@@ -4,13 +4,12 @@ Every published DeepSWE 1.1 score in one dataset: the official [Datacurve leader
 
 The official board has added no model since **3 September 2026** (GPT-6 Astra). Since then labs have kept publishing DeepSWE 1.1 numbers for GPT-6.1 Sol, Claude Opus 5.5 and Sonnet 5.5, Gemini 4 Argon, Grok 4.7, DeepSeek V4.1 Flash, Mistral Large 4 and others, and Mercor has run its own independent evaluation. This repo puts them side by side without pretending they are the same measurement.
 
-**Interactive page:** `index.html` (open it locally or serve the repo with GitHub Pages). It has the official board's controls: best result per model or all effort levels, per-model effort lines, a switch between cost, output tokens and agent steps, and pickers for models and configurations.
+**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). It uses the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be.
 
 ![Score against cost per task](charts/score-vs-cost.svg)
 
 ![Best score per model by who measured it](charts/best-per-model.svg)
 
-![Results by publication date](charts/score-over-time.svg)
 
 ## The data
 
@@ -20,6 +19,7 @@ The official board has added no model since **3 September 2026** (GPT-6 Astra). 
 | `data/models.csv` | One row per model: display name, lab, open weights (blank when not established). |
 | `data/deepswe-1.1.json` | Generated: the two CSVs joined and typed, plus the notes shown on the page. |
 | `SOURCES.md` | Generated: every original source, numbered as on the page, with what it establishes. |
+| `data/pricing/ai-gateway.json` | List prices from Vercel AI Gateway, used only to estimate cost where a source published tokens but no cost (refresh with `node scripts/sync-pricing.mjs`). |
 | `data/official/` | The official board's rows as embedded in its page, its JSON artifact, and the date each configuration first appeared. |
 | `research/` | The October 2026 research sweep: raw findings per search task, the fact-check, and the merge script and log. |
 
@@ -48,6 +48,8 @@ Columns in `deepswe-1.1.csv`:
 - **Independent runs.** Mercor (mini-swe-agent, 500 steps, 2-hour limit, 3 passes; no per-model dates), Artificial Analysis (Grok Build harness), Fireworks (Kimi K3 at three efforts) and entrpi (MiniMax M3).
 
 Every original source is numbered in [SOURCES.md](SOURCES.md) and at the foot of the page, where each entry says what it establishes and links back to the readings that cite it. On the page, each score carries its source number; hovering, focusing or tapping it shows the source, and with scripts off it jumps to the list.
+
+Where a source published token counts but no cost, the page shows an estimate from Vercel AI Gateway's list prices, marked est. and cited; with only a total token count it is a range from all-input to all-output pricing. Estimates live in the generated JSON (`cost_estimate`), never in the CSV.
 
 A number is included only when it was read at the source that published it. Figures that appear only on aggregator sites are left out; `research/ingest-log.txt` lists every rejected figure and the reason.
 

@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, timeline, spreadPlot, readingRowHtml, theadHtml, hashId, rowKey, STYLE_RULES } from '../site/charts.mjs';
+import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES } from '../site/charts.mjs';
 import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -31,6 +31,23 @@ const rows = obs
   .map(o => ({ ...o, display_name: modelByKey.get(o.model_key).display_name, lab: modelByKey.get(o.model_key).lab, open_weights: modelByKey.get(o.model_key).open_weights }))
   .sort((a, b) => b.score_pct - a.score_pct || a.model_key.localeCompare(b.model_key));
 for (const r of rows) r.row_id = 'row-' + hashId(rowKey(r));
+
+// Estimated cost, only where a source published tokens but no cost and the model has a list price in
+// data/pricing/ai-gateway.json. With an input/output split the estimate is a single figure; with only
+// a total it is a range, every token priced as input at the low end and as output at the high end.
+const pricing = JSON.parse(readFileSync(p('data/pricing/ai-gateway.json'), 'utf8'));
+for (const r of rows) {
+  const price = pricing.models[r.model_key];
+  if (r.cost_per_task_usd != null || !price) continue;
+  const round = v => Number(v.toFixed(4));
+  if (r.input_tokens_per_task != null && r.output_tokens_per_task != null) {
+    const v = r.input_tokens_per_task * price.input_per_token + r.output_tokens_per_task * price.output_per_token;
+    r.cost_estimate = { low: round(v), high: round(v), basis: `${r.input_tokens_per_task} input and ${r.output_tokens_per_task} output tokens at ${price.gateway_id} list prices (AI Gateway, ${pricing.fetched}); cached input would cost less` };
+  } else if (r.tokens_per_task != null) {
+    r.cost_estimate = { low: round(r.tokens_per_task * price.input_per_token), high: round(r.tokens_per_task * price.output_per_token),
+      basis: `${r.tokens_per_task} total tokens with no input/output split, priced all as input (low) to all as output (high) at ${price.gateway_id} list prices (AI Gateway, ${pricing.fetched}); cached input would cost less` };
+  }
+}
 if (new Set(rows.map(r => r.row_id)).size !== rows.length) { console.error('row id collision'); process.exit(1); }
 
 // The source registry: every original source, numbered once; every row points into it.
@@ -51,7 +68,8 @@ const dataset = {
   rows,
 };
 
-const marker = meta.official_last_added ? { date: meta.official_last_added, label: `Official board’s last addition · ${meta.official_last_added}` } : null;
+const max = barMax(rows);
+const priceSrc = sources.find(x => x.key === 'ai-gateway-pricing');
 // README charts show each model's best result per source, which is the page's default view.
 const best = new Map();
 for (const r of rows) {
@@ -61,20 +79,19 @@ for (const r of rows) {
 }
 const bestRows = rows.filter(r => best.get(r.model_key + '|' + r.source_type) === r);
 // Inside the page, chart colours resolve to the page's own tokens, which already switch with the theme.
-const PAGE_TOKENS = '.viz{--v-paper:var(--sheet);--v-ink:var(--ink);--v-ink2:var(--ink-2);--v-muted:var(--muted);--v-grid:var(--grid);--v-rule:var(--rule);font-family:var(--sans)}';
+const PAGE_TOKENS = '.viz{--v-good:var(--good);--v-good-ink:var(--good-ink);--v-paper:var(--sheet);--v-ink:var(--ink);--v-ink2:var(--ink-2);--v-muted:var(--muted);--v-grid:var(--grid);--v-rule:var(--rule);font-family:var(--sans)}';
 const outputs = {
   'data/deepswe-1.1.json': JSON.stringify(dataset, null, 2) + '\n',
   'charts/score-vs-cost.svg': effortScatter(rows, { embedStyle: true, id: 'readme-sc', height: 640 }) + '\n',
-  'charts/score-over-time.svg': timeline(rows, { embedStyle: true, marker, asOf: meta.as_of, id: 'readme-tl', height: 460 }) + '\n',
-  'charts/best-per-model.svg': spreadPlot(bestRows, { embedStyle: true, id: 'readme-sp' }) + '\n',
+  'charts/best-per-model.svg': spreadBars(bestRows, { embedStyle: true, id: 'readme-sp' }) + '\n',
   'SOURCES.md': sourcesMarkdown(sources),
   'index.html': readFileSync(p('site/template.html'), 'utf8')
     .replace('/*__VIZSTYLE__*/', () => PAGE_TOKENS + STYLE_RULES)
     .replace('<!--__THEAD__-->', () => theadHtml({ key: 'score_pct', dir: -1 }))
-    .replace('<!--__ROWS__-->', () => rows.map((r, i) => readingRowHtml(r, i + 1, srcByUrl.get(r.source_url))).join('\n'))
+    .replace('<!--__TFOOT__-->', () => tfootHtml(max))
+    .replace('<!--__ROWS__-->', () => rows.map(r => readingRowHtml(r, srcByUrl.get(r.source_url), max, priceSrc)).join('\n'))
     .replace('<!--__SCATTER__-->', () => effortScatter(rows, { id: 'sc' }))
-    .replace('<!--__SPREAD__-->', () => spreadPlot(rows, { id: 'sp', onlyMulti: true }))
-    .replace('<!--__TIME__-->', () => timeline(rows, { id: 'tl', marker, asOf: meta.as_of }))
+    .replace('<!--__SPREAD__-->', () => spreadBars(rows, { id: 'sp', onlyMulti: true }))
     .replace('<!--__NOTES__-->', () => renderNotes(meta.notes, sources))
     .replace('<!--__REGISTRY__-->', () => registryHtml(sources, rowsById))
     .replace('<!--__CITE_CHANGELOG__-->', () => `<sup>${citeHtml(sources.find(x => x.key === 'datacurve-changelog'))}</sup>`)

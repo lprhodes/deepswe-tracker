@@ -1,0 +1,12 @@
+{
+  "source": "https://ai-gateway.vercel.sh/v1/models",
+  "fetched": "2026-10-09",
+  "models": {
+    "laguna-s-2.1": {
+      "gateway_id": "poolside/laguna-s-2.1",
+      "input_per_token": 9e-8,
+      "output_per_token": 1.8e-7,
+      "input_cache_read_per_token": 9e-9
+    }
+  }
+}

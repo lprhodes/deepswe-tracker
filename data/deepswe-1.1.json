@@ -19,7 +19,8 @@
       "Costs are per task in USD. The official page and its data file disagree for 19 of 70 configurations; this tracker shows the page's figure and keeps the file's in the row notes.{{datacurve-artifact}} Lab costs are the lab's own, shown only where the lab published them.",
       "Mercor shows no date for each model, so its results appear in the charts and table but not on the timeline.{{url:https://www.mercor.com/apex/oss-benchmarks/oss-deep-swe-leaderboard/}}",
       "A number is included only when it was read at the source that published it. Figures that appear only on aggregator sites are left out; research/ingest-log.txt in the repository lists each one and why.",
-      "Anthropic has published no DeepSWE 1.1 score for Claude Haiku 5.5;{{anthropic-haiku-55}} Mercor's independent run is the only one. There is no GPT-6.1 Luna: OpenAI released GPT-6.1 Sol only.{{url:https://openai.com/index/introducing-gpt-6-1-sol/}}"
+      "Anthropic has published no DeepSWE 1.1 score for Claude Haiku 5.5;{{anthropic-haiku-55}} Mercor's independent run is the only one. There is no GPT-6.1 Luna: OpenAI released GPT-6.1 Sol only.{{url:https://openai.com/index/introducing-gpt-6-1-sol/}}",
+      "Where a source published token counts but no cost, the cost is estimated from Vercel AI Gateway’s list prices and shown as a range marked est.{{ai-gateway-pricing}} With only a total token count, the range runs from every token priced as input to every token priced as output; cached input is cheaper still, so the true cost may sit below it. Only Laguna S 2.1 qualifies today."
     ],
     "official_generated_at": "2026-09-22T06:27:15.860279+00:00",
     "official_latest_job": {
@@ -99,6 +100,16 @@
         "published": "2026-09-29",
         "accessed": "2026-10-09",
         "establishes": "Reports SWE-bench Pro, FrontierSWE v2 and ProgramBench for Haiku 5.5, and no DeepSWE 1.1 result."
+      },
+      {
+        "id": "ai-gateway-pricing",
+        "title": "AI Gateway model list and prices",
+        "publisher": "Vercel",
+        "type": "Price list",
+        "url": "https://ai-gateway.vercel.sh/v1/models",
+        "published": "",
+        "accessed": "2026-10-09",
+        "establishes": "Per-token list prices used to estimate cost where a source published tokens but no cost: Laguna S 2.1 at $0.09 per million input tokens and $0.18 per million output tokens."
       }
     ]
   },
@@ -584,6 +595,19 @@
       "key": "gh-issue-103",
       "readings": 0,
       "n": 39
+    },
+    {
+      "id": "r-isoxsa",
+      "title": "AI Gateway model list and prices",
+      "publisher": "Vercel",
+      "type": "Price list",
+      "url": "https://ai-gateway.vercel.sh/v1/models",
+      "published": "",
+      "accessed": "2026-10-09",
+      "establishes": "Per-token list prices used to estimate cost where a source published tokens but no cost: Laguna S 2.1 at $0.09 per million input tokens and $0.18 per million output tokens.",
+      "key": "ai-gateway-pricing",
+      "readings": 0,
+      "n": 40
     }
   ],
   "rows": [
@@ -4728,6 +4752,11 @@
       "lab": "Poolside",
       "open_weights": true,
       "row_id": "row-befdi5",
+      "cost_estimate": {
+        "low": 0.0224,
+        "high": 0.0448,
+        "basis": "249000 total tokens with no input/output split, priced all as input (low) to all as output (high) at poolside/laguna-s-2.1 list prices (AI Gateway, 2026-10-09); cached input would cost less"
+      },
       "source_id": "r-12e8ru1",
       "source_n": 7
     },

@@ -10,7 +10,7 @@ const TYPE = {
   third_party_run: 'Independent run',
 };
 const ORDER = ['Official leaderboard', 'Official changelog', 'Official documentation', 'Official data file',
-  'Lab self-report', 'Lab system card', 'Independent run', 'Independent audit', 'Discussion'];
+  'Lab self-report', 'Lab system card', 'Independent run', 'Independent audit', 'Discussion', 'Price list'];
 
 const PUBLISHERS = [
   [/(^|\.)deepswe\.datacurve\.ai$/, 'Datacurve'], [/web\.archive\.org$/, 'Internet Archive (capture of the Datacurve board)'],

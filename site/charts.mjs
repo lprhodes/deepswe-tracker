@@ -4,8 +4,8 @@
 // Styling is by class, so one stylesheet themes light and dark.
 //
 // The grammar follows the official DeepSWE board so the two can be read side by side: colour is
-// the lab, each model's effort levels are joined by a line, and cost runs high-to-low so the most
-// efficient results sit top right. Who measured a result is the second encoding: marker shape and
+// the lab (the official board's brand-led colours), each model's effort levels are joined by a line,
+// and cost runs high-to-low so the most efficient results sit top right. Who measured a result is the second encoding: marker shape and
 // line style (official solid circle, lab claim dashed diamond, independent run dotted square).
 
 export const SERIES = [
@@ -15,34 +15,39 @@ export const SERIES = [
 ];
 const CLS = Object.fromEntries(SERIES.map(s => [s.key, s.cls]));
 
-// Eight labs get a colour, in the validated slot order (blue, orange, aqua, yellow, magenta, green,
-// violet, red); every other lab is grey and identified by its label. Hues follow the official board
-// where the palette allows: Google blue, Anthropic orange, OpenAI green, Moonshot red.
-export const LAB_SLOTS = { Google: 'l1', Anthropic: 'l2', 'Z.ai': 'l3', Alibaba: 'l4', xAI: 'l5', OpenAI: 'l6', DeepSeek: 'l7', 'Moonshot AI': 'l8' };
-export const labClass = lab => LAB_SLOTS[lab] || 'l0';
+// Lab colours follow each lab's branding. The nine labs on the official board use the exact values
+// it renders (sampled from deepswe.datacurve.ai on 2026-10-09) so the two charts can be compared at a
+// glance; the rest take their own brand colour where they have a distinctive one, and grey otherwise.
+// Several brands share a hue (Google, Meta and Tencent are all blue; Anthropic, Mistral and Xiaomi
+// orange), so labels, hover emphasis and the table carry identity rather than colour alone.
+export const LAB_COLORS = {
+  OpenAI: 'oklch(0.58 0.13 155)', Anthropic: 'oklch(0.62 0.15 50)', Google: 'oklch(0.58 0.17 255)',
+  'Z.ai': 'oklch(0.62 0.12 195)', DeepSeek: 'oklch(0.55 0.18 295)', Meta: 'oklch(0.61 0.2 255)',
+  Alibaba: 'oklch(0.6 0.15 220)', xAI: 'oklch(0.56 0.08 265)', 'Moonshot AI': 'oklch(0.6 0.18 20)',
+  Mistral: 'oklch(0.66 0.21 38)', Xiaomi: 'oklch(0.69 0.2 47)', NVIDIA: 'oklch(0.72 0.19 130)',
+  'Fireworks AI': 'oklch(0.5 0.27 285)', MiniMax: 'oklch(0.6 0.2 5)', Tencent: 'oklch(0.5 0.2 262)',
+};
+const OTHER_LAB = 'oklch(0.64 0.01 160)';
+const slug = l => l.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+export const labClass = lab => (LAB_COLORS[lab] ? 'lab-' + slug(lab) : 'lab-other');
+export const LAB_CSS = Object.entries(LAB_COLORS).map(([l, c]) => `.lab-${slug(l)}{--c:${c}}`).join('') + `.lab-other{--c:${OTHER_LAB}}`;
 
 export const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 export const effortRank = e => { const i = EFFORTS.indexOf(e); return i < 0 ? -1 : i; };
 
 export const METRICS = {
-  cost: { field: 'cost_per_task_usd', label: 'Avg cost per task', short: 'Cost', noun: 'cost per task', fmt: v => fmtUsd(v) },
-  output: { field: 'output_tokens_per_task', label: 'Avg output tokens per task', short: 'Output tokens', noun: 'output-token count', fmt: v => fmtCount(v) },
-  steps: { field: 'steps_per_task', label: 'Avg agent steps per task', short: 'Agent steps', noun: 'agent-step count', fmt: v => fmtCount(v) },
+  cost: { field: 'cost_per_task_usd', label: 'Avg cost per task', short: 'Cost', noun: 'cost per task', better: 'cheaper', fmt: v => fmtUsd(v) },
+  output: { field: 'output_tokens_per_task', label: 'Avg output tokens per task', short: 'Output tokens', noun: 'output-token count', better: 'fewer tokens', fmt: v => fmtCount(v) },
+  steps: { field: 'steps_per_task', label: 'Avg agent steps per task', short: 'Agent steps', noun: 'agent-step count', better: 'fewer steps', fmt: v => fmtCount(v) },
 };
-
-const LAB_LIGHT = ['#8a908d', '#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
-const LAB_DARK = ['#7d8582', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9', '#e66767'];
-const labVars = list => list.map((c, i) => `--l${i}:${c}`).join(';');
 
 // Colour tokens for a standalone SVG (the README charts). The page swaps this block for one that
 // points at its own tokens, so the page has a single source of colour.
 export const STYLE_TOKENS = `
-.viz{--v-paper:#fbfcfa;--v-ink:#14212b;--v-ink2:#44535c;--v-muted:#5f6e74;--v-grid:#e3e9e4;--v-rule:#b9c8be;${labVars(LAB_LIGHT)};font-family:Archivo,system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;${labVars(LAB_DARK)}}}
-:root[data-theme="dark"] .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;${labVars(LAB_DARK)}}
+.viz{--v-good:#2f9e5a;--v-good-ink:#1d6b3b;--v-paper:#fbfcfa;--v-ink:#14212b;--v-ink2:#44535c;--v-muted:#5f6e74;--v-grid:#e3e9e4;--v-rule:#b9c8be;font-family:Archivo,system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz{--v-good:#4cc27a;--v-good-ink:#8fdcab;--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c}}
+:root[data-theme="dark"] .viz{--v-good:#4cc27a;--v-good-ink:#8fdcab;--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c}
 `;
-export const LAB_TOKENS_LIGHT = labVars(LAB_LIGHT);
-export const LAB_TOKENS_DARK = labVars(LAB_DARK);
 export const STYLE_RULES = `
 .viz .bg{fill:var(--v-paper)}
 .viz .grid{stroke:var(--v-grid);stroke-width:1}
@@ -56,6 +61,9 @@ export const STYLE_RULES = `
 .viz .lbl-eff{fill:var(--v-muted);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
+.viz .best-a{stop-color:var(--v-good);stop-opacity:.16} .viz .best-b{stop-color:var(--v-good);stop-opacity:0}
+.viz .best-lbl{fill:var(--v-good-ink);font-size:12px;font-weight:650} .viz .best-sub{fill:var(--v-good-ink);font-size:11px}
+.viz .dir{fill:var(--v-ink2);font-size:12px;font-weight:600}
 .viz .ref{stroke:var(--v-ink2);stroke-width:1}
 .viz .ref-lbl{fill:var(--v-ink2);font-size:11px}
 .viz .span{stroke:var(--v-rule);stroke-width:2;stroke-linecap:round}
@@ -63,8 +71,9 @@ export const STYLE_RULES = `
 .viz .eline.s2{stroke-dasharray:6 4} .viz .eline.s3{stroke-dasharray:1.5 4}
 .viz .mk{stroke:var(--v-paper);stroke-width:2}
 .viz .key{fill:var(--v-ink2)}
-${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `.viz .l${i}{--c:var(--l${i})}`).join(' ')}
+${LAB_CSS}
 .viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c)}
+.viz .track{fill:var(--v-grid)} .viz .whisk{stroke:var(--v-ink);stroke-width:1.2;fill:none}
 .viz .hit{fill:transparent;cursor:pointer}
 .viz .hit:focus-visible{fill:transparent;stroke:var(--v-ink);stroke-width:2}
 .viz .hit:hover+.mk,.viz .hit:focus-visible+.mk{stroke:var(--v-ink)}
@@ -112,19 +121,22 @@ function open(w, h, id, title, desc, embedStyle) {
 }
 
 // Two keys: shapes for who measured it (neutral ink), swatches for each lab present.
-function legend(x, y, rows) {
-  let out = '', cx = x;
+function legend(x, y0, rows) {
+  let y = y0;
+  let out = '';
+  let cx = x;
   const present = new Set(rows.map(r => r.source_type));
   for (const s of SERIES.filter(s => present.has(s.key))) {
     out += markPath(s.cls, '', cx + 6, y - 4, 'key') + `<text class="tick" x="${cx + 16}" y="${y}">${esc(s.label)}</text>`;
     cx += 16 + textW(s.label, 11) + 20;
   }
-  const labs = new Set(rows.map(r => r.lab));
-  const named = Object.keys(LAB_SLOTS).filter(l => labs.has(l));
-  const others = [...labs].some(l => !LAB_SLOTS[l]);
+  const labs = [...new Set(rows.map(r => r.lab))];
+  const named = Object.keys(LAB_COLORS).filter(l => labs.includes(l));
+  const others = labs.some(l => !LAB_COLORS[l]);
   cx += 12;
   for (const l of [...named, ...(others ? ['Other labs'] : [])]) {
-    out += `<rect class="sw ${l === 'Other labs' ? 'l0' : labClass(l)}" x="${cx}" y="${y - 9}" width="10" height="10" rx="2"/><text class="tick" x="${cx + 14}" y="${y}">${esc(l)}</text>`;
+    if (cx > 1000) { cx = x; y += 18; }
+    out += `<rect class="sw ${l === 'Other labs' ? 'lab-other' : labClass(l)}" x="${cx}" y="${y - 9}" width="10" height="10" rx="2"/><text class="tick" x="${cx + 14}" y="${y}">${esc(l)}</text>`;
     cx += 14 + textW(l, 11) + 14;
   }
   return out;
@@ -182,7 +194,7 @@ export function frontier(rows, field) {
 // Score against a per-task measure, drawn like the official board: y is the DeepSWE score from 0,
 // x runs from the most expensive on the left to zero on the right (linear, or log when asked), and
 // each model's effort levels are joined in order from low to max.
-export function effortScatter(rows, { metric = 'cost', scale = 'linear', embedStyle = false, width = 1080, height = 660, id = 'sc', labelTop = 20 } = {}) {
+export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 660, id = 'sc', labelTop = 20 } = {}) {
   const M = METRICS[metric];
   const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r[M.field] > 0);
   const title = `DeepSWE 1.1 score against ${M.noun}`;
@@ -210,15 +222,21 @@ export function effortScatter(rows, { metric = 'cost', scale = 'linear', embedSt
     svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Lines join each model’s effort levels from low to max, as on the official board. Colour is the lab; shape is who measured it.</text>`;
     svg += legend(24, 80, pts.map(p => p.r));
   }
-  svg += `<text class="y-title" x="${m.left}" y="${m.top - 18}">DeepSWE score</text>`;
-  svg += `<text class="note" x="${right}" y="${m.top - 18}" text-anchor="end">most efficient ↗</text>`;
+  svg += `<text class="y-title" x="${m.left}" y="${m.top - 18}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
+  // Where a model wants to be: the top right, a high score for a low cost. A wash fades out from
+  // that corner so the target reads before any single point does.
+  const plotW = right - m.left, plotH = bottom - m.top;
+  svg += `<defs><radialGradient id="${id}-best" cx="1" cy="0" r="0.75"><stop offset="0" class="best-a"/><stop offset="1" class="best-b"/></radialGradient></defs>`;
+  svg += `<rect x="${m.left}" y="${m.top}" width="${plotW}" height="${plotH}" fill="url(#${id}-best)" aria-hidden="true"/>`;
+  svg += `<text class="best-lbl" x="${right - 10}" y="${m.top + 18}" text-anchor="end">Best: higher score, lower ${metric === 'cost' ? 'cost' : metric === 'output' ? 'token use' : 'step count'} ↗</text>`;
+  svg += `<text class="best-sub" x="${right - 10}" y="${m.top + 34}" text-anchor="end">capable and ${M.better}</text>`;
   svg += yAxis(0, y1, sy, m.left, right);
   for (const t of ticks) {
     const x = sx(t).toFixed(1);
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${esc(M.fmt(t))}</text>`;
   }
   svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
-  svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''}</text>`;
+  svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
   const groups = new Map();
@@ -239,81 +257,60 @@ export function effortScatter(rows, { metric = 'cost', scale = 'linear', embedSt
   return svg + '</svg>';
 }
 
-export function timeline(rows, { embedStyle = false, width = 1080, height = 420, marker = null, asOf, id = 'tl' } = {}) {
-  const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r.published);
-  const title = 'DeepSWE 1.1 results by publication date';
-  const desc = `Each of ${pts.length} dated results placed on the day its score was published; colour is the lab, shape is who measured it.`;
-  if (!pts.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No dated results in this selection.</text></svg>`;
-  const m = { left: 60, right: 24, top: embedStyle ? 112 : 24, bottom: 44 };
-  const right = width - m.right, bottom = height - m.bottom;
-  const t = d => Date.parse(d + 'T00:00:00Z');
-  const day = 864e5;
-  const dates = pts.map(p => t(p.r.published));
-  const x0 = Math.min(...dates) - 5 * day, x1 = Math.max(t(asOf || '1970-01-01'), ...dates) + 5 * day;
-  const sx = v => m.left + (v - x0) / (x1 - x0) * (right - m.left);
-  const y1 = scoreTop(pts.map(p => p.r));
-  const sy = v => bottom - (v / y1) * (bottom - m.top);
-  let svg = open(width, height, id, title, desc, embedStyle);
-  if (embedStyle) {
-    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Each point is one model at one effort level, on the date its score was published.</text>`;
-    svg += legend(24, 80, pts.map(p => p.r));
-  }
-  svg += yAxis(0, y1, sy, m.left, right);
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const d = new Date(x0); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + 1);
-  for (; d.getTime() <= x1; d.setUTCMonth(d.getUTCMonth() + 1)) {
-    const x = sx(d.getTime()).toFixed(1);
-    svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">1 ${months[d.getUTCMonth()]}</text>`;
-  }
-  svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
-  if (marker) {
-    const mx = sx(t(marker.date)).toFixed(1);
-    svg += `<line class="ref" x1="${mx}" x2="${mx}" y1="${m.top}" y2="${bottom}"/><text class="ref-lbl" x="${+mx - 6}" y="${bottom - 8}" text-anchor="end">${esc(marker.label)}</text>`;
-  }
-  for (const p of pts) svg += mark(p.r, p.i, sx(t(p.r.published)), sy(p.r.score_pct));
-  return svg + '</svg>';
-}
+// The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%
+// only if a score ever passes 80.
+export const barMax = rows => (rows.some(r => r.score_pct > 80) ? 100 : 80);
 
-// One row per model: its best official, lab-claimed and independent score, joined by a rule, so
-// the distance between a lab's claim and an independent re-run is the thing you see.
-export function spreadPlot(rows, { embedStyle = false, width = 1080, id = 'sp', onlyMulti = false } = {}) {
+// "Same model, different measurer", in the official leaderboard's form: under each model, one bar per
+// source (official board, lab claim, independent run), each with its interval where one was given.
+export function spreadBars(rows, { embedStyle = false, width = 1080, id = 'sp', onlyMulti = false } = {}) {
   const byModel = new Map();
   rows.forEach((r, i) => {
-    if (!byModel.has(r.model_key)) byModel.set(r.model_key, { name: r.display_name, key: r.model_key, best: {} });
+    if (!byModel.has(r.model_key)) byModel.set(r.model_key, { name: r.display_name, key: r.model_key, lab: r.lab, best: {} });
     const b = byModel.get(r.model_key).best;
     if (b[r.source_type] == null || rows[b[r.source_type]].score_pct < r.score_pct) b[r.source_type] = i;
   });
   let models = [...byModel.values()].map(mo => ({ ...mo, top: Math.max(...Object.values(mo.best).map(i => rows[i].score_pct)) }));
   if (onlyMulti) models = models.filter(mo => Object.keys(mo.best).length > 1);
   models.sort((a, b) => b.top - a.top);
-  const rowH = 24;
-  const m = { left: 200, right: 64, top: embedStyle ? 112 : 16, bottom: 40 };
-  const height = m.top + models.length * rowH + m.bottom;
-  const right = width - m.right, bottom = height - m.bottom;
   const title = 'Best DeepSWE 1.1 score per model, by who measured it';
-  const desc = `${models.length} models; for each, the best official, lab-claimed and independent pass@1 at any effort level.`;
+  const desc = `${models.length} models; for each, a bar for its best official, lab-claimed and independent pass@1 at any effort level.`;
   if (!models.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No models in this selection.</text></svg>`;
-  const sx = v => m.left + (v / 100) * (right - m.left);
+  const max = barMax(rows);
+  const m = { left: 220, srcW: 104, right: 70, top: embedStyle ? 112 : 16, bottom: 36 };
+  const x0 = m.left + m.srcW, x1 = width - m.right;
+  const sx = v => x0 + (v / max) * (x1 - x0);
+  const barH = 9, gap = 6, pad = 10;
+  let y = m.top, body = '';
+  for (const mo of models) {
+    const srcs = SERIES.filter(s => s.key in mo.best);
+    const blockH = pad * 2 + srcs.length * barH + (srcs.length - 1) * gap;
+    body += `<g class="grp" data-model="${esc(mo.key)}"><line class="grid" x1="24" x2="${width - 24}" y1="${y}" y2="${y}"/>`;
+    body += `<rect class="sw ${labClass(mo.lab)}" x="${m.left - 196}" y="${y + blockH / 2 - 5}" width="10" height="10" rx="2"/><text class="lbl" x="${m.left - 180}" y="${y + blockH / 2 + 4}">${esc(mo.name.length > 26 ? mo.name.slice(0, 25) + '…' : mo.name)}</text>`;
+    srcs.forEach((s, k) => {
+      const i = mo.best[s.key], r = rows[i], cy = y + pad + k * (barH + gap) + barH / 2;
+      body += `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${sx(r.score_pct).toFixed(1)}" data-y="${cy.toFixed(1)}">`;
+      body += markPath(s.cls, '', m.left + 6, cy, 'key') + `<text class="tick" x="${m.left + 16}" y="${cy + 4}">${esc(s.label)}</text>`;
+      body += `<rect class="track" x="${x0}" y="${cy - barH / 2}" width="${(x1 - x0).toFixed(1)}" height="${barH}"/>`;
+      body += `<rect class="sw ${labClass(r.lab)}" x="${x0}" y="${cy - barH / 2}" width="${(sx(r.score_pct) - x0).toFixed(1)}" height="${barH}"/>`;
+      if (r.ci_pct != null) {
+        const a = sx(Math.max(0, r.score_pct - r.ci_pct)), b = sx(Math.min(max, r.score_pct + r.ci_pct));
+        body += `<path class="whisk" d="M${a.toFixed(1)} ${cy}H${b.toFixed(1)}M${a.toFixed(1)} ${cy - 5}V${cy + 5}M${b.toFixed(1)} ${cy - 5}V${cy + 5}"/>`;
+      }
+      body += `<text class="val" x="${x1 + 8}" y="${cy + 4}">${fmtPct(r.score_pct)}</text>`;
+      body += `<rect class="hit" data-i="${i}" tabindex="0" x="${x0}" y="${cy - 8}" width="${(x1 - x0).toFixed(1)}" height="16"><title>${esc(pointLabel(r))} · ${esc(s.label)}: ${fmtPct(r.score_pct)}</title></rect></g>`;
+    });
+    body += '</g>';
+    y += blockH;
+  }
+  const height = y + m.bottom;
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
-    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">The rule spans the gap between sources for the same model. Colour is the lab; shape is who measured it.</text>`;
+    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Each model’s best result from each source, on the official leaderboard’s 0–${max}% bar scale.</text>`;
     svg += legend(24, 80, rows);
   }
-  for (let v = 0; v <= 100; v += 10) {
-    const x = sx(v).toFixed(1);
-    svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top - 6}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${v}%</text>`;
-  }
-  models.forEach((mo, k) => {
-    const cy = m.top + k * rowH + rowH / 2;
-    const idx = Object.values(mo.best);
-    const xs = idx.map(i => sx(rows[i].score_pct));
-    const name = mo.name.length > 28 ? mo.name.slice(0, 27) + '…' : mo.name;
-    svg += `<g class="grp" data-model="${esc(mo.key)}"><text class="lbl" x="${m.left - 14}" y="${cy + 4}" text-anchor="end">${esc(name)}</text>`;
-    if (xs.length > 1) svg += `<line class="span" x1="${Math.min(...xs).toFixed(1)}" x2="${Math.max(...xs).toFixed(1)}" y1="${cy}" y2="${cy}"/>`;
-    for (const s of SERIES) if (s.key in mo.best) { const i = mo.best[s.key]; svg += mark(rows[i], i, sx(rows[i].score_pct), cy); }
-    svg += `<text class="val" x="${(Math.max(...xs) + 12).toFixed(1)}" y="${cy + 4}">${fmtPct(mo.top)}</text></g>`;
-  });
-  return svg + '</svg>';
+  for (let v = 0; v <= max; v += 20) svg += `<line class="grid" x1="${sx(v).toFixed(1)}" x2="${sx(v).toFixed(1)}" y1="${m.top}" y2="${y}"/><text class="tick" x="${sx(v).toFixed(1)}" y="${y + 18}" text-anchor="middle">${v}%</text>`;
+  return svg + body + '</svg>';
 }
 
 // ---------- readings table, shared by the build (pre-rendered, works without script) and the page ----------
@@ -331,44 +328,55 @@ export function shapeSvg(cls) {
 }
 
 const fmtDay = d => (d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '');
-// Eight columns sized to fit the content width without scrolling; each carries a class so narrow
-// screens can fold the lowest-priority ones (the model cell repeats effort when its column folds).
+// The readings table in the official leaderboard's form: model with its effort in brackets, a bar on
+// a 0–80% scale with the interval as a whisker, then the score and per-task figures. Each column has a
+// class so narrow screens fold the lowest-priority ones instead of scrolling.
 export const TABLE_COLS = [
-  ['rank', '#', 'n c-rank'], ['display_name', 'Model', 'c-model'], ['effort', 'Effort', 'c-eff'],
-  ['source_type', 'Measured by', 'c-src'], ['score_pct', 'Pass@1', 'c-score'], ['cost_per_task_usd', 'Cost / task', 'n c-cost'],
-  ['output_tokens_per_task', 'Usage per task', 'n c-use'], ['published', 'Published', 'n c-pub'],
+  ['display_name', 'Model', 'c-model'], ['source_type', 'Measured by', 'c-src'], ['bar', '', 'c-bar'],
+  ['score_pct', 'Pass@1', 'n c-score'], ['cost_per_task_usd', 'Avg cost', 'n c-cost'],
+  ['output_tokens_per_task', 'Out tok', 'n c-tok'], ['steps_per_task', 'Steps', 'n c-steps'], ['published', 'Published', 'n c-pub'],
 ];
-export const TABLE_SORTABLE = new Set(['display_name', 'effort', 'source_type', 'score_pct', 'cost_per_task_usd', 'output_tokens_per_task', 'steps_per_task', 'published']);
+export const TABLE_SORTABLE = new Set(['display_name', 'source_type', 'score_pct', 'cost_per_task_usd', 'output_tokens_per_task', 'steps_per_task', 'published']);
 
 export function theadHtml(sort) {
   return '<tr>' + TABLE_COLS.map(([k, label, cls]) => {
     const aria = sort && k === sort.key ? ` aria-sort="${sort.dir > 0 ? 'ascending' : 'descending'}"` : '';
-    const inner = TABLE_SORTABLE.has(k) ? `<button type="button" data-sort="${k}">${label}</button>` : label;
-    return `<th scope="col" class="${cls || ''}"${aria}>${inner}</th>`;
+    const inner = TABLE_SORTABLE.has(k) ? `<button type="button" data-sort="${k}">${label}</button>` : (label || '<span class="sr">Bar</span>');
+    return `<th scope="col" class="${cls}"${aria}>${inner}</th>`;
   }).join('') + '</tr>';
 }
+// The bar column's axis, as on the official leaderboard: tick labels under the bars.
+export function tfootHtml(max) {
+  const ticks = []; for (let v = 0; v <= max; v += 20) ticks.push(`<span style="left:${(v / max) * 100}%">${v}%</span>`);
+  return '<tr class="axis-row">' + TABLE_COLS.map(([k, , cls]) => `<td class="${cls}">${k === 'bar' ? `<div class="ticks" aria-hidden="true">${ticks.join('')}</div>` : ''}</td>`).join('') + '</tr>';
+}
+
+const fmtUsdRange = (lo, hi) => (fmtUsd(lo) === fmtUsd(hi) ? `≈${fmtUsd(lo)}` : `≈${fmtUsd(lo)}–${fmtUsd(hi).slice(1)}`);
 
 // One reading. The pass@1 figure carries its citation marker: an anchor into the source registry,
-// so the claim-to-source link works with no script at all; the page layers a preview on top.
-export function readingRowHtml(r, rank, src) {
+// so the claim-to-source link works with no script at all; the page layers a preview on top. A cost
+// the source did not publish but that can be estimated from its token count shows as an estimate,
+// cited to the price list it came from.
+export function readingRowHtml(r, src, max = 80, priceSrc = null) {
   const s = SERIES.find(x => x.key === r.source_type);
   const na = t => `<span class="na">${t}</span>`;
-  const ci = r.ci_pct != null
-    ? `<div class="ci" style="left:${Math.max(0, r.score_pct - r.ci_pct)}%;width:${Math.min(100, r.score_pct + r.ci_pct) - Math.max(0, r.score_pct - r.ci_pct)}%"></div>` : '';
   // Attribute names held in a constant so this template is not itself read as a marker by tools
   // that scan the page source for data-cite.
   const CITE = 'data-cite';
-  const cite = src ? `<a class="cite" href="#${src.id}" ${CITE}="${src.id}" data-n="${src.n}" aria-describedby="${src.id}">${src.n}</a>` : '';
-  const usage = [r.output_tokens_per_task != null && `${fmtCount(r.output_tokens_per_task)} out tok`, r.steps_per_task != null && `${fmtCount(r.steps_per_task)} steps`].filter(Boolean);
+  const marker = x => (x ? `<a class="cite" href="#${x.id}" ${CITE}="${x.id}" data-n="${x.n}" aria-describedby="${x.id}">${x.n}</a>` : '');
+  const w = v => `${Math.min(100, (v / max) * 100).toFixed(2)}%`;
+  const ci = r.ci_pct != null ? `<div class="ci" style="left:${w(Math.max(0, r.score_pct - r.ci_pct))};width:${(Math.min(max, r.score_pct + r.ci_pct) - Math.max(0, r.score_pct - r.ci_pct)) / max * 100}%"></div>` : '';
+  const est = r.cost_estimate;
+  const cost = r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd)
+    : est ? `<span class="estc" title="${esc(est.basis)}">${fmtUsdRange(est.low, est.high)} <span class="esttag">est.</span></span><sup>${marker(priceSrc)}</sup>` : na('not given');
   return `<tr id="${r.row_id}" data-flip-id="${r.row_id}" data-model="${esc(r.model_key)}">` +
-    `<td class="n na c-rank">${rank}</td>` +
-    `<td class="c-model"><span class="name">${esc(r.display_name)}</span>` +
-      `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="eff-inline">${r.effort ? ' · ' + esc(r.effort) : ''}</span></span></td>` +
-    `<td class="c-eff"><span class="eff">${esc(r.effort || '—')}</span></td>` +
+    `<td class="c-model"><span class="swatch ${labClass(r.lab)}"></span><span class="name">${esc(r.display_name)}</span>${r.effort ? ` <span class="effb">[${esc(r.effort)}]</span>` : ''}` +
+      `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="src-inline"> · ${s.mark}</span></span></td>` +
     `<td class="c-src"><span class="hall ${s.cls}">${shapeSvg(s.cls)}${s.mark}</span><span class="via">${esc(src ? src.publisher : r.source_name)}</span></td>` +
-    `<td class="c-score"><span class="sv">${fmtPct(r.score_pct)}${r.ci_pct != null ? `<small> ±${r.ci_pct}</small>` : ''}<sup>${cite}</sup></span>` +
-      `<div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${labClass(r.lab)}" style="width:${r.score_pct}%"></div>${ci}</div></td>` +
-    `<td class="n c-cost">${r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd) : na('not given')}</td>` +
-    `<td class="n c-use">${usage.length ? usage.join('<br>') : na('not given')}</td>` +
+    `<td class="c-bar"><div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${labClass(r.lab)}" style="width:${w(r.score_pct)}"></div>${ci}</div></td>` +
+    `<td class="n c-score"><span class="sv">${fmtPct(r.score_pct)}${r.ci_pct != null ? `<small> ±${r.ci_pct}</small>` : ''}</span><sup>${marker(src)}</sup></td>` +
+    `<td class="n c-cost">${cost}</td>` +
+    `<td class="n c-tok">${r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : r.tokens_per_task != null ? `<span title="total tokens; no input/output split published">${fmtCount(r.tokens_per_task)} total</span>` : na('—')}</td>` +
+    `<td class="n c-steps">${r.steps_per_task != null ? fmtCount(r.steps_per_task) : na('—')}</td>` +
     `<td class="n c-pub">${r.published ? fmtDay(r.published) : na('not given')}</td></tr>`;
 }

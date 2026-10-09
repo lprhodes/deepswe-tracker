@@ -24,9 +24,7 @@
 <style>
 :root{
   --ground:#f3f6f1; --ground-2:#e8eee7; --sheet:#fbfcfa; --ink:#14212b; --ink-2:#44535c; --muted:#5f6e74;
-  --rule:#b9c8be; --grid:#dde6df; --focus:#2453a6; --link:#1f4b97;
-  /* lab colours: validated eight-slot palette (light) and grey for other labs */
-  --l0:#8a908d; --l1:#2a78d6; --l2:#eb6834; --l3:#1baf7a; --l4:#eda100; --l5:#e87ba4; --l6:#008300; --l7:#4a3aa7; --l8:#e34948;
+  --rule:#b9c8be; --grid:#dde6df; --focus:#2453a6; --link:#1f4b97; --good:#2f9e5a; --good-ink:#1d6b3b;
   --shadow-1:0 1px 2px rgb(20 33 43 / .05), 0 2px 6px rgb(20 33 43 / .04);
   --shadow-2:0 2px 4px rgb(20 33 43 / .06), 0 10px 28px rgb(20 33 43 / .10);
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
@@ -34,21 +32,21 @@
   --sans:Archivo, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"Spline Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
   /* dark-theme values, applied by the two blocks below */
-  --dark-ground:#101614; --dark-ground-2:#17201d; --dark-sheet:#141a18; --dark-ink:#e8efe9; --dark-ink-2:#b4c2bb; --dark-muted:#93a39c; --dark-rule:#34423c; --dark-grid:#222b28; --dark-focus:#7ea6ec; --dark-link:#8fb2f0; --dark-l0:#7d8582; --dark-l1:#3987e5; --dark-l2:#d95926; --dark-l3:#199e70; --dark-l4:#c98500; --dark-l5:#d55181; --dark-l6:#008300; --dark-l7:#9085e9; --dark-l8:#e66767;
+  --dark-ground:#101614; --dark-ground-2:#17201d; --dark-sheet:#141a18; --dark-ink:#e8efe9; --dark-ink-2:#b4c2bb; --dark-muted:#93a39c; --dark-rule:#34423c; --dark-grid:#222b28; --dark-focus:#7ea6ec; --dark-link:#8fb2f0; --dark-good:#4cc27a; --dark-good-ink:#8fdcab;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
-  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --l0:var(--dark-l0); --l1:var(--dark-l1); --l2:var(--dark-l2); --l3:var(--dark-l3); --l4:var(--dark-l4); --l5:var(--dark-l5); --l6:var(--dark-l6); --l7:var(--dark-l7); --l8:var(--dark-l8);
+  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --good:var(--dark-good); --good-ink:var(--dark-good-ink);
   --shadow-1:0 1px 0 rgb(255 255 255 / .03) inset; --shadow-2:0 1px 0 rgb(255 255 255 / .05) inset, 0 12px 32px rgb(0 0 0 / .45);
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --l0:var(--dark-l0); --l1:var(--dark-l1); --l2:var(--dark-l2); --l3:var(--dark-l3); --l4:var(--dark-l4); --l5:var(--dark-l5); --l6:var(--dark-l6); --l7:var(--dark-l7); --l8:var(--dark-l8);
+  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --good:var(--dark-good); --good-ink:var(--dark-good-ink);
   --shadow-1:0 1px 0 rgb(255 255 255 / .03) inset; --shadow-2:0 1px 0 rgb(255 255 255 / .05) inset, 0 12px 32px rgb(0 0 0 / .45);
   color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font:400 15px/1.55 var(--sans);font-variation-settings:"wdth" 100}
-::selection{background:color-mix(in oklch, var(--l1) 26%, transparent)}
+::selection{background:color-mix(in oklch, var(--link) 22%, transparent)}
 a{color:var(--link);text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{text-decoration-thickness:2px}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:2px}
@@ -107,7 +105,7 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
 .legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend svg{color:var(--ink-2)}
-.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c)}
 .legend .lsep{color:var(--muted);margin-left:var(--space-3)}
 .unplotted{font-size:13px;color:var(--muted);margin:var(--space-2) 0 0}
 .empty{padding:var(--space-7) var(--space-5);text-align:center;color:var(--ink-2)}
@@ -125,24 +123,28 @@ tbody td{padding:9px 10px;border-bottom:1px solid var(--grid);vertical-align:mid
 tbody tr:hover{background:var(--ground)}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td .name{font-weight:620}
-td .id{display:block;font:400 11px/1.35 var(--mono);color:var(--muted)}
+td .effb{font:400 12px/1 var(--mono);color:var(--muted)}
+td .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:8px;vertical-align:-1px}
+td .id{display:block;font:400 11px/1.35 var(--mono);color:var(--muted);margin-left:18px}
 td .id .h{white-space:nowrap}
-.eff-inline{display:none}
-td .eff{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
-.hall{display:inline-flex;align-items:center;gap:6px;font:600 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink);border:1px solid var(--rule);padding:3px 5px;border-radius:1px;white-space:nowrap}
-.hall{border-color:var(--ink-2)} .hall svg{color:var(--ink)}
+.src-inline{display:none}
+.hall{display:inline-flex;align-items:center;gap:6px;font:600 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink);border:1px solid var(--ink-2);padding:3px 5px;border-radius:1px;white-space:nowrap}
+.hall svg{color:var(--ink)}
 td .via{display:block;margin-top:4px;font-size:12px;max-width:16ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{position:relative;width:100%;max-width:170px;min-width:72px;height:12px;margin-top:5px}
-.bar .track{position:absolute;inset:4px 0;background:var(--grid)}
-.bar .fill{position:absolute;left:0;top:4px;bottom:4px}
-.bar .fill.l0{background:var(--l0)} .bar .fill.l1{background:var(--l1)} .bar .fill.l2{background:var(--l2)} .bar .fill.l3{background:var(--l3)} .bar .fill.l4{background:var(--l4)} .bar .fill.l5{background:var(--l5)} .bar .fill.l6{background:var(--l6)} .bar .fill.l7{background:var(--l7)} .bar .fill.l8{background:var(--l8)}
-.bar .ci{position:absolute;top:1px;bottom:1px;border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink)}
-.bar .ci::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--ink)}
-td.c-score{min-width:110px}
+td.c-bar,th.c-bar{width:30%;min-width:96px}
+.bar{position:relative;width:100%;height:14px}
+.bar .track{position:absolute;inset:3px 0;background:var(--grid)}
+.bar .fill{position:absolute;left:0;top:3px;bottom:3px;background:var(--c)}
+.bar .ci{position:absolute;top:0;bottom:0;border-left:1.2px solid var(--ink);border-right:1.2px solid var(--ink)}
+.bar .ci::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.2px solid var(--ink)}
+.axis-row td{border-bottom:0;padding-top:4px;padding-bottom:12px}
+.ticks{position:relative;height:14px;font:400 11px/1 var(--mono);color:var(--muted)}
+.ticks span{position:absolute;top:0;transform:translateX(-50%)}
+.ticks span:first-child{transform:none} .ticks span:last-child{transform:translateX(-100%)}
 td .sv{font-weight:700;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
 td .sv small{font-weight:500;font-size:12px;color:var(--ink-2)}
-td.c-use{font-size:12.5px;line-height:1.35;white-space:nowrap}
-th.c-score{text-align:left}
+.estc{white-space:nowrap;color:var(--ink-2)}
+.esttag{font:600 9.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;border:1px dashed var(--muted);color:var(--muted);padding:1px 3px;border-radius:2px}
 .na{color:var(--muted)}
 
 /* notes and footer */
@@ -160,16 +162,22 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* the readings table folds its lowest-priority columns instead of scrolling */
-@media (max-width:1100px){ .c-rank{display:none} }
-@media (max-width:960px){ .c-pub{display:none} tbody td,thead th{padding-left:8px;padding-right:8px} td .via{max-width:12ch} }
-@media (max-width:800px){ .c-use,.c-eff{display:none} .eff-inline{display:inline} }
+@media (max-width:1180px){ .c-pub{display:none} }
+@media (max-width:1100px){ .c-steps,.c-tok{display:none} tbody td,thead th{padding-left:8px;padding-right:8px} td .via{max-width:12ch} }
+@media (max-width:880px){ .c-src{display:none} .src-inline{display:inline} }
 @media (max-width:560px){
-  .c-src,.hsep{display:none}
-  tbody td,thead th{padding:8px 6px}
+  .hsep,td .sv small{display:none}
+  tbody td,thead th{padding:8px 4px}
+  .tablewrap{border-left:0;border-right:0}
   td .name{font-size:13px}
-  td.c-score{min-width:0}
-  td .sv small{display:none}
-  .bar{max-width:none}
+  td .effb{display:block;margin-left:18px}
+  td .id{font-size:10.5px}
+  td.c-bar,th.c-bar{min-width:40px;width:20%}
+  .ticks span:not(:first-child):not(:last-child){display:none}
+  td.c-cost .na{font-size:11px}
+  .estc{white-space:normal;display:inline-block;max-width:8ch;font-size:11.5px}
+  td .sv{font-size:13px}
+  td .name{overflow-wrap:anywhere}
 }
 @media (max-width:900px){
 }
@@ -229,8 +237,8 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
     <div class="cgroup" role="group" aria-label="Sources" id="srcGroup"></div>
     <div class="cgroup">
       <div class="seg" role="group" aria-label="Effort levels shown">
-        <button type="button" data-mode="best" aria-pressed="true">Best per model</button>
-        <button type="button" data-mode="all" aria-pressed="false">All effort levels</button>
+        <button type="button" data-mode="all" aria-pressed="true">All effort levels</button>
+        <button type="button" data-mode="best" aria-pressed="false">Best per model</button>
       </div>
       <span role="group" aria-label="Effort levels" id="effortGroup" class="cgroup"></span>
     </div>
@@ -250,7 +258,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it: colour is the lab, each line joins one model’s effort levels from low to max, and cost runs from high on the left to zero on the right. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
@@ -264,11 +272,11 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 2 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
-        <p>Bars run from 0 to 100%; the bracket is the 95% interval where the source gives one. The number after each score is its source in the list below. Select a heading to sort.</p>
+        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices. Select a heading to sort.</p>
       </div>
       <span class="field" id="tableCount"></span>
     </div>
-    <div class="tablewrap"><table id="tbl"><caption class="sr">DeepSWE 1.1 readings for the current filters</caption><thead><!--__THEAD__--></thead><tbody><!--__ROWS__--></tbody></table></div>
+    <div class="tablewrap"><table id="tbl"><caption class="sr">DeepSWE 1.1 readings for the current filters</caption><thead><!--__THEAD__--></thead><tbody><!--__ROWS__--></tbody><tfoot><!--__TFOOT__--></tfoot></table></div>
   </section>
 
   <section class="block" aria-labelledby="sp-h">
@@ -276,21 +284,10 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 3 · The spread</span>
         <h2 id="sp-h">Same model, different measurer</h2>
-        <p>Each model’s best result from each source. Where a lab’s claim and an independent re-run disagree, the rule between them is the gap. Only models measured by at least two sources are shown.</p>
+        <p>The official leaderboard’s bar form, one bar per source under each model: its best official result, its lab’s claim and any independent re-run. Only models measured by at least two sources are shown.</p>
       </div>
     </div>
     <div class="panel" id="c-spread"><!--__SPREAD__--></div>
-  </section>
-
-  <section class="block" aria-labelledby="tl-h">
-    <div class="bhead">
-      <div>
-        <span class="field">Fig. 4 · Timeline</span>
-        <h2 id="tl-h">When each result was published</h2>
-        <p>After the official board’s last addition, every new result came from a lab or an independent runner.</p>
-      </div>
-    </div>
-    <div class="panel" id="c-time"><!--__TIME__--></div>
   </section>
 
   <section class="block" aria-labelledby="nt-h">
@@ -364,8 +361,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => wind
 
 // ---------- state ----------
 const ALL_EFF = [...EFFORTS, 'other'];
-const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all', metric: 'cost', scale: 'linear', sort: { key: 'score_pct', dir: -1 } };
-const isDefault = () => state.sources.size === 3 && state.mode === 'best' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.period === 'all';
+const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all', metric: 'cost', scale: 'log', sort: { key: 'score_pct', dir: -1 } };
+const isDefault = () => state.sources.size === 3 && state.mode === 'all' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.period === 'all';
 
 function selected() {
   let rows = ROWS.filter(r => state.sources.has(r.source_type) && state.efforts.has(r._eff) && !state.offLabs.has(r.lab) && !state.offModels.has(r.model_key) && !state.offConfigs.has(r._key)
@@ -393,8 +390,8 @@ for (const s of SERIES) {
   $('#legend').append(el('span', { innerHTML: shapeSvg(s.cls) }, [s.label]));
 }
 $('#legend').append(el('span', { className: 'lsep', textContent: 'Colour is the lab:' }));
-for (const [lab, cls] of [...Object.entries(LAB_SLOTS), ['Other labs', 'l0']]) {
-  const sw = el('span', { className: 'sw' }); sw.style.background = `var(--${cls})`;
+for (const [lab, cls] of [...Object.keys(LAB_COLORS).map(l => [l, labClass(l)]), ['Other labs', 'lab-other']]) {
+  const sw = el('span', { className: `sw ${cls}` });
   $('#legend').append(el('span', {}, [sw, lab]));
 }
 for (const e of ALL_EFF) {
@@ -420,7 +417,7 @@ const segment = (host, options, get, set) => {
 };
 segment($('#periodGroup'), [['all', 'All dates'], [last, `After ${fmtDate(last).replace(/ \d{4}$/, '')}`]], () => state.period, v => (state.period = v));
 segment($('#metricGroup'), Object.entries(METRICS).map(([k, m]) => [k, m.short]), () => state.metric, v => (state.metric = v));
-segment($('#scaleGroup'), [['linear', 'Linear'], ['log', 'Log']], () => state.scale, v => (state.scale = v));
+segment($('#scaleGroup'), [['log', 'Log'], ['linear', 'Linear']], () => state.scale, v => (state.scale = v));
 
 // Models and configs pickers: grouped checklists with search, all and none.
 const MODELS = [...new Map(ROWS.map(r => [r.model_key, { key: r.model_key, name: r.display_name, lab: r.lab }])).values()].sort((a, b) => a.lab.localeCompare(b.lab) || a.name.localeCompare(b.name));
@@ -464,9 +461,9 @@ document.querySelectorAll('.pop').forEach(p => p.addEventListener('toggle', () =
 document.addEventListener('click', e => { if (!e.target.closest('.pop')) document.querySelectorAll('.pop[open]').forEach(p => (p.open = false)); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.pop[open]').forEach(p => { p.open = false; p.querySelector('summary').focus(); }); });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all' });
+  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all' });
   document.querySelectorAll('#srcGroup .chip, #effortGroup .chip').forEach(b => b.setAttribute('aria-pressed', 'true'));
-  document.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === 'best')));
+  document.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === 'all')));
   $('#periodGroup').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === 'all')));
   drawLabs(); drawModels(); drawConfigs(); render();
 });
@@ -474,10 +471,10 @@ $('#reset').addEventListener('click', () => {
 // ---------- tooltip ----------
 const tipEl = $('#tip');
 function tip(r, ev, target) {
-  const k = el('span', { className: 'k' }); k.style.background = `var(--${labClass(r.lab)})`;
+  const k = el('span', { className: `k ${labClass(r.lab)}` }); k.style.background = 'var(--c)';
   const facts = [
     r.harness && `Harness: ${r.harness}`,
-    r.cost_per_task_usd != null && `Cost per task: ${fmtUsd(r.cost_per_task_usd)}`,
+    r.cost_per_task_usd != null ? `Cost per task: ${fmtUsd(r.cost_per_task_usd)}` : r.cost_estimate && `Cost per task: about ${fmtUsd(r.cost_estimate.low)}–${fmtUsd(r.cost_estimate.high)} (estimated from AI Gateway list prices)`,
     r.output_tokens_per_task != null && `Output tokens per task: ${fmtCount(r.output_tokens_per_task)}`,
     r.steps_per_task != null && `Agent steps per task: ${fmtCount(r.steps_per_task)}`,
     r.published ? `Published ${fmtDate(r.published)}` : 'Publication date not given',
@@ -534,6 +531,8 @@ function highlight(model) {
 // Rows come from the same renderer the build uses for the pre-rendered table, so the page reads the
 // same with or without script; here they are re-rendered for the current filters and sort.
 const SRC = new Map((DATA.sources || []).map(x => [x.id, x]));
+const BARMAX = barMax(ROWS);
+const PRICE_SRC = (DATA.sources || []).find(x => x.key === 'ai-gateway-pricing');
 function renderTable(rows) {
   const { key, dir } = state.sort;
   const val = r => (key === 'effort' ? effortRank(r.effort) : r[key]);
@@ -546,7 +545,7 @@ function renderTable(rows) {
   $('#tbl thead').innerHTML = theadHtml(state.sort);
   const tbody = $('#tbl tbody');
   const flipState = !firstRender && motionOK() && typeof Flip !== 'undefined' && tbody.children.length ? Flip.getState(tbody.querySelectorAll('tr')) : null;
-  tbody.innerHTML = sorted.length ? sorted.map((r, n) => readingRowHtml(r, n + 1, SRC.get(r.source_id))).join('')
+  tbody.innerHTML = sorted.length ? sorted.map(r => readingRowHtml(r, SRC.get(r.source_id), BARMAX, PRICE_SRC)).join('')
     : `<tr><td colspan="${TABLE_COLS.length}" class="empty">No readings match these filters.</td></tr>`;
   if (flipState) Flip.from(flipState, { targets: tbody.querySelectorAll('tr'), duration: 0.45, ease: 'power2.inOut', fade: true, simple: true });
   $('#tbl').dataset.state = sorted.length ? 'ideal' : 'empty';
@@ -627,15 +626,14 @@ function render() {
   $('#modelCount').textContent = `(${MODELS.length - state.offModels.size}/${MODELS.length})`;
   $('#configCount').textContent = `(${ROWS.length - state.offConfigs.size}/${ROWS.length})`;
   if (!rows.length) {
-    ['#c-scatter', '#c-spread', '#c-time'].forEach(id => emptyState($(id)));
+    ['#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
     $('#unplotted').textContent = '';
   } else {
     const M = METRICS[state.metric];
     mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
     const missing = rows.filter(r => !(r[M.field] > 0)).length;
     $('#unplotted').textContent = missing ? `${missing} of ${rows.length} readings in this selection have no published ${M.noun} and are not plotted; they are in the table.` : '';
-    mount('#c-spread', spreadPlot(rows, { id: 'sp', onlyMulti: true }), rows);
-    mount('#c-time', timeline(rows, { id: 'tl', marker: { date: last, label: `Official board’s last addition · ${fmtDate(last)}` }, asOf: meta.as_of }), rows);
+    mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
   renderTable(rows);
   firstRender = false;
