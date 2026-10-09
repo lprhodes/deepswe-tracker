@@ -456,14 +456,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
 <script type="application/json" id="report-data">
 {
  "project": "deepswe-tracker",
- "updated": "2026-10-09T20:05:00+11:00",
+ "updated": "2026-10-10T09:40:00+11:00",
  "verdict": {
   "token": "done",
-  "number": "210",
+  "number": "215",
   "unit": "readings of 80 models",
-  "headline": "New models are on the chart: a release slider opens on the last 30 days, and models with no published cost sit beside it at their score.",
-  "run_label": "release slider",
-  "head_sha": "844fc04"
+  "headline": "Simpler no-cost list, one line per measurer, and a sweep for other effort levels: labs rarely publish more than one.",
+  "run_label": "effort-level sweep",
+  "head_sha": "83a4984"
  },
  "tasks": [
   {
@@ -576,6 +576,30 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "stage": "code written",
    "outcome": "done",
    "note": "Opus 5.5, Sonnet 5.5, Gemini 4 Argon now visible"
+  },
+  {
+   "id": "P-8",
+   "title": "Simplify the list of models with no published cost",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "ranked list, no leader lines"
+  },
+  {
+   "id": "P-9",
+   "title": "Join a model's runs by the same measurer into one line",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "board live + archive were split by address"
+  },
+  {
+   "id": "R-2",
+   "title": "Find other effort levels for the 53 single-setting models",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "1 new setting (Laguna off); DeepSeek previews split"
   }
  ],
  "gates": [
@@ -603,12 +627,12 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "kind": "design"
   },
   {
-   "name": "Design lint: 0 critical; all 41 major flags are source links read as loads",
+   "name": "Design lint: 0 critical; all 43 major flags are source links read as loads",
    "command": "design-lint.py index.html",
    "exit_code": 0,
    "state": "done",
    "kind": "design",
-   "counts": "41/41"
+   "counts": "43/43"
   },
   {
    "name": "UX lint: no failures",
@@ -630,7 +654,7 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "name": "Every score cites a listed source, and every source is cited",
    "command": "dossier-report audit_page.py index.html",
    "exit_code": 0,
-   "counts": "40/40",
+   "counts": "42/42",
    "state": "done",
    "kind": "tests"
   },
@@ -644,9 +668,9 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
   },
   {
    "name": "Readings table fits without sideways scroll",
-   "command": "Playwright at 1360, 1280, 1024, 900, 768, 390px",
+   "command": "Playwright at 1360, 1280, 1024, 900, 768, 390px, 30 days and any time",
    "exit_code": 0,
-   "counts": "6/6",
+   "counts": "12/12",
    "state": "done",
    "kind": "design"
   },
@@ -683,14 +707,6 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "file_line": "index.html",
    "claim": "Design lint flags the 41 source links as external loads; they are hyperlinks",
    "state": "waived"
-  },
-  {
-   "id": "F-03",
-   "score": 30,
-   "severity": "low",
-   "file_line": "site/charts.mjs (any-time view)",
-   "claim": "At any time the no-cost column holds 47 models; lower scorers go unlabelled, tooltips only",
-   "state": "waived"
   }
  ],
  "corrections": [
@@ -709,6 +725,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "true_state": "xAI reported 71.0% at high; 73% is Artificial Analysis's run.",
    "mechanism": "A news write-up merged two sources.",
    "caught_by": "fact-check against the xAI model card PDF"
+  },
+  {
+   "earlier_claim": "DeepSeek V4 Pro scores 7.5% to 62.8% across sources",
+   "said_pct": 7.5,
+   "true_pct": 62.8,
+   "true_state": "Two models: the April preview (7.5–12.8%) and the August 0813 re-release (56–63%).",
+   "mechanism": "DeepSeek re-released it under the same API name.",
+   "caught_by": "DeepSeek's V4-Pro-0813 card lists both"
   }
  ],
  "coverage": [
@@ -716,6 +740,11 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "axis": "Models you named that have a score",
    "covered": 10,
    "denominator": 11
+  },
+  {
+   "axis": "Single-setting models given a second setting",
+   "covered": 1,
+   "denominator": 53
   }
  ],
  "not_checked": [
@@ -738,9 +767,15 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
  ],
  "not_done": [
   {
-   "action": "Cost for Anthropic, Google and Meta readings",
-   "reason": "Those labs publish neither cost nor tokens, so there is nothing to price.",
-   "what_would_unblock": "A lab publishing token counts.",
+   "action": "Cost estimates from token counts",
+   "reason": "No reading has the input tokens a cost needs; Laguna's counts turned out to be output only.",
+   "what_would_unblock": "A lab publishing input and output tokens.",
+   "size": "unknown"
+  },
+  {
+   "action": "Effort level for runs a card only implies",
+   "reason": "Cards give a default setting but not the one used for DeepSWE.",
+   "what_would_unblock": "The lab stating the setting.",
    "size": "unknown"
   }
  ],
@@ -766,6 +801,11 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "path": "README.md",
    "kind": "md",
    "contains": "What the data is, the charts, and how to add a score."
+  },
+  {
+   "path": "research/2026-10-10-effort-levels-report.md",
+   "kind": "md",
+   "contains": "The effort-level sweep: what was found and what was not."
   },
   {
    "path": "research/2026-10-09-deepswe-scores-report.md",
