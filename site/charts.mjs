@@ -41,6 +41,17 @@ export const METRICS = {
   steps: { field: 'steps_per_task', label: 'Avg agent steps per task', short: 'Agent steps', noun: 'agent-step count', better: 'fewer steps', fmt: v => fmtCount(v) },
 };
 
+// The release-date window: a model is shown when it was released within the last N days of the
+// anchor, which is the data's as-of date or the newest release in it, whichever is later. A model's
+// release date is the one its source states (models.csv), else the date its first DeepSWE 1.1 result
+// was published. Models with neither appear only when the window is "any time".
+export const WINDOWS = [7, 14, 30, 60, 90, null];
+export const DEFAULT_WINDOW = 2;
+export const windowAnchor = (rows, asOf) => rows.reduce((a, r) => (r.model_released && r.model_released > a ? r.model_released : a), asOf);
+export const windowStart = (anchor, days) => new Date(Date.parse(anchor + 'T00:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
+export const inWindow = (r, days, anchor) => days == null || (!!r.model_released && r.model_released >= windowStart(anchor, days));
+export const windowPhrase = days => (days == null ? 'at any time' : `in the last ${days} days`);
+
 // Colour tokens for a standalone SVG (the README charts). The page swaps this block for one that
 // points at its own tokens, so the page has a single source of colour.
 export const STYLE_TOKENS = `
@@ -63,6 +74,8 @@ export const STYLE_RULES = `
 .viz .lbl-eff{fill:var(--v-ink2);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace;paint-order:stroke;stroke:var(--v-paper);stroke-width:3px;stroke-linejoin:round}
 .viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
+.viz .rail-bg{fill:var(--v-grid);opacity:.45}
+.viz .rail-h{fill:var(--v-ink);font-size:12px;font-weight:650}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
 .viz .best-a{stop-color:var(--v-good);stop-opacity:.16} .viz .best-b{stop-color:var(--v-good);stop-opacity:0}
@@ -115,9 +128,11 @@ function markPath(src, lab, x, y, cls = 'mk') {
   if (src === 's3') return `<rect class="${cls} ${src} ${lab}" x="${x - 4.5}" y="${y - 4.5}" width="9" height="9" pointer-events="none"/>`;
   return `<circle class="${cls} ${src} ${lab}" cx="${x}" cy="${y}" r="5" pointer-events="none"/>`;
 }
-function mark(r, i, x, y) {
+// The hit target is larger than the mark, except where points pack closer than its radius (the column
+// of unmeasured results), where it shrinks so every point keeps its own centre.
+function mark(r, i, x, y, hitR = 12) {
   const fx = x.toFixed(1), fy = y.toFixed(1);
-  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="12"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
+  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="${hitR}"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
 }
 
 function open(w, h, id, title, desc, embedStyle) {
@@ -213,36 +228,44 @@ export function frontier(rows, field) {
 // runs from the most expensive on the left to the cheapest on the right (log by default, or linear),
 // and each model's effort levels are joined in order from low to max. Lines are drawn first and every
 // point after, so a model measured at one effort level is never hidden under another model's line.
-export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 680, id = 'sc', labelTop = 30 } = {}) {
+// Results that publish a score but not this measure sit in a column at the right, on the same score
+// axis, so a model without a published cost is still on the chart.
+export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 680, id = 'sc', labelTop = 30, title: titleText } = {}) {
   const M = METRICS[metric];
-  const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r[M.field] > 0);
-  const title = `DeepSWE 1.1 score against ${M.noun}`;
-  const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.`;
-  if (!pts.length) return open(width, 120, id, title, 'No results with this measure.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection report a ${esc(M.noun)}.</text></svg>`;
-  const key = embedStyle ? legend(24, 80, pts.map(p => p.r), width - 28) : null;
-  const m = { left: 60, right: 28, top: key ? key.y + 44 : 48, bottom: 58 };
+  const all = rows.map((r, i) => ({ r, i }));
+  const pts = all.filter(p => p.r[M.field] > 0);
+  const miss = all.filter(p => !(p.r[M.field] > 0));
+  const title = titleText || `DeepSWE 1.1 score against ${M.noun}`;
+  const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.` +
+    (miss.length ? ` A column at the right holds ${miss.length} results with no published ${M.noun}, placed by score only.` : '');
+  if (!all.length) return open(width, 120, id, title, 'No results in this selection.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection.</text></svg>`;
+  const key = embedStyle ? legend(24, 80, rows, width - 28) : null;
+  const railW = miss.length ? 236 : 0;
+  const m = { left: 60, right: 28 + railW, top: key ? key.y + 44 : 48, bottom: 58 };
   const right = width - m.right, bottom = height - m.bottom;
+  const railX = right + 30, railR = width - 28;
+  const y1 = scoreTop(rows);
+  const sy = v => bottom - (v / y1) * (bottom - m.top);
+  const plotW = right - m.left, plotH = bottom - m.top;
   const vals = pts.map(p => p.r[M.field]).sort((a, b) => a - b);
-  let sx, ticks, clampAt = Infinity;
-  if (scale === 'log') {
+  let sx = () => right, ticks = [], clampAt = Infinity;
+  if (!vals.length) { /* no x scale: only the column of unmeasured results is drawn */ }
+  else if (scale === 'log') {
     const lx0 = Math.log10(vals[0] / 1.35), lx1 = Math.log10(vals.at(-1) * 1.35);
-    sx = v => right - (Math.log10(v) - lx0) / (lx1 - lx0) * (right - m.left);
+    sx = v => right - (Math.log10(v) - lx0) / (lx1 - lx0) * plotW;
     const all = LOG_TICKS.filter(t => Math.log10(t) >= lx0 && Math.log10(t) <= lx1);
     ticks = all.filter((_, k) => k % Math.ceil(all.length / 8) === 0);
   } else {
     // A long expensive tail would squeeze every other result against zero, so the axis stops at
     // about 1.25x the 90th percentile; results beyond it are pinned to the left edge and counted.
     const p90 = vals[Math.floor(vals.length * 0.9)] ?? vals.at(-1);
-    let top = Math.min(vals.at(-1), p90 * 1.25);
+    const top = Math.min(vals.at(-1), p90 * 1.25);
     const step = niceStep(top);
     const max = Math.ceil(top * 1.02 / step) * step;
     if (vals.at(-1) > max) clampAt = max;
-    sx = v => right - (Math.min(v, max) / max) * (right - m.left);
-    ticks = []; for (let t = 0; t <= max + 1e-9; t += step) ticks.push(+t.toFixed(6));
+    sx = v => right - (Math.min(v, max) / max) * plotW;
+    for (let t = 0; t <= max + 1e-9; t += step) ticks.push(+t.toFixed(6));
   }
-  const y1 = scoreTop(pts.map(p => p.r));
-  const sy = v => bottom - (v / y1) * (bottom - m.top);
-  const plotW = right - m.left, plotH = bottom - m.top;
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
     svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Lines join each model’s effort levels from low to max, as on the official board. Colour is the lab; shape is who measured it.</text>`;
@@ -250,26 +273,37 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   }
   svg += `<text class="y-title" x="${m.left}" y="${m.top - 20}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
   const bestText = `Best: higher score, ${M.better} ↗`;
-  svg += `<text class="best-lbl" x="${right}" y="${m.top - 20}" text-anchor="end">${esc(bestText)}</text>`;
-  if (scale !== 'log') {
+  if (vals.length) svg += `<text class="best-lbl" x="${right}" y="${m.top - 20}" text-anchor="end">${esc(bestText)}</text>`;
+  if (vals.length && scale !== 'log') {
     // In linear mode the cheapest results sit hard against the right edge, so the top-right corner is
     // the target region itself; a wash fades out from it.
     svg += `<defs><radialGradient id="${id}-best" cx="1" cy="0" r="0.7"><stop offset="0" class="best-a"/><stop offset="1" class="best-b"/></radialGradient></defs>`;
     svg += `<rect x="${m.left}" y="${m.top}" width="${plotW}" height="${plotH}" fill="url(#${id}-best)" aria-hidden="true"/>`;
   }
-  svg += yAxis(0, y1, sy, m.left, right);
+  if (miss.length) {
+    svg += `<rect class="rail-bg" x="${railX - 14}" y="${m.top}" width="${railR - railX + 14}" height="${plotH}" rx="6" aria-hidden="true"/>`;
+    svg += `<text class="rail-h" x="${railX - 6}" y="${m.top - 20}">No ${esc(M.short.toLowerCase())} published</text>`;
+    svg += `<text class="tick" x="${railX - 6}" y="${bottom + 18}">placed by score only</text>`;
+  }
+  svg += yAxis(0, y1, sy, m.left, miss.length ? railR : right);
   for (const t of ticks) {
     const x = sx(t).toFixed(1);
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${esc(M.fmt(t))}</text>`;
   }
   svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
-  svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
+  if (vals.length) svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
+  else svg += `<text class="note" x="${(m.left + right) / 2}" y="${(m.top + bottom) / 2}" text-anchor="middle">No result in this selection publishes a ${esc(M.noun)}.</text>`;
   const clamped = pts.filter(p => p.r[M.field] > clampAt).length;
   if (clamped) svg += `<text class="note" x="${m.left + 6}" y="${bottom - 8}">◂ ${clamped} result${clamped === 1 ? '' : 's'} above ${esc(M.fmt(clampAt))}, pinned to this edge</text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
-  const groups = new Map();
-  for (const p of placed) { if (!groups.has(p.g)) groups.set(p.g, []); groups.get(p.g).push(p); }
+  // The column: one centre line, each point nudged sideways until it clears the ones above it.
+  const colX = railX + 18, railPts = [];
+  for (const p of [...miss].sort((a, b) => b.r.score_pct - a.r.score_pct)) {
+    const cy = sy(p.r.score_pct);
+    const dx = [0, 9, -9, 16, -16].find(d => railPts.every(q => Math.hypot(q.cx - (colX + d), q.cy - cy) >= 9)) ?? 0;
+    railPts.push({ ...p, cx: colX + dx, cy, g: groupKey(p.r) });
+  }
 
   // The efficient frontier, a wide neutral band under the data in both scales. It is keyed in the
   // header rather than labelled on the plot, where its label would compete with the model labels.
@@ -283,22 +317,62 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   }
   // Layer 1: every line. Layer 2: every point, single-effort models drawn larger.
   let lines = '', points = '';
-  for (const [g, ps] of groups) {
-    const model = esc(ps[0].r.model_key);
-    const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
-    if (laddered.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
-    points += `<g class="grp${ps.length === 1 ? ' solo' : ''}" data-g="${esc(g)}" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy)).join('') + '</g>';
+  for (const [set, hitR] of [[placed, 12], [railPts, 7]]) {
+    const groups = new Map();
+    for (const p of set) { if (!groups.has(p.g)) groups.set(p.g, []); groups.get(p.g).push(p); }
+    for (const [g, ps] of groups) {
+      const model = esc(ps[0].r.model_key);
+      const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
+      if (laddered.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
+      points += `<g class="grp${ps.length === 1 ? ' solo' : ''}" data-g="${esc(g)}" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy, hitR)).join('') + '</g>';
+    }
   }
   svg += lines + points;
   // Layer 3: one label per model, at its best visible result, tinted in its lab colour.
-  const bestByModel = new Map();
-  for (const p of placed) { const b = bestByModel.get(p.r.model_key); if (!b || p.r.score_pct > b.r.score_pct) bestByModel.set(p.r.model_key, p); }
+  const bestOf = set => { const b = new Map(); for (const p of set) { const x = b.get(p.r.model_key); if (!x || p.r.score_pct > x.r.score_pct) b.set(p.r.model_key, p); } return [...b.values()]; };
   const frontModels = new Set(front.map(r => r.model_key));
-  const chosen = [...bestByModel.values()].sort((a, b) => b.r.score_pct - a.r.score_pct)
+  const chosen = bestOf(placed).sort((a, b) => b.r.score_pct - a.r.score_pct)
     .filter((p, k) => k < labelTop || frontModels.has(p.r.model_key));
   const items = chosen.map(p => ({ cx: p.cx, cy: p.cy, model: p.r.model_key, cls: labClass(p.r.lab), text: p.r.display_name, sub: (p.r.effort || '').toUpperCase() }));
   svg += placeLabels(items, { left: m.left, right, top: m.top, bottom }, placed.map(p => ({ x: p.cx - 5, y: p.cy - 5, w: 10, h: 10 })));
+  if (railPts.length) svg += railLabels(bestOf(railPts), { x: railX + 42, right: railR - 4, top: m.top + 8, bottom: bottom - 6 });
   return svg + '</svg>';
+}
+
+// Labels for the column of unmeasured results, stacked beside it in the same top-to-bottom order as
+// their points so no two leaders cross. Labels that would overlap are merged into a block centred on
+// their points. Highest scores are taken first; a label the stack would push further than `reach`
+// from its point is left off, and that point keeps its tooltip.
+function stackLabels(list, top, bottom, H) {
+  const blocks = [];
+  for (const p of [...list].sort((a, b) => a.cy - b.cy)) {
+    blocks.push({ ps: [p], sum: p.cy });
+    for (;;) {
+      const n = blocks.length;
+      const fit = bk => Math.min(Math.max(bk.sum / bk.ps.length - (bk.ps.length - 1) * H / 2, top), bottom - (bk.ps.length - 1) * H);
+      if (n < 2 || fit(blocks[n - 2]) + blocks[n - 2].ps.length * H <= fit(blocks[n - 1])) { blocks.forEach(bk => (bk.y = fit(bk))); break; }
+      const last = blocks.pop(); blocks[n - 2].ps.push(...last.ps); blocks[n - 2].sum += last.sum;
+    }
+  }
+  return blocks.flatMap(bk => bk.ps.map((p, k) => ({ p, y: bk.y + k * H })));
+}
+function railLabels(best, box, reach = 150) {
+  const H = 15;
+  let kept = [];
+  for (const p of [...best].sort((a, b) => b.r.score_pct - a.r.score_pct)) {
+    const trial = stackLabels([...kept, p], box.top, box.bottom, H);
+    if (trial.every(t => Math.abs(t.y - t.p.cy) <= reach) && kept.length + 1 <= Math.floor((box.bottom - box.top) / H) + 1) kept.push(p);
+  }
+  const room = box.right - box.x;
+  return stackLabels(kept, box.top, box.bottom, H).map(({ p, y }) => {
+    const eff = (p.r.effort || '').toUpperCase();
+    let name = p.r.display_name;
+    const nameW = textW(name, 12), effW = eff ? textW(eff, 9) + 6 : 0;
+    const showEff = eff && nameW + effW <= room;
+    if (nameW > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
+    return `<g class="grp glbl ${labClass(p.r.lab)}" data-model="${esc(p.r.model_key)}"><line class="leader" x1="${(p.cx + 6).toFixed(1)}" y1="${p.cy.toFixed(1)}" x2="${(box.x - 4).toFixed(1)}" y2="${y.toFixed(1)}"/>` +
+      `<text class="lbl" x="${box.x}" y="${(y + 4).toFixed(1)}">${esc(name)}${showEff ? `<tspan class="lbl-eff" dx="6">${esc(eff)}</tspan>` : ''}</text></g>`;
+  }).join('');
 }
 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%

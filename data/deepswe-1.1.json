@@ -636,6 +636,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1xty4qe",
+      "model_released": "2026-09-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ctctri",
       "source_n": 28
     },
@@ -664,6 +666,8 @@
       "lab": "Meta",
       "open_weights": false,
       "row_id": "row-47v276",
+      "model_released": "2026-09-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1wqp1zm",
       "source_n": 17
     },
@@ -692,6 +696,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1j0dft9",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
       "source_n": 30
     },
@@ -720,6 +726,8 @@
       "lab": "Fireworks AI",
       "open_weights": false,
       "row_id": "row-p2qq0j",
+      "model_released": "2026-09-23",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
       "source_n": 27
     },
@@ -748,6 +756,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-k5hr20",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1jseipb",
       "source_n": 25
     },
@@ -776,6 +786,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-o4taeh",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -804,6 +816,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-owdu43",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -832,6 +846,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1w5t75g",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -860,6 +876,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-14zbox",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-s5arsj",
       "source_n": 21
     },
@@ -888,6 +906,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-346qj2",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -916,6 +936,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-vqmucw",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -944,6 +966,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-5dvg8e",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -972,6 +996,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1oeh1kj",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1000,6 +1026,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-16dfael",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
       "source_n": 30
     },
@@ -1028,6 +1056,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-3bvbtr",
+      "model_released": "2026-09-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-17v6sj",
       "source_n": 35
     },
@@ -1056,6 +1086,8 @@
       "lab": "Cognition",
       "open_weights": false,
       "row_id": "row-1o9vzqd",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-prwi23",
       "source_n": 19
     },
@@ -1084,6 +1116,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-lbxd05",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1112,6 +1146,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1wxhh73",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1140,6 +1176,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-y7m969",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1168,6 +1206,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-16p8paj",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -1196,6 +1236,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1sj5dau",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1224,6 +1266,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1unx8j9",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1252,6 +1296,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1mtbg4a",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1280,6 +1326,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-z4hdo2",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
       "source_n": 30
     },
@@ -1308,6 +1356,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1xg0j7k",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
       "source_n": 30
     },
@@ -1336,6 +1386,8 @@
       "lab": "Xiaomi",
       "open_weights": true,
       "row_id": "row-b1kgds",
+      "model_released": "2026-09-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1mttwp9",
       "source_n": 24
     },
@@ -1364,6 +1416,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1n55rtx",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1392,6 +1446,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-nhlnrl",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1420,6 +1476,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1kjx08d",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1448,6 +1506,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-itcfkk",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1476,6 +1536,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1ns4aaz",
+      "model_released": "2026-09-28",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1tiaoyx",
       "source_n": 29
     },
@@ -1504,6 +1566,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-1kwajgk",
+      "model_released": "2026-09-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1g5kt5u",
       "source_n": 23
     },
@@ -1532,6 +1596,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-tdaaio",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1560,6 +1626,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-qoxc9u",
+      "model_released": "2026-09-28",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1588,6 +1656,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-106utim",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -1616,6 +1686,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-18ttaw",
+      "model_released": "2026-08-20",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1644,6 +1716,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1c4imbl",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1672,6 +1746,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-tdvxi6",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1700,6 +1776,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1dtxecg",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1728,6 +1806,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-n5l7y",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -1756,6 +1836,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1v14szb",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1784,6 +1866,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-vejsjt",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -1812,6 +1896,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-vw58k6",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1840,6 +1926,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1ly571m",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1868,6 +1956,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-ajdh5w",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1896,6 +1986,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-fm38un",
+      "model_released": "2026-08-20",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1924,6 +2016,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1g3833n",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -1952,6 +2046,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-15hrore",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -1980,6 +2076,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-kte6r1",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-l1zffg",
       "source_n": 9
     },
@@ -2008,6 +2106,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1kfzh6g",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2036,6 +2136,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-123w736",
+      "model_released": "2026-07-18",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2064,6 +2166,8 @@
       "lab": "Xiaomi",
       "open_weights": true,
       "row_id": "row-q48lwe",
+      "model_released": "2026-09-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1mttwp9",
       "source_n": 24
     },
@@ -2092,6 +2196,8 @@
       "lab": "StepFun",
       "open_weights": true,
       "row_id": "row-nj1v5q",
+      "model_released": "2026-09-20",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1o5c47s",
       "source_n": 22
     },
@@ -2120,6 +2226,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1r66635",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -2148,6 +2256,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-ub0egg",
+      "model_released": "2026-07-18",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-kyj4bu",
       "source_n": 8
     },
@@ -2176,6 +2286,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-cax4uv",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2204,6 +2316,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-2f9pfs",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1b2qf5e",
       "source_n": 16
     },
@@ -2232,6 +2346,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1e5knmg",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2260,6 +2376,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-t03qkb",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2288,6 +2406,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1lhlm4s",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2316,6 +2436,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1st9iuc",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2344,6 +2466,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-tb7k4q",
+      "model_released": "2026-09-03",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2372,6 +2496,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-12m5fyd",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2400,6 +2526,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-1so5ru7",
+      "model_released": "2026-08-20",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1171e08",
       "source_n": 14
     },
@@ -2428,6 +2556,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-huu76o",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2456,6 +2586,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-m482jr",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -2484,6 +2616,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1d2hsmx",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -2512,6 +2646,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-11vuxf9",
+      "model_released": "2026-07-18",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
       "source_n": 27
     },
@@ -2540,6 +2676,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1wpexpo",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -2568,6 +2706,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-e5sg10",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2596,6 +2736,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-18oxn14",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-tt3io3",
       "source_n": 12
     },
@@ -2624,6 +2766,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-ils0lb",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -2652,6 +2796,8 @@
       "lab": "Nex-AGI",
       "open_weights": true,
       "row_id": "row-1ogzpoy",
+      "model_released": "2026-09-08",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
       "source_n": 18
     },
@@ -2680,6 +2826,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1n2qy16",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -2708,6 +2856,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1rhhb5e",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2736,6 +2886,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1q9if39",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2764,6 +2916,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-f4ic5k",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2792,6 +2946,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-z10ec",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2820,6 +2976,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-wxw9bn",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -2848,6 +3006,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-12wnw3m",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2876,6 +3036,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-69o7y9",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-17v6sj",
       "source_n": 35
     },
@@ -2904,6 +3066,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-q5njty",
+      "model_released": "2026-09-01",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -2932,6 +3096,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-10u6f80",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -2960,6 +3126,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1u8z7hs",
+      "model_released": "2026-09-29",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
       "source_n": 30
     },
@@ -2988,6 +3156,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-y14yn6",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3016,6 +3186,8 @@
       "lab": "Tencent",
       "open_weights": true,
       "row_id": "row-lcrv5b",
+      "model_released": "2026-08-27",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-p3aj15",
       "source_n": 15
     },
@@ -3044,6 +3216,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-2clyyf",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3072,6 +3246,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-pa1eq4",
+      "model_released": "2026-08-26",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3100,6 +3276,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-eakg9h",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3128,6 +3306,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-2nx1rj",
+      "model_released": "2026-07-18",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
       "source_n": 27
     },
@@ -3156,6 +3336,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1fioxzl",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -3184,6 +3366,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1csb5tq",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -3212,6 +3396,8 @@
       "lab": "Mistral",
       "open_weights": true,
       "row_id": "row-2arw03",
+      "model_released": "2026-10-06",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-d2tk0p",
       "source_n": 32
     },
@@ -3240,6 +3426,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-ddelns",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -3268,6 +3456,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-5a37tj",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3296,6 +3486,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-ouwfw",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3324,6 +3516,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-bm6mdq",
+      "model_released": "2026-09-29",
+      "model_released_basis": "stated",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3352,6 +3546,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1gtq4fm",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3380,6 +3576,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-18j1o47",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3408,6 +3606,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-3vfxsy",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -3436,6 +3636,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1ojpt5b",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3464,6 +3666,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-kipywi",
+      "model_released": "2026-08-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-qxom7y",
       "source_n": 13
     },
@@ -3492,6 +3696,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-blybci",
+      "model_released": "2026-07-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3520,6 +3726,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-1nr3gb4",
+      "model_released": "2026-08-04",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3548,6 +3756,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-19e0252",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3576,6 +3786,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-vphi25",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -3604,6 +3816,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1vnfpxa",
+      "model_released": "2026-08-06",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3632,6 +3846,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-17gjj3j",
+      "model_released": "2026-08-04",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-ouk7wk",
       "source_n": 11
     },
@@ -3660,6 +3876,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-10qeqvl",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -3688,6 +3906,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-15b4q5d",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -3716,6 +3936,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-uvwqhb",
+      "model_released": "2026-07-18",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
       "source_n": 27
     },
@@ -3744,6 +3966,8 @@
       "lab": "Nex-AGI",
       "open_weights": true,
       "row_id": "row-1bzp4ea",
+      "model_released": "2026-09-08",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
       "source_n": 18
     },
@@ -3772,6 +3996,8 @@
       "lab": "Meta",
       "open_weights": false,
       "row_id": "row-qte2qf",
+      "model_released": "2026-08-07",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3800,6 +4026,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1yrhm2q",
+      "model_released": "2026-08-06",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
       "source_n": 20
     },
@@ -3828,6 +4056,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-f3dla0",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3856,6 +4086,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-z88wg6",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -3884,6 +4116,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1meuekt",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3912,6 +4146,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1q1xs9y",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3940,6 +4176,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-7fe1ld",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3968,6 +4206,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1imalva",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -3996,6 +4236,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-1jii3v9",
+      "model_released": "2026-07-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4024,6 +4266,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-2xh2qw",
+      "model_released": "2026-08-06",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4052,6 +4296,8 @@
       "lab": "Meta",
       "open_weights": false,
       "row_id": "row-ylw86l",
+      "model_released": "2026-07-14",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4080,6 +4326,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-e8s2o9",
+      "model_released": "2026-08-04",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4108,6 +4356,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1o3rvd8",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4136,6 +4386,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-2ndzjq",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4164,6 +4416,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-k22gcp",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4192,6 +4446,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-495gbu",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4220,6 +4476,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1sa9dgv",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4248,6 +4506,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-v4yd6l",
+      "model_released": "2026-07-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4276,6 +4536,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-dvkuwq",
+      "model_released": "2026-07-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4304,6 +4566,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-oo7mzf",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4332,6 +4596,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1gl1fwy",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4360,6 +4626,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1ca4w9c",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4388,6 +4656,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-qiuq8l",
+      "model_released": "2026-07-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4416,6 +4686,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-1138rgg",
+      "model_released": "2026-06-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-11h0zp7",
       "source_n": 6
     },
@@ -4444,6 +4716,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-255enc",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4472,6 +4746,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-13997ak",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -4500,6 +4776,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1w8ic1j",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -4528,6 +4806,8 @@
       "lab": "Reflection AI",
       "open_weights": true,
       "row_id": "row-16j4ryu",
+      "model_released": "2026-10-05",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1x8ip3p",
       "source_n": 31
     },
@@ -4556,6 +4836,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1kerb9g",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4584,6 +4866,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-grzg6t",
+      "model_released": "2026-06-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4612,6 +4896,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-j8z20a",
+      "model_released": "2026-08-26",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4640,6 +4926,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1fvmcu6",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -4668,6 +4956,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-gz1a0a",
+      "model_released": "2026-08-05",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-190dm7p",
       "source_n": 10
     },
@@ -4696,6 +4986,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-1ucz10t",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4724,6 +5016,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1pcx9r4",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4752,6 +5046,8 @@
       "lab": "Poolside",
       "open_weights": true,
       "row_id": "row-befdi5",
+      "model_released": "2026-07-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "cost_estimate": {
         "low": 0.0224,
         "high": 0.0448,
@@ -4785,6 +5081,8 @@
       "lab": "Meta",
       "open_weights": false,
       "row_id": "row-1bkgt8e",
+      "model_released": "2026-07-14",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4813,6 +5111,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-r2zw6y",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -4841,6 +5141,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1iia63p",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -4869,6 +5171,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-1k7amnx",
+      "model_released": "2026-06-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4897,6 +5201,8 @@
       "lab": "Cognition",
       "open_weights": false,
       "row_id": "row-1bfjpb6",
+      "model_released": "2026-09-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-prwi23",
       "source_n": 19
     },
@@ -4925,6 +5231,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1bw434n",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -4953,6 +5261,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1twb52n",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -4981,6 +5291,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-a6zyiq",
+      "model_released": "2026-06-16",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5009,6 +5321,8 @@
       "lab": "Nex-AGI",
       "open_weights": true,
       "row_id": "row-92bvuc",
+      "model_released": "2026-09-08",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
       "source_n": 18
     },
@@ -5037,6 +5351,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-vnphv3",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5065,6 +5381,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-poihd0",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5093,6 +5411,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-kcyzlp",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5121,6 +5441,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-bfbz9v",
+      "model_released": "2026-09-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5149,6 +5471,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-vnot5p",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5177,6 +5501,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-3ph296",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5205,6 +5531,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-1yoj145",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5233,6 +5561,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1em597q",
+      "model_released": "2026-07-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5261,6 +5591,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-12ms1es",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5289,6 +5621,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-uei8w1",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5317,6 +5651,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-1bibl2y",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5345,6 +5681,8 @@
       "lab": "Tencent",
       "open_weights": true,
       "row_id": "row-1ilk7um",
+      "model_released": "2026-08-27",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-p3aj15",
       "source_n": 15
     },
@@ -5373,6 +5711,8 @@
       "lab": "Anthropic",
       "open_weights": false,
       "row_id": "row-1thnwnf",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5401,6 +5741,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-165hhz9",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5429,6 +5771,8 @@
       "lab": "xAI",
       "open_weights": false,
       "row_id": "row-f6bkeh",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5457,6 +5801,8 @@
       "lab": "OpenAI",
       "open_weights": null,
       "row_id": "row-3oes9n",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5485,6 +5831,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-1wrol78",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5513,6 +5861,8 @@
       "lab": "Moonshot AI",
       "open_weights": null,
       "row_id": "row-1r0o7od",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5541,6 +5891,8 @@
       "lab": "Alibaba",
       "open_weights": false,
       "row_id": "row-cpxpc0",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-ouk7wk",
       "source_n": 11
     },
@@ -5569,6 +5921,8 @@
       "lab": "MiniMax",
       "open_weights": null,
       "row_id": "row-9zllbx",
+      "model_released": "2026-06-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5597,6 +5951,8 @@
       "lab": "Xiaomi",
       "open_weights": true,
       "row_id": "row-1q4sncw",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5625,6 +5981,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-65jvtm",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5653,6 +6011,8 @@
       "lab": "Alibaba",
       "open_weights": false,
       "row_id": "row-1rl4w7q",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5681,6 +6041,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-q9lc3f",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5709,6 +6071,8 @@
       "lab": "MiniMax",
       "open_weights": null,
       "row_id": "row-1hc37at",
+      "model_released": "2026-06-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-hzsdm7",
       "source_n": 34
     },
@@ -5737,6 +6101,8 @@
       "lab": "Alibaba",
       "open_weights": null,
       "row_id": "row-1exbwot",
+      "model_released": "2026-08-24",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-qxom7y",
       "source_n": 13
     },
@@ -5765,6 +6131,8 @@
       "lab": "MiniMax",
       "open_weights": null,
       "row_id": "row-x0507n",
+      "model_released": "2026-06-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-hzsdm7",
       "source_n": 34
     },
@@ -5793,6 +6161,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-1fk1m2l",
+      "model_released": "2026-08-05",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-190dm7p",
       "source_n": 10
     },
@@ -5821,6 +6191,8 @@
       "lab": "xAI",
       "open_weights": null,
       "row_id": "row-mbkfkb",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5849,6 +6221,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-18zp7di",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5877,6 +6251,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-7ygxig",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -5905,6 +6281,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-xdw8fl",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -5933,6 +6311,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-yvja1r",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -5961,6 +6341,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1gab77k",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -5989,6 +6371,8 @@
       "lab": "MiniMax",
       "open_weights": null,
       "row_id": "row-1ggd9h",
+      "model_released": "2026-06-02",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6017,6 +6401,8 @@
       "lab": "Google",
       "open_weights": false,
       "row_id": "row-se9nz3",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6045,6 +6431,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-183svb6",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -6073,6 +6461,8 @@
       "lab": "Google",
       "open_weights": null,
       "row_id": "row-14jryq4",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -6101,6 +6491,8 @@
       "lab": "Thinking Machines",
       "open_weights": false,
       "row_id": "row-1rprkfy",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6129,6 +6521,8 @@
       "lab": "Alibaba",
       "open_weights": null,
       "row_id": "row-1yu8727",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -6157,6 +6551,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-6tewm6",
+      "model_released": "2026-09-22",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -6185,6 +6581,8 @@
       "lab": "Z.ai",
       "open_weights": true,
       "row_id": "row-w6r0fq",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6213,6 +6611,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-7db7b6",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
     },
@@ -6241,6 +6641,8 @@
       "lab": "OpenAI",
       "open_weights": false,
       "row_id": "row-10y4p19",
+      "model_released": "2026-07-10",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
       "source_n": 26
     },
@@ -6269,6 +6671,8 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-1irgvx5",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6297,6 +6701,8 @@
       "lab": "NVIDIA",
       "open_weights": true,
       "row_id": "row-p7xtiy",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6325,6 +6731,8 @@
       "lab": "Anthropic",
       "open_weights": null,
       "row_id": "row-1lndd2c",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -6353,6 +6761,8 @@
       "lab": "MiniMax",
       "open_weights": false,
       "row_id": "row-9s98xd",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
     },
@@ -6381,6 +6791,8 @@
       "lab": "Google",
       "open_weights": true,
       "row_id": "row-4yiqqu",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6409,6 +6821,8 @@
       "lab": "OpenAI",
       "open_weights": true,
       "row_id": "row-1tvbm70",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6437,6 +6851,8 @@
       "lab": "Moonshot AI",
       "open_weights": false,
       "row_id": "row-1dj6krb",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6465,6 +6881,8 @@
       "lab": "MiniMax",
       "open_weights": false,
       "row_id": "row-1lhbuv",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
       "source_n": 36
     },
@@ -6493,6 +6911,8 @@
       "lab": "Alibaba",
       "open_weights": true,
       "row_id": "row-hdfwj0",
+      "model_released": null,
+      "model_released_basis": null,
       "source_id": "r-14zikky",
       "source_n": 36
     }

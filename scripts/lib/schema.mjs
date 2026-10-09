@@ -51,7 +51,12 @@ export function typeModels(rows) {
     if (!r.display_name) errors.push(`${where}: display_name is empty`);
     if (!r.lab) errors.push(`${where}: lab is empty`);
     if (!['', 'true', 'false'].includes(String(r.open_weights ?? '').toLowerCase())) errors.push(`${where}: open_weights must be true, false or blank`);
-    return { ...r, open_weights: triState(r.open_weights) };
+    // released is optional: set it only where a source states the release date, and name that source.
+    const released = r.released ?? '', releasedSource = r.released_source ?? '';
+    if (released && !/^\d{4}-\d{2}-\d{2}$/.test(released)) errors.push(`${where}: released "${released}" must be YYYY-MM-DD`);
+    if (released && !/^https?:\/\//.test(releasedSource)) errors.push(`${where}: released needs released_source, the URL that states it`);
+    if (!released && releasedSource) errors.push(`${where}: released_source given without released`);
+    return { ...r, open_weights: triState(r.open_weights), released, released_source: releasedSource };
   });
   return { models, errors };
 }

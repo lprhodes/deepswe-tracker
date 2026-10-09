@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DeepSWE 1.1 Tracker</title>
 <meta name="description" content="Every published DeepSWE 1.1 score: the official Datacurve board, lab-reported results at each effort level, and independent runs, with cost per task and tokens where published.">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
@@ -94,6 +95,11 @@ a:hover{text-decoration-thickness:2px}
 .pop-body input[type=checkbox]{accent-color:var(--ink);inline-size:18px;block-size:18px;margin:0}
 .reset{border:1px dashed var(--rule)}
 .reset[hidden]{display:none}
+.win{display:inline-flex;align-items:center;gap:var(--space-2);border:1px solid var(--rule);background:var(--sheet);border-radius:2px;padding:0 10px;min-height:32px;font:500 13px/1 var(--sans);color:var(--ink-2)}
+.win input[type=range]{inline-size:132px;margin:0;accent-color:var(--ink);cursor:pointer}
+.win output{color:var(--ink);font-variant-numeric:tabular-nums;min-inline-size:15ch}
+.win output .n{color:var(--muted)}
+.js tr.out{display:none}
 
 /* sections */
 section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
@@ -184,6 +190,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
 @media (max-width:560px){
   .wrap{padding:0 var(--space-4)}
   .controls{position:static}
+  .win input[type=range]{inline-size:104px} .win output{min-inline-size:0;white-space:nowrap} .win output .n{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 /* citations: marker, preview, registry */
@@ -246,7 +253,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <details class="pop" id="labPop"><summary>Labs <span class="n" id="labCount"></span></summary><div class="pop-body" id="labBody"></div></details>
       <details class="pop" id="modelPop"><summary>Models <span class="n" id="modelCount"></span></summary><div class="pop-body" id="modelBody"></div></details>
       <details class="pop" id="configPop"><summary>Configs <span class="n" id="configCount"></span></summary><div class="pop-body" id="configBody"></div></details>
-      <div class="seg" role="group" aria-label="Period" id="periodGroup"></div>
+      <div class="win"><label for="win">Released</label><input type="range" id="win" min="0" max="5" step="1" list="winStops"><datalist id="winStops"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option><option value="5"></option></datalist><output for="win" id="winOut" aria-live="polite"></output></div>
       <button type="button" class="reset" id="reset" hidden>Reset filters</button>
     </div>
   </div>
@@ -258,13 +265,13 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. A model whose source gives a score but no cost sits in the column at the right, at its score. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
     <div class="legend" id="legend"></div>
     <div class="panel" id="c-scatter"><!--__SCATTER__--></div>
-    <p class="unplotted" id="unplotted"></p>
+    <p class="unplotted" id="unplotted"><!--__UNPLOTTED__--></p>
   </section>
 
   <section class="block" aria-labelledby="tb-h">
@@ -301,6 +308,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div><dt>What was gathered</dt><dd>On 9 Oct 2026, Claude (Anthropic’s model) ran Dossier’s free local research loop with its own web search: six search tasks covering the official board, the US labs, Chinese and open-weight labs and Mistral, aggregator sites, and community and press coverage. A separate fact-check pass then settled the conflicts between them. No paid research API was used.</dd></div>
       <div><dt>What was kept</dt><dd>The sweep returned 605 raw figures. {{READING_COUNT}} readings of {{MODEL_COUNT}} models survived the rule that a number is read at the source that published it, and the page cites {{SOURCE_COUNT}} sources in the list below. Official rows are re-read from the board’s own page every day.</dd></div>
       <div><dt>What was verified</dt><dd>Every lab figure was re-read on the lab’s own page or PDF. Three conflicts were settled against the primary document: GPT-6.1 Sol’s xhigh and max scores, who published Grok 4.7’s 73%, and the harness behind Muse Spark 1.3. Of the 22 sources the research report cites, none were fabricated; two OpenAI pages block automated reads and one StepFun page did not load.</dd></div>
+      <div><dt>Release dates</dt><dd>The release slider uses the date a model’s source states for its release where one does, and otherwise the date its first DeepSWE 1.1 result was published: the launch post for a lab’s own score, or the day the official board first listed it. Labs publish these scores at launch, so for new models the two agree. Models whose only result is undated, such as most of Mercor’s, appear only when the slider is at any time.</dd></div>
       <div><dt>What could not be established</dt><dd>When each model joined Mercor’s board; cost per task for Anthropic, Google and Meta models, which those labs do not publish; a dated StepFun page for Step 5 Preview; and why Datacurve ran Grok 4.7 without posting the result. No person has yet re-checked every row; corrections are welcome as issues on the repository.</dd></div>
     </dl>
   </section>
@@ -361,12 +369,13 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => wind
 
 // ---------- state ----------
 const ALL_EFF = [...EFFORTS, 'other'];
-const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all', metric: 'cost', scale: 'log', sort: { key: 'score_pct', dir: -1 } };
-const isDefault = () => state.sources.size === 3 && state.mode === 'all' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.period === 'all';
+const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), win: DEFAULT_WINDOW, metric: 'cost', scale: 'log', sort: { key: 'score_pct', dir: -1 } };
+const ANCHOR = windowAnchor(ROWS, meta.as_of);
+const isDefault = () => state.sources.size === 3 && state.mode === 'all' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.win === DEFAULT_WINDOW;
 
 function selected() {
   let rows = ROWS.filter(r => state.sources.has(r.source_type) && state.efforts.has(r._eff) && !state.offLabs.has(r.lab) && !state.offModels.has(r.model_key) && !state.offConfigs.has(r._key)
-    && (state.period === 'all' || (r.published && r.published > state.period)));
+    && inWindow(r, WINDOWS[state.win], ANCHOR));
   if (state.mode === 'best') {
     const best = new Map();
     for (const r of rows) {
@@ -415,7 +424,11 @@ const segment = (host, options, get, set) => {
   }
   host.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === get())));
 };
-segment($('#periodGroup'), [['all', 'All dates'], [last, `After ${fmtDate(last).replace(/ \d{4}$/, '')}`]], () => state.period, v => (state.period = v));
+// Release-date slider: one stop per window, from the last 7 days to any time.
+const winInput = $('#win');
+winInput.value = String(state.win);
+const winText = i => WINDOWS[i] == null ? 'at any time' : `in the last ${WINDOWS[i]} days`;
+winInput.addEventListener('input', () => { state.win = +winInput.value; render(); });
 segment($('#metricGroup'), Object.entries(METRICS).map(([k, m]) => [k, m.short]), () => state.metric, v => (state.metric = v));
 segment($('#scaleGroup'), [['log', 'Log'], ['linear', 'Linear']], () => state.scale, v => (state.scale = v));
 
@@ -461,10 +474,10 @@ document.querySelectorAll('.pop').forEach(p => p.addEventListener('toggle', () =
 document.addEventListener('click', e => { if (!e.target.closest('.pop')) document.querySelectorAll('.pop[open]').forEach(p => (p.open = false)); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.pop[open]').forEach(p => { p.open = false; p.querySelector('summary').focus(); }); });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all' });
+  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), win: DEFAULT_WINDOW });
   document.querySelectorAll('#srcGroup .chip, #effortGroup .chip').forEach(b => b.setAttribute('aria-pressed', 'true'));
   document.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === 'all')));
-  $('#periodGroup').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === 'all')));
+  winInput.value = String(DEFAULT_WINDOW);
   drawLabs(); drawModels(); drawConfigs(); render();
 });
 
@@ -612,6 +625,7 @@ function showRow() {
   const id = location.hash.slice(1);
   if (!id.startsWith('row-') || document.getElementById(id)) return;
   $('#reset').click();
+  state.win = WINDOWS.length - 1; winInput.value = String(state.win);
   document.querySelector('[data-mode="all"]').click();
   requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'center' }));
 }
@@ -625,14 +639,19 @@ function render() {
   $('#labCount').textContent = `(${LABS.length - state.offLabs.size}/${LABS.length})`;
   $('#modelCount').textContent = `(${MODELS.length - state.offModels.size}/${MODELS.length})`;
   $('#configCount').textContent = `(${ROWS.length - state.offConfigs.size}/${ROWS.length})`;
+  const nModels = new Set(rows.map(r => r.model_key)).size;
+  const days = WINDOWS[state.win];
+  $('#winOut').replaceChildren(winText(state.win), el('span', { className: 'n', textContent: ` · ${nModels} model${nModels === 1 ? '' : 's'}` }));
+  winInput.setAttribute('aria-valuetext', `${winText(state.win)}, ${nModels} models`);
+  const span = days == null ? 'at any time' : `${fmtDate(windowStart(ANCHOR, days)).replace(/ \d{4}$/, '')} – ${fmtDate(ANCHOR)}`;
   if (!rows.length) {
     ['#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
-    $('#unplotted').textContent = '';
+    $('#unplotted').textContent = days == null ? '' : `No model in this selection was released ${span}. Slide the release window wider.`;
   } else {
     const M = METRICS[state.metric];
     mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
     const missing = rows.filter(r => !(r[M.field] > 0)).length;
-    $('#unplotted').textContent = missing ? `${missing} of ${rows.length} readings in this selection have no published ${M.noun} and are not plotted; they are in the table.` : '';
+    $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + (missing ? ` ${missing} of their ${rows.length} readings publish a score but no ${M.noun}; they sit in the right-hand column at their score.` : '');
     mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
   renderTable(rows);

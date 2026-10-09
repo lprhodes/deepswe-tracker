@@ -17,6 +17,8 @@
 .viz .lbl-eff{fill:var(--v-ink2);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace;paint-order:stroke;stroke:var(--v-paper);stroke-width:3px;stroke-linejoin:round}
 .viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
+.viz .rail-bg{fill:var(--v-grid);opacity:.45}
+.viz .rail-h{fill:var(--v-ink);font-size:12px;font-weight:650}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
 .viz .best-a{stop-color:var(--v-good);stop-opacity:.16} .viz .best-b{stop-color:var(--v-good);stop-opacity:0}

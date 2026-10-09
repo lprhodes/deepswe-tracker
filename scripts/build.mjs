@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES } from '../site/charts.mjs';
+import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS } from '../site/charts.mjs';
 import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -31,6 +31,16 @@ const rows = obs
   .map(o => ({ ...o, display_name: modelByKey.get(o.model_key).display_name, lab: modelByKey.get(o.model_key).lab, open_weights: modelByKey.get(o.model_key).open_weights }))
   .sort((a, b) => b.score_pct - a.score_pct || a.model_key.localeCompare(b.model_key));
 for (const r of rows) r.row_id = 'row-' + hashId(rowKey(r));
+
+// A model's release date: the one models.csv states, with its source, else the date its first DeepSWE
+// 1.1 result was published. Blank when neither is known.
+const firstPublished = new Map();
+for (const r of rows) if (r.published && (!firstPublished.has(r.model_key) || r.published < firstPublished.get(r.model_key))) firstPublished.set(r.model_key, r.published);
+for (const r of rows) {
+  const m = modelByKey.get(r.model_key);
+  r.model_released = m.released || firstPublished.get(r.model_key) || null;
+  r.model_released_basis = m.released ? 'stated' : r.model_released ? 'first DeepSWE 1.1 result' : null;
+}
 
 // Estimated cost, only where a source published tokens but no cost and the model has a list price in
 // data/pricing/ai-gateway.json. With an input/output split the estimate is a single figure; with only
@@ -55,6 +65,11 @@ const sources = buildSources(rows, meta);
 const srcByUrl = new Map(sources.map(s => [s.url, s]));
 for (const r of rows) { const s = srcByUrl.get(r.source_url); r.source_id = s.id; r.source_n = s.n; }
 const rowsById = new Map(rows.map(r => [r.row_id, r]));
+const unknownRelease = models.filter(m => m.released_source && !srcByUrl.has(m.released_source));
+if (unknownRelease.length) {
+  console.error(`released_source not in the source registry (add it to data/meta.json context_sources):\n  ${unknownRelease.map(m => `${m.model_key}: ${m.released_source}`).join('\n  ')}`);
+  process.exit(1);
+}
 
 const dataset = {
   benchmark: 'DeepSWE 1.1',
@@ -69,8 +84,16 @@ const dataset = {
 };
 
 const max = barMax(rows);
+// The page opens on models released in the last 30 days; the static views match that opening state.
+const anchor = windowAnchor(rows, meta.as_of);
+const days = WINDOWS[DEFAULT_WINDOW];
+const recent = rows.filter(r => inWindow(r, days, anchor));
+const fmtDay = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const span = `${fmtDay(windowStart(anchor, days)).replace(/ \d{4}$/, '')} – ${fmtDay(anchor)}`;
+const missing = recent.filter(r => !(r[METRICS.cost.field] > 0)).length;
+const unplotted = `Models released ${span}.` + (missing ? ` ${missing} of their ${recent.length} readings publish a score but no cost per task; they sit in the right-hand column at their score.` : '');
 const priceSrc = sources.find(x => x.key === 'ai-gateway-pricing');
-// README charts show each model's best result per source, which is the page's default view.
+// The README's bar chart shows each model's best result per source across every date.
 const best = new Map();
 for (const r of rows) {
   const k = r.model_key + '|' + r.source_type;
@@ -82,16 +105,18 @@ const bestRows = rows.filter(r => best.get(r.model_key + '|' + r.source_type) ==
 const PAGE_TOKENS = '.viz{--v-good:var(--good);--v-good-ink:var(--good-ink);--v-paper:var(--sheet);--v-ink:var(--ink);--v-ink2:var(--ink-2);--v-muted:var(--muted);--v-grid:var(--grid);--v-rule:var(--rule);font-family:var(--sans)}';
 const outputs = {
   'data/deepswe-1.1.json': JSON.stringify(dataset, null, 2) + '\n',
-  'charts/score-vs-cost.svg': effortScatter(rows, { embedStyle: true, id: 'readme-sc', height: 640 }) + '\n',
+  'charts/score-vs-cost.svg': effortScatter(recent, { embedStyle: true, id: 'readme-sc', height: 640, title: `DeepSWE 1.1 score against cost per task: models released ${span}` }) + '\n',
   'charts/best-per-model.svg': spreadBars(bestRows, { embedStyle: true, id: 'readme-sp' }) + '\n',
   'SOURCES.md': sourcesMarkdown(sources),
   'index.html': readFileSync(p('site/template.html'), 'utf8')
     .replace('/*__VIZSTYLE__*/', () => PAGE_TOKENS + STYLE_RULES)
     .replace('<!--__THEAD__-->', () => theadHtml({ key: 'score_pct', dir: -1 }))
     .replace('<!--__TFOOT__-->', () => tfootHtml(max))
-    .replace('<!--__ROWS__-->', () => rows.map(r => readingRowHtml(r, srcByUrl.get(r.source_url), max, priceSrc)).join('\n'))
-    .replace('<!--__SCATTER__-->', () => effortScatter(rows, { id: 'sc' }))
-    .replace('<!--__SPREAD__-->', () => spreadBars(rows, { id: 'sp', onlyMulti: true }))
+    // Every reading is in the table without scripts; older ones are hidden only once scripts run.
+    .replace('<!--__ROWS__-->', () => rows.map(r => readingRowHtml(r, srcByUrl.get(r.source_url), max, priceSrc).replace(/^<tr /, inWindow(r, days, anchor) ? '<tr ' : '<tr class="out" ')).join('\n'))
+    .replace('<!--__SCATTER__-->', () => effortScatter(recent, { id: 'sc' }))
+    .replace('<!--__UNPLOTTED__-->', () => unplotted)
+    .replace('<!--__SPREAD__-->', () => spreadBars(recent, { id: 'sp', onlyMulti: true }))
     .replace('<!--__NOTES__-->', () => renderNotes(meta.notes, sources))
     .replace('<!--__REGISTRY__-->', () => registryHtml(sources, rowsById))
     .replace('<!--__CITE_CHANGELOG__-->', () => `<sup>${citeHtml(sources.find(x => x.key === 'datacurve-changelog'))}</sup>`)

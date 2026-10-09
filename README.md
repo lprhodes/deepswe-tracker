@@ -4,9 +4,9 @@ Every published DeepSWE 1.1 score in one dataset: the official [Datacurve leader
 
 The official board has added no model since **3 September 2026** (GPT-6 Astra). Since then labs have kept publishing DeepSWE 1.1 numbers for GPT-6.1 Sol, Claude Opus 5.5 and Sonnet 5.5, Gemini 4 Argon, Grok 4.7, DeepSeek V4.1 Flash, Mistral Large 4 and others, and Mercor has run its own independent evaluation. This repo puts them side by side without pretending they are the same measurement.
 
-**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). It uses the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be.
+**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). It uses the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be. A release-date slider opens on the models released in the last 30 days and widens to 60, 90 days or any time. A model whose source gives a score but no cost (most Anthropic, Google and Meta claims) sits in a column beside the chart, at its score.
 
-![Score against cost per task](charts/score-vs-cost.svg)
+![Score against cost per task, models released in the last 30 days](charts/score-vs-cost.svg)
 
 ![Best score per model by who measured it](charts/best-per-model.svg)
 
@@ -16,8 +16,8 @@ The official board has added no model since **3 September 2026** (GPT-6 Astra). 
 | File | What it holds |
 |---|---|
 | `data/deepswe-1.1.csv` | One row per reading: a model at an effort level, from one source. The file you edit. |
-| `data/models.csv` | One row per model: display name, lab, open weights (blank when not established). |
-| `data/deepswe-1.1.json` | Generated: the two CSVs joined and typed, plus the notes shown on the page. |
+| `data/models.csv` | One row per model: display name, lab, open weights (blank when not established), and `released` with `released_source` where a source states the release date. |
+| `data/deepswe-1.1.json` | Generated: the two CSVs joined and typed, plus the notes shown on the page. `model_released` is the stated release date, or failing that the date the model's first DeepSWE 1.1 result was published. |
 | `SOURCES.md` | Generated: every original source, numbered as on the page, with what it establishes. |
 | `data/pricing/ai-gateway.json` | List prices from Vercel AI Gateway, used only to estimate cost where a source published tokens but no cost (refresh with `node scripts/sync-pricing.mjs`). |
 | `data/official/` | The official board's rows as embedded in its page, its JSON artifact, and the date each configuration first appeared. |
