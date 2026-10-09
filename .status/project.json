@@ -1,13 +1,13 @@
 {
   "project": "deepswe-tracker",
-  "updated": "2026-10-10T09:40:00+11:00",
+  "updated": "2026-10-10T10:30:00+11:00",
   "verdict": {
     "token": "done",
     "number": "215",
     "unit": "readings of 80 models",
-    "headline": "Simpler no-cost list, one line per measurer, and a sweep for other effort levels: labs rarely publish more than one.",
-    "run_label": "effort-level sweep",
-    "head_sha": "83a4984"
+    "headline": "Fig. 1 now ranks every model by best score with no cost needed; the cost chart is Fig. 2.",
+    "run_label": "ranked chart",
+    "head_sha": "74fd603"
   },
   "tasks": [
     {
@@ -144,6 +144,14 @@
       "stage": "code written",
       "outcome": "done",
       "note": "1 new setting (Laguna off); DeepSeek previews split"
+    },
+    {
+      "id": "P-10",
+      "title": "A primary chart that needs no cost",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "ranked dots, effort lanes, phone layout"
     }
   ],
   "gates": [
@@ -187,10 +195,10 @@
       "kind": "design"
     },
     {
-      "name": "Slider, column, tooltips and backlinks work with no errors",
-      "command": "Playwright: light, dark, 390px, no-JS, keyboard, hover, backlink",
+      "name": "Charts render with no errors: light, dark, 390px, hover, slider",
+      "command": "Playwright: ranked chart at 30 and 90 days, cost chart, phone layout",
       "exit_code": 0,
-      "counts": "8/8",
+      "counts": "6/6",
       "state": "done",
       "kind": "tests"
     },
@@ -293,8 +301,8 @@
   ],
   "not_checked": [
     {
-      "axis": "Score chart legibility on a phone",
-      "why_not": "The control bar was checked at 390px; the chart still scales down from 1080px wide."
+      "axis": "Cost chart on a phone",
+      "why_not": "It still scrolls sideways below 720px; only the ranked chart has a phone layout."
     },
     {
       "axis": "Screen-reader reading of the page",
