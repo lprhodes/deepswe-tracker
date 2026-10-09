@@ -57,8 +57,12 @@ export const STYLE_RULES = `
 .viz .y-title{fill:var(--v-ink);font-size:13px;font-weight:620}
 .viz .title{fill:var(--v-ink);font-size:16px;font-weight:650}
 .viz .sub{fill:var(--v-ink2);font-size:12px}
-.viz .lbl{fill:var(--v-ink);font-size:11.5px;font-weight:600}
-.viz .lbl-eff{fill:var(--v-muted);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace}
+.viz .lbl{fill:var(--v-ink);font-size:12px;font-weight:650;paint-order:stroke;stroke:var(--v-paper);stroke-width:3.5px;stroke-linejoin:round}
+.viz .glbl .lbl{fill:color-mix(in oklch, var(--c) 62%, var(--v-ink))}
+.viz .leader{stroke:var(--c);stroke-width:1;opacity:.7}
+.viz .lbl-eff{fill:var(--v-ink2);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace;paint-order:stroke;stroke:var(--v-paper);stroke-width:3px;stroke-linejoin:round}
+.viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
+.viz .front-lbl{fill:var(--v-ink2);font-size:12px}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
 .viz .best-a{stop-color:var(--v-good);stop-opacity:.16} .viz .best-b{stop-color:var(--v-good);stop-opacity:0}
@@ -67,7 +71,9 @@ export const STYLE_RULES = `
 .viz .ref{stroke:var(--v-ink2);stroke-width:1}
 .viz .ref-lbl{fill:var(--v-ink2);font-size:11px}
 .viz .span{stroke:var(--v-rule);stroke-width:2;stroke-linecap:round}
-.viz .eline{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;opacity:.8}
+.viz .eline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;opacity:.55}
+.viz .solo .mk{stroke-width:2.5}
+.viz .solo circle.mk{r:6.5}
 .viz .eline.s2{stroke-dasharray:6 4} .viz .eline.s3{stroke-dasharray:1.5 4}
 .viz .mk{stroke:var(--v-paper);stroke-width:2}
 .viz .key{fill:var(--v-ink2)}
@@ -78,6 +84,7 @@ ${LAB_CSS}
 .viz .hit:focus-visible{fill:transparent;stroke:var(--v-ink);stroke-width:2}
 .viz .hit:hover+.mk,.viz .hit:focus-visible+.mk{stroke:var(--v-ink)}
 .viz.dim .grp{opacity:.12} .viz.dim .grp.on{opacity:1} .viz.dim .grp.on .eline{opacity:1;stroke-width:3}
+.viz.dim .front{opacity:.03}
 `;
 export const STYLE = STYLE_TOKENS + STYLE_RULES;
 
@@ -121,7 +128,9 @@ function open(w, h, id, title, desc, embedStyle) {
 }
 
 // Two keys: shapes for who measured it (neutral ink), swatches for each lab present.
-function legend(x, y0, rows) {
+// Key to shape (who measured) and colour (lab), wrapping before maxX. Returns the markup and the
+// baseline of its last row, so the chart below can start clear of it.
+function legend(x, y0, rows, maxX = 1050) {
   let y = y0;
   let out = '';
   let cx = x;
@@ -135,11 +144,11 @@ function legend(x, y0, rows) {
   const others = labs.some(l => !LAB_COLORS[l]);
   cx += 12;
   for (const l of [...named, ...(others ? ['Other labs'] : [])]) {
-    if (cx > 1000) { cx = x; y += 18; }
+    if (cx + 14 + textW(l, 11) > maxX) { cx = x; y += 18; }
     out += `<rect class="sw ${l === 'Other labs' ? 'lab-other' : labClass(l)}" x="${cx}" y="${y - 9}" width="10" height="10" rx="2"/><text class="tick" x="${cx + 14}" y="${y}">${esc(l)}</text>`;
     cx += 14 + textW(l, 11) + 14;
   }
-  return out;
+  return { svg: out, y };
 }
 
 function yAxis(y0, y1, sy, left, right) {
@@ -157,33 +166,42 @@ function niceStep(max, target = 6) {
   return [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= raw);
 }
 
-// Greedy label placement around a point. A label that collides with a placed label, any mark or the
-// plot edge is dropped; its value stays in the tooltip and the table.
+// Label placement: nearest free spot around the point (above, beside, below, then the diagonals) at
+// growing distances. A label that lands away from its point gets a leader line back to it. A label
+// that fits nowhere is dropped; its value stays in the tooltip and the table.
 function placeLabels(items, bounds, marks) {
   const placed = [];
   const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
   let out = '';
   for (const it of items) {
-    const w = Math.max(textW(it.text), it.sub ? textW(it.sub, 9) + 6 : 0), h = it.sub ? 24 : 13;
-    // Nearest first: above, beside and below the point, then the diagonals, at growing distances.
+    const w = Math.max(textW(it.text, 12), it.sub ? textW(it.sub, 9) + 4 : 0), h = it.sub ? 24 : 14;
     const tries = [];
-    for (const d of [8, 18, 30]) tries.push(
-      { x: it.cx - w / 2, y: it.cy - d - h }, { x: it.cx + d, y: it.cy - h / 2 }, { x: it.cx - d - w, y: it.cy - h / 2 },
-      { x: it.cx - w / 2, y: it.cy + d }, { x: it.cx + d * 0.7, y: it.cy - d * 0.7 - h }, { x: it.cx - d * 0.7 - w, y: it.cy - d * 0.7 - h },
-      { x: it.cx + d * 0.7, y: it.cy + d * 0.7 }, { x: it.cx - d * 0.7 - w, y: it.cy + d * 0.7 });
+    for (const d of [7, 16, 28, 42]) tries.push(
+      { x: it.cx - w / 2, y: it.cy - d - h, d }, { x: it.cx + d, y: it.cy - h / 2, d }, { x: it.cx - d - w, y: it.cy - h / 2, d },
+      { x: it.cx - w / 2, y: it.cy + d, d }, { x: it.cx + d * 0.7, y: it.cy - d * 0.7 - h, d }, { x: it.cx - d * 0.7 - w, y: it.cy - d * 0.7 - h, d },
+      { x: it.cx + d * 0.7, y: it.cy + d * 0.7, d }, { x: it.cx - d * 0.7 - w, y: it.cy + d * 0.7, d });
     for (const t of tries) {
-      const box = { x: t.x - 1, y: t.y - 1, w: w + 2, h: h + 2 };
+      const box = { x: t.x - 2, y: t.y - 1, w: w + 4, h: h + 2 };
       if (box.x < bounds.left || box.x + box.w > bounds.right || box.y < bounds.top || box.y + box.h > bounds.bottom) continue;
       if (placed.some(p => hit(p, box)) || marks.some(p => hit(p, box))) continue;
       placed.push(box);
-      out += `<g class="glbl" data-g="${esc(it.g)}"><text class="lbl" x="${(t.x + w / 2).toFixed(1)}" y="${(t.y + 10).toFixed(1)}" text-anchor="middle">${esc(it.text)}</text>` +
-        (it.sub ? `<text class="lbl-eff" x="${(t.x + w / 2).toFixed(1)}" y="${(t.y + 21).toFixed(1)}" text-anchor="middle">${esc(it.sub)}</text>` : '') + '</g>';
+      const cx = t.x + w / 2;
+      // Leader from the label's nearest edge to the point, when the label sits away from it.
+      let leader = '';
+      if (t.d > 12) {
+        const lx = Math.max(t.x, Math.min(it.cx, t.x + w)), ly = it.cy < t.y ? t.y : it.cy > t.y + h ? t.y + h : t.y + h / 2;
+        leader = `<line class="leader" x1="${lx.toFixed(1)}" y1="${ly.toFixed(1)}" x2="${it.cx.toFixed(1)}" y2="${it.cy.toFixed(1)}"/>`;
+      }
+      out += `<g class="grp glbl ${it.cls}" data-model="${esc(it.model)}">${leader}<text class="lbl" x="${cx.toFixed(1)}" y="${(t.y + 11).toFixed(1)}" text-anchor="middle">${esc(it.text)}</text>` +
+        (it.sub ? `<text class="lbl-eff" x="${cx.toFixed(1)}" y="${(t.y + 22).toFixed(1)}" text-anchor="middle">${esc(it.sub)}</text>` : '') + '</g>';
       break;
     }
   }
   return out;
 }
 
+// The results no other result beats on both score and cost: walking from cheapest up, each point that
+// scores higher than everything cheaper than it.
 export function frontier(rows, field) {
   const sorted = [...rows].sort((a, b) => a[field] - b[field] || b.score_pct - a.score_pct);
   const out = []; let best = -Infinity;
@@ -191,45 +209,54 @@ export function frontier(rows, field) {
   return out;
 }
 
-// Score against a per-task measure, drawn like the official board: y is the DeepSWE score from 0,
-// x runs from the most expensive on the left to zero on the right (linear, or log when asked), and
-// each model's effort levels are joined in order from low to max.
-export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 660, id = 'sc', labelTop = 20 } = {}) {
+// Score against a per-task measure, drawn like the official board: y is the DeepSWE score from 0, x
+// runs from the most expensive on the left to the cheapest on the right (log by default, or linear),
+// and each model's effort levels are joined in order from low to max. Lines are drawn first and every
+// point after, so a model measured at one effort level is never hidden under another model's line.
+export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 680, id = 'sc', labelTop = 30 } = {}) {
   const M = METRICS[metric];
   const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r[M.field] > 0);
   const title = `DeepSWE 1.1 score against ${M.noun}`;
   const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.`;
   if (!pts.length) return open(width, 120, id, title, 'No results with this measure.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection report a ${esc(M.noun)}.</text></svg>`;
-  const m = { left: 60, right: 28, top: embedStyle ? 112 : 44, bottom: 56 };
+  const key = embedStyle ? legend(24, 80, pts.map(p => p.r), width - 28) : null;
+  const m = { left: 60, right: 28, top: key ? key.y + 44 : 48, bottom: 58 };
   const right = width - m.right, bottom = height - m.bottom;
-  const vals = pts.map(p => p.r[M.field]);
-  let sx, ticks;
+  const vals = pts.map(p => p.r[M.field]).sort((a, b) => a - b);
+  let sx, ticks, clampAt = Infinity;
   if (scale === 'log') {
-    const lx0 = Math.log10(Math.min(...vals) / 1.35), lx1 = Math.log10(Math.max(...vals) * 1.35);
+    const lx0 = Math.log10(vals[0] / 1.35), lx1 = Math.log10(vals.at(-1) * 1.35);
     sx = v => right - (Math.log10(v) - lx0) / (lx1 - lx0) * (right - m.left);
     const all = LOG_TICKS.filter(t => Math.log10(t) >= lx0 && Math.log10(t) <= lx1);
     ticks = all.filter((_, k) => k % Math.ceil(all.length / 8) === 0);
   } else {
-    const step = niceStep(Math.max(...vals));
-    const max = Math.ceil(Math.max(...vals) * 1.04 / step) * step;
-    sx = v => right - (v / max) * (right - m.left);
+    // A long expensive tail would squeeze every other result against zero, so the axis stops at
+    // about 1.25x the 90th percentile; results beyond it are pinned to the left edge and counted.
+    const p90 = vals[Math.floor(vals.length * 0.9)] ?? vals.at(-1);
+    let top = Math.min(vals.at(-1), p90 * 1.25);
+    const step = niceStep(top);
+    const max = Math.ceil(top * 1.02 / step) * step;
+    if (vals.at(-1) > max) clampAt = max;
+    sx = v => right - (Math.min(v, max) / max) * (right - m.left);
     ticks = []; for (let t = 0; t <= max + 1e-9; t += step) ticks.push(+t.toFixed(6));
   }
   const y1 = scoreTop(pts.map(p => p.r));
   const sy = v => bottom - (v / y1) * (bottom - m.top);
+  const plotW = right - m.left, plotH = bottom - m.top;
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
     svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Lines join each model’s effort levels from low to max, as on the official board. Colour is the lab; shape is who measured it.</text>`;
-    svg += legend(24, 80, pts.map(p => p.r));
+    svg += key.svg;
   }
-  svg += `<text class="y-title" x="${m.left}" y="${m.top - 18}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
-  // Where a model wants to be: the top right, a high score for a low cost. A wash fades out from
-  // that corner so the target reads before any single point does.
-  const plotW = right - m.left, plotH = bottom - m.top;
-  svg += `<defs><radialGradient id="${id}-best" cx="1" cy="0" r="0.75"><stop offset="0" class="best-a"/><stop offset="1" class="best-b"/></radialGradient></defs>`;
-  svg += `<rect x="${m.left}" y="${m.top}" width="${plotW}" height="${plotH}" fill="url(#${id}-best)" aria-hidden="true"/>`;
-  svg += `<text class="best-lbl" x="${right - 10}" y="${m.top + 18}" text-anchor="end">Best: higher score, lower ${metric === 'cost' ? 'cost' : metric === 'output' ? 'token use' : 'step count'} ↗</text>`;
-  svg += `<text class="best-sub" x="${right - 10}" y="${m.top + 34}" text-anchor="end">capable and ${M.better}</text>`;
+  svg += `<text class="y-title" x="${m.left}" y="${m.top - 20}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
+  const bestText = `Best: higher score, ${M.better} ↗`;
+  svg += `<text class="best-lbl" x="${right}" y="${m.top - 20}" text-anchor="end">${esc(bestText)}</text>`;
+  if (scale !== 'log') {
+    // In linear mode the cheapest results sit hard against the right edge, so the top-right corner is
+    // the target region itself; a wash fades out from it.
+    svg += `<defs><radialGradient id="${id}-best" cx="1" cy="0" r="0.7"><stop offset="0" class="best-a"/><stop offset="1" class="best-b"/></radialGradient></defs>`;
+    svg += `<rect x="${m.left}" y="${m.top}" width="${plotW}" height="${plotH}" fill="url(#${id}-best)" aria-hidden="true"/>`;
+  }
   svg += yAxis(0, y1, sy, m.left, right);
   for (const t of ticks) {
     const x = sx(t).toFixed(1);
@@ -237,23 +264,40 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   }
   svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
   svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
+  const clamped = pts.filter(p => p.r[M.field] > clampAt).length;
+  if (clamped) svg += `<text class="note" x="${m.left + 6}" y="${bottom - 8}">◂ ${clamped} result${clamped === 1 ? '' : 's'} above ${esc(M.fmt(clampAt))}, pinned to this edge</text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
   const groups = new Map();
   for (const p of placed) { if (!groups.has(p.g)) groups.set(p.g, []); groups.get(p.g).push(p); }
-  for (const [g, ps] of groups) {
-    const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
-    svg += `<g class="grp" data-g="${esc(g)}" data-model="${esc(ps[0].r.model_key)}">`;
-    if (laddered.length > 1) svg += `<path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/>`;
-    for (const p of ps) svg += mark(p.r, p.i, p.cx, p.cy);
-    svg += '</g>';
+
+  // The efficient frontier, a wide neutral band under the data in both scales. It is keyed in the
+  // header rather than labelled on the plot, where its label would compete with the model labels.
+  const front = frontier(placed.map(p => p.r), M.field);
+  const frontPts = placed.filter(p => front.includes(p.r)).sort((a, b) => a.cx - b.cx);
+  if (frontPts.length > 1) {
+    svg += `<path class="front" d="M${frontPts.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}" aria-hidden="true"/>`;
+    const kx = right - textW(bestText, 12) - 24 - textW('Efficient frontier', 12);
+    svg += `<line class="front" x1="${(kx - 26).toFixed(1)}" x2="${(kx - 8).toFixed(1)}" y1="${m.top - 24}" y2="${m.top - 24}"/>` +
+      `<text class="front-lbl" x="${kx.toFixed(1)}" y="${m.top - 20}"><title>No other result here scores higher for less</title>Efficient frontier</text>`;
   }
-  // Labels as on the official board: the model's name over its best point, its effort beneath.
-  const front = new Set(frontier(placed.map(p => p.r), M.field));
-  const bestOf = [...groups.values()].map(ps => ps.reduce((a, b) => (b.r.score_pct > a.r.score_pct ? b : a)));
-  const want = [...new Set([...bestOf.sort((a, b) => b.r.score_pct - a.r.score_pct).slice(0, labelTop), ...placed.filter(p => front.has(p.r))])];
-  const items = want.sort((a, b) => b.r.score_pct - a.r.score_pct).map(p => ({ cx: p.cx, cy: p.cy, g: p.g, text: p.r.display_name, sub: (p.r.effort || '').toUpperCase() + (p.r.source_type === 'lab_self_reported' ? ' · LAB CLAIM' : p.r.source_type === 'third_party_run' ? ' · INDEPENDENT' : '') }));
-  svg += placeLabels(items, { left: m.left, right, top: m.top, bottom }, placed.map(p => ({ x: p.cx - 6, y: p.cy - 6, w: 12, h: 12 })));
+  // Layer 1: every line. Layer 2: every point, single-effort models drawn larger.
+  let lines = '', points = '';
+  for (const [g, ps] of groups) {
+    const model = esc(ps[0].r.model_key);
+    const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
+    if (laddered.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
+    points += `<g class="grp${ps.length === 1 ? ' solo' : ''}" data-g="${esc(g)}" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy)).join('') + '</g>';
+  }
+  svg += lines + points;
+  // Layer 3: one label per model, at its best visible result, tinted in its lab colour.
+  const bestByModel = new Map();
+  for (const p of placed) { const b = bestByModel.get(p.r.model_key); if (!b || p.r.score_pct > b.r.score_pct) bestByModel.set(p.r.model_key, p); }
+  const frontModels = new Set(front.map(r => r.model_key));
+  const chosen = [...bestByModel.values()].sort((a, b) => b.r.score_pct - a.r.score_pct)
+    .filter((p, k) => k < labelTop || frontModels.has(p.r.model_key));
+  const items = chosen.map(p => ({ cx: p.cx, cy: p.cy, model: p.r.model_key, cls: labClass(p.r.lab), text: p.r.display_name, sub: (p.r.effort || '').toUpperCase() }));
+  svg += placeLabels(items, { left: m.left, right, top: m.top, bottom }, placed.map(p => ({ x: p.cx - 5, y: p.cy - 5, w: 10, h: 10 })));
   return svg + '</svg>';
 }
 
@@ -277,7 +321,8 @@ export function spreadBars(rows, { embedStyle = false, width = 1080, id = 'sp', 
   const desc = `${models.length} models; for each, a bar for its best official, lab-claimed and independent pass@1 at any effort level.`;
   if (!models.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No models in this selection.</text></svg>`;
   const max = barMax(rows);
-  const m = { left: 220, srcW: 104, right: 70, top: embedStyle ? 112 : 16, bottom: 36 };
+  const key = embedStyle ? legend(24, 80, rows, width - 24) : null;
+  const m = { left: 220, srcW: 104, right: 70, top: key ? key.y + 32 : 16, bottom: 36 };
   const x0 = m.left + m.srcW, x1 = width - m.right;
   const sx = v => x0 + (v / max) * (x1 - x0);
   const barH = 9, gap = 6, pad = 10;
@@ -307,7 +352,7 @@ export function spreadBars(rows, { embedStyle = false, width = 1080, id = 'sp', 
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
     svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Each model’s best result from each source, on the official leaderboard’s 0–${max}% bar scale.</text>`;
-    svg += legend(24, 80, rows);
+    svg += key.svg;
   }
   for (let v = 0; v <= max; v += 20) svg += `<line class="grid" x1="${sx(v).toFixed(1)}" x2="${sx(v).toFixed(1)}" y1="${m.top}" y2="${y}"/><text class="tick" x="${sx(v).toFixed(1)}" y="${y + 18}" text-anchor="middle">${v}%</text>`;
   return svg + body + '</svg>';
