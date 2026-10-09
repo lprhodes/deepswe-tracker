@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "artifact": "index.html",
+      "date": "2026-10-09",
+      "display_face": "Archivo (wdth 118)",
+      "family": "certificate-metrology",
+      "kind": "visual",
+      "motion": "GSAP mark FLIP between readings, Flip table reorder, three.js sheet separation",
+      "note": "DeepSWE 1.1 tracker",
+      "pairing": "Archivo + Spline Sans Mono",
+      "palette_family": "cool certificate green ground, ink-blue / vermilion / teal series",
+      "signature": "hallmark stamps per reading; lapsed-standard seal",
+      "topology": "masthead + seal, WebGL stage, sticky control bar, figure stack"
+    }
+  ],
+  "max_entries": 5,
+  "schema_version": 1
+}
