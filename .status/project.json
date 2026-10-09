@@ -1,13 +1,13 @@
 {
   "project": "deepswe-tracker",
-  "updated": "2026-10-09T21:10:00+11:00",
+  "updated": "2026-10-09T19:50:00+11:00",
   "verdict": {
     "token": "done",
     "number": "210",
     "unit": "readings of 80 models",
     "headline": "Score chart reworked for reading: every point visible, one label per model, the frontier keyed.",
     "run_label": "chart readability pass",
-    "head_sha": "4fc30c5"
+    "head_sha": "fb3e8e0"
   },
   "tasks": [
     {
@@ -54,9 +54,8 @@
       "title": "Push the CI workflows to GitHub",
       "origin": "planned",
       "stage": "code written",
-      "outcome": "stuck",
-      "blocked_by": "gh token lacks the workflow scope",
-      "waiting_hours": 0
+      "outcome": "done",
+      "note": "check passed; sync ran, board unchanged"
     },
     {
       "id": "P-3",
@@ -186,6 +185,14 @@
       "counts": "1/1",
       "state": "done",
       "kind": "build"
+    },
+    {
+      "name": "CI: build check and daily sync both run on GitHub",
+      "command": "gh run: check.yml on push, sync-official.yml by hand",
+      "exit_code": 0,
+      "counts": "2/2",
+      "state": "done",
+      "kind": "build"
     }
   ],
   "findings": [
@@ -291,18 +298,11 @@
       "contains": "Every figure left out, and why."
     }
   ],
-  "needs_you": [
-    {
-      "ask": "Add the workflow scope to gh, then push",
-      "kind": "credential",
-      "waiting_since": "2026-10-09T06:00:00Z",
-      "one_line": "Run gh auth refresh -s workflow, then git push in ~/Dev/deepswe-tracker."
-    }
-  ],
+  "needs_you": [],
   "git": {
     "branch": "main",
-    "commits_ahead": 1,
+    "commits_ahead": 0,
     "worktree_clean": true,
-    "pushed": false
+    "pushed": true
   }
 }
