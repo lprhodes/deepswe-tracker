@@ -456,14 +456,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
 <script type="application/json" id="report-data">
 {
  "project": "deepswe-tracker",
- "updated": "2026-10-09T19:50:00+11:00",
+ "updated": "2026-10-09T20:05:00+11:00",
  "verdict": {
   "token": "done",
   "number": "210",
   "unit": "readings of 80 models",
-  "headline": "Score chart reworked for reading: every point visible, one label per model, the frontier keyed.",
-  "run_label": "chart readability pass",
-  "head_sha": "fb3e8e0"
+  "headline": "New models are on the chart: a release slider opens on the last 30 days, and models with no published cost sit beside it at their score.",
+  "run_label": "release slider",
+  "head_sha": "844fc04"
  },
  "tasks": [
   {
@@ -560,6 +560,22 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "stage": "code written",
    "outcome": "done",
    "note": "points over lines, frontier band, linear axis capped"
+  },
+  {
+   "id": "P-6",
+   "title": "Release-date slider, last 30 days by default",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "7, 14, 30, 60, 90 days or any time"
+  },
+  {
+   "id": "P-7",
+   "title": "Show models with no published cost on the chart",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "Opus 5.5, Sonnet 5.5, Gemini 4 Argon now visible"
   }
  ],
  "gates": [
@@ -603,10 +619,10 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "kind": "design"
   },
   {
-   "name": "Score chart renders with no errors, log and linear, light and dark",
-   "command": "Playwright: 1360px, 4 captures + README SVGs",
+   "name": "Slider, column, tooltips and backlinks work with no errors",
+   "command": "Playwright: light, dark, 390px, no-JS, keyboard, hover, backlink",
    "exit_code": 0,
-   "counts": "4/4",
+   "counts": "8/8",
    "state": "done",
    "kind": "tests"
   },
@@ -667,6 +683,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "file_line": "index.html",
    "claim": "Design lint flags the 41 source links as external loads; they are hyperlinks",
    "state": "waived"
+  },
+  {
+   "id": "F-03",
+   "score": 30,
+   "severity": "low",
+   "file_line": "site/charts.mjs (any-time view)",
+   "claim": "At any time the no-cost column holds 47 models; lower scorers go unlabelled, tooltips only",
+   "state": "waived"
   }
  ],
  "corrections": [
@@ -696,8 +720,8 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
  ],
  "not_checked": [
   {
-   "axis": "Score chart on a phone",
-   "why_not": "Not captured this round; the chart scales down from 1080px wide."
+   "axis": "Score chart legibility on a phone",
+   "why_not": "The control bar was checked at 390px; the chart still scales down from 1080px wide."
   },
   {
    "axis": "Screen-reader reading of the page",
