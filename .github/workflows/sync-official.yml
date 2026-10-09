@@ -1,0 +1,30 @@
+name: sync official leaderboard
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/sync-official.mjs
+      - run: npm run build
+      # The sync stamps today's date into every official row's `accessed` column, so only commit
+      # when the artifact itself changed; otherwise the history fills with date-only commits.
+      - name: Commit if the official artifact changed
+        run: |
+          if git diff --quiet -- data/official/leaderboard-live.json data/official/page-rows.json; then
+            echo "Official page rows and artifact unchanged."
+            exit 0
+          fi
+          git config user.name "deepswe-tracker bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data charts index.html
+          git commit -m "Sync official DeepSWE 1.1 leaderboard ($(node -p "require('./data/official/leaderboard-live.json').generated_at"))"
+          git push
