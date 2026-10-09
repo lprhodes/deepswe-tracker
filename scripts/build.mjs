@@ -84,7 +84,7 @@ const dataset = {
 };
 
 const max = barMax(rows);
-// The page opens on models released in the last 30 days; the static views match that opening state.
+// The page opens on models released in the last 60 days; the static views match that opening state.
 const anchor = windowAnchor(rows, meta.as_of);
 const days = WINDOWS[DEFAULT_WINDOW];
 const recent = rows.filter(r => inWindow(r, days, anchor));

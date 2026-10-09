@@ -49,7 +49,7 @@ export const METRICS = {
 // release date is the one its source states (models.csv), else the date its first DeepSWE 1.1 result
 // was published. Models with neither appear only when the window is "any time".
 export const WINDOWS = [7, 14, 30, 60, 90, null];
-export const DEFAULT_WINDOW = 2;
+export const DEFAULT_WINDOW = 3;
 export const windowAnchor = (rows, asOf) => rows.reduce((a, r) => (r.model_released && r.model_released > a ? r.model_released : a), asOf);
 export const windowStart = (anchor, days) => new Date(Date.parse(anchor + 'T00:00:00Z') - (days - 1) * 864e5).toISOString().slice(0, 10);
 export const inWindow = (r, days, anchor) => days == null || (!!r.model_released && r.model_released >= windowStart(anchor, days));
