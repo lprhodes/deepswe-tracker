@@ -1,0 +1,24 @@
+{
+  "as_of": "2026-10-09",
+  "official_url": "https://deepswe.datacurve.ai/",
+  "official_last_added": "2026-09-03",
+  "official_last_added_basis": "Datacurve changelog: GPT-6 Astra (all efforts) added 2026-09-03; its trials finished 2026-09-01. The 2026-09-22 generated_at is a site re-export with no new runs.",
+  "notes": [
+    "The official board has added no model since 3 Sep 2026 (GPT-6 Astra; its runs finished on 1 Sep). The page was re-exported on 22 Sep with no new runs. Datacurve's CEO has said the team is building the next version of DeepSWE.",
+    "Epoch AI's review of 7 Sep 2026 rated DeepSWE 1.1 'flawed': it found grading defects in 23 of 113 tasks, mostly hidden tests colliding with tests the agent wrote. Tokenless separately documented 70 ways a submission can rewrite test outcomes. Treat differences of a few points with care.",
+    "Lab claims are run by the lab, on its own harness, effort settings and trial count. They are not directly comparable with the official runs (mini-swe-agent, 4 passes over 113 tasks). The harness is listed on every row; a few labs say Datacurve ran the evaluation for them (xAI for Grok 4.7).",
+    "Independent runs: Mercor (mini-swe-agent, 500 steps, 2-hour limit, 3 passes), Artificial Analysis (Grok Build harness), Fireworks (Kimi K3 at three effort levels) and entrpi (MiniMax M3).",
+    "Costs are per task in USD. The official page and its JSON file disagree for 19 of 70 configurations; this tracker shows the page's figure and records the file's in the row notes. Lab costs are the lab's own and are only shown where the lab published them.",
+    "Mercor shows no date for each model, so its results appear in the charts and table but not on the timeline.",
+    "A number is included only when it was read at the source that published it. Figures that appear only on aggregator sites are left out; the research log in research/ lists each one and why.",
+    "Anthropic has published no DeepSWE 1.1 score for Claude Haiku 5.5 (Mercor's independent run is the only one). There is no GPT-6.1 Luna: OpenAI released GPT-6.1 Sol only."
+  ],
+  "official_generated_at": "2026-09-22T06:27:15.860279+00:00",
+  "official_latest_job": {
+    "name": "20260901-deep-swe-1-1-gpt-6-astra",
+    "finished_at": "2026-09-01T07:35:13Z"
+  },
+  "official_configs": 70,
+  "official_checked": "2026-10-09",
+  "official_rows_from": "page"
+}

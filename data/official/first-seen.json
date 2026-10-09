@@ -1,0 +1,282 @@
+{
+  "mini_swe_agent_claude_fable_5_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_fable_5_low": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_fable_5_max": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_fable_5_medium": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_fable_5_xhigh": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_4_8_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_4_8_low": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_4_8_max": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_4_8_medium": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_4_8_xhigh": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_5_high": {
+    "date": "2026-07-25",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_5_low": {
+    "date": "2026-07-25",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_5_max": {
+    "date": "2026-07-25",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_5_medium": {
+    "date": "2026-07-25",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_opus_5_xhigh": {
+    "date": "2026-07-25",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_4_6_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_5_high": {
+    "date": "2026-07-02",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_5_low": {
+    "date": "2026-07-02",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_5_max": {
+    "date": "2026-07-02",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_5_medium": {
+    "date": "2026-07-02",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_claude_sonnet_5_xhigh": {
+    "date": "2026-07-02",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_deepseek_v4_flash_max": {
+    "date": "2026-08-06",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_deepseek_v4_pro_max": {
+    "date": "2026-08-12",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_1_pro_preview_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_5_flash_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_6_flash_high": {
+    "date": "2026-07-22",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_7_flash_high": {
+    "date": "2026-08-13",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_7_flash_low": {
+    "date": "2026-08-13",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_7_flash_medium": {
+    "date": "2026-08-13",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_8_flash_high": {
+    "date": "2026-09-01",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gemini_3_8_flash_medium": {
+    "date": "2026-09-01",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_glm_5_2_high": {
+    "date": "2026-06-21",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_glm_5_2_max": {
+    "date": "2026-06-21",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_glm_5_3_flash_max": {
+    "date": "2026-08-26",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_glm_5_3_max": {
+    "date": "2026-08-20",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_4_xhigh": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_5_high": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_5_low": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_5_medium": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_5_xhigh": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_luna_high": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_luna_low": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_luna_max": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_luna_medium": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_luna_xhigh": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_sol_high": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_sol_low": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_sol_max": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_sol_medium": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_sol_xhigh": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_terra_high": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_terra_low": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_terra_max": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_terra_medium": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_5_6_terra_xhigh": {
+    "date": "2026-07-10",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_6_astra_high": {
+    "date": "2026-09-03",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_6_astra_low": {
+    "date": "2026-09-03",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_6_astra_max": {
+    "date": "2026-09-03",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_6_astra_medium": {
+    "date": "2026-09-03",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_gpt_6_astra_xhigh": {
+    "date": "2026-09-03",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_grok_4_5_high": {
+    "date": "2026-07-16",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_grok_4_6_high": {
+    "date": "2026-08-12",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_grok_4_6_low": {
+    "date": "2026-08-12",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_grok_4_6_medium": {
+    "date": "2026-08-12",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_grok_4_6_xhigh": {
+    "date": "2026-08-12",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_kimi_k2_7_code_default": {
+    "date": "2026-06-15",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_kimi_k3_max": {
+    "date": "2026-07-18",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_muse_spark_1_1_xhigh": {
+    "date": "2026-07-14",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_muse_spark_1_2_xhigh": {
+    "date": "2026-08-07",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  },
+  "mini_swe_agent_qwen3_8_max_xhigh": {
+    "date": "2026-08-04",
+    "basis": "Datacurve changelog (deepswe.datacurve.ai/changelog) or trials.json finish time, per research/raw/t1-notes.md"
+  }
+}
