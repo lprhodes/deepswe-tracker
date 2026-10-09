@@ -1,0 +1,26 @@
+[
+  {
+    "model": "Laguna S 2.1",
+    "model_key_hint": "laguna-s-2.1",
+    "model_id": "laguna-s-2.1",
+    "lab": "Poolside",
+    "open_weights": true,
+    "effort": "off",
+    "harness": "pool",
+    "score_pct": 16.5,
+    "ci_pct": null,
+    "n_samples": null,
+    "cost_per_task_usd": null,
+    "tokens_per_task": null,
+    "input_tokens_per_task": null,
+    "output_tokens_per_task": 99000,
+    "steps_per_task": null,
+    "source_type": "lab_self_reported",
+    "source_name": "Poolside Laguna S 2.1 launch post",
+    "source_url": "https://poolside.ai/blog/introducing-laguna-s-2-1",
+    "published": "2026-07-21",
+    "accessed": "2026-10-10",
+    "quote": "Max thinking lifts S 2.1’s score on Terminal-Bench 2.1 from 60.4% to 70.2% and on DeepSWE from 16.5% to 40.4%.",
+    "notes": "Poolside launch post states Laguna S 2.1 has two thinking modes: off and max (enabled by default); released without user-configurable low/medium/high control. In thinking-off mode, S 2.1 scored 16.5% (plotted as ~17% with 99k mean completion tokens/trajectory) in the pool harness, compared to 40.4% at max thinking (~249k completion tokens)."
+  }
+]

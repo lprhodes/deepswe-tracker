@@ -1,7 +1,7 @@
 // Column contracts for the two hand-edited CSVs. The build refuses a row that breaks them,
 // so a typo surfaces in CI rather than as a silently missing point on the chart.
 
-export const MODEL_COLUMNS = ['model_key', 'display_name', 'lab', 'open_weights', 'notes'];
+export const MODEL_COLUMNS = ['model_key', 'display_name', 'lab', 'open_weights', 'notes', 'released', 'released_source'];
 
 export const OBS_COLUMNS = [
   'model_key',          // joins data/models.csv

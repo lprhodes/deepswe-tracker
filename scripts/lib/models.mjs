@@ -20,6 +20,7 @@ const NAMES = {
   'gemini-3-flash-preview': 'Gemini 3 Flash (preview)', 'gemma-4-31b': 'Gemma 4 31B', 'qwen3.6-27b': 'Qwen3.6-27B',
   'qwen3.8-27b': 'Qwen3.8-27B', 'qwen3.8-flash-next': 'Qwen3.8-Flash-Next', 'nex-n2.5-max': 'Nex-N2.5-Max', 'nex-n2.5-pro': 'Nex-N2.5-Pro',
   'nex-n2.5-mini': 'Nex-N2.5-Mini', 'gpt-5.4-mini': 'GPT-5.4 mini',
+  'deepseek-v4-pro-preview': 'DeepSeek V4 Pro (preview)', 'deepseek-v4-flash-preview': 'DeepSeek V4 Flash (preview)',
 };
 export function displayName(key) {
   if (NAMES[key]) return NAMES[key];

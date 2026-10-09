@@ -20,7 +20,8 @@
       "Mercor shows no date for each model, so its results appear in the charts and table but not on the timeline.{{url:https://www.mercor.com/apex/oss-benchmarks/oss-deep-swe-leaderboard/}}",
       "A number is included only when it was read at the source that published it. Figures that appear only on aggregator sites are left out; research/ingest-log.txt in the repository lists each one and why.",
       "Anthropic has published no DeepSWE 1.1 score for Claude Haiku 5.5;{{anthropic-haiku-55}} Mercor's independent run is the only one. There is no GPT-6.1 Luna: OpenAI released GPT-6.1 Sol only.{{url:https://openai.com/index/introducing-gpt-6-1-sol/}}",
-      "Where a source published token counts but no cost, the cost is estimated from Vercel AI Gateway’s list prices and shown as a range marked est.{{ai-gateway-pricing}} With only a total token count, the range runs from every token priced as input to every token priced as output; cached input is cheaper still, so the true cost may sit below it. Only Laguna S 2.1 qualifies today."
+      "Where a source published token counts but no cost, the cost is estimated from Vercel AI Gateway’s list prices and shown as a range marked est.{{ai-gateway-pricing}} With only a total token count, the range runs from every token priced as input to every token priced as output; cached input is cheaper still, so the true cost may sit below it. No reading qualifies today: Poolside’s token counts for Laguna S 2.1 are output tokens only, and an agent’s cost is mostly its input.",
+      "DeepSeek re-released V4 Pro (as 0813) and V4 Flash (as 0731) under the same names; the official board’s live rows are the re-releases, and the earlier previews are listed as separate models.{{url:https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813}} Gemini 3.1 Pro was only ever released as a preview, so Mercor’s “Gemini 3.1 Pro” is the same model as the board’s."
     ],
     "official_generated_at": "2026-09-22T06:27:15.860279+00:00",
     "official_latest_job": {
@@ -119,7 +120,7 @@
     "third_party_run": "Independent third-party run"
   },
   "models": 80,
-  "observations": 210,
+  "observations": 215,
   "sources": [
     {
       "id": "r-16wwn5l",
@@ -203,9 +204,9 @@
       "publisher": "Poolside",
       "type": "Lab self-report",
       "published": "2026-07-21",
-      "accessed": "2026-10-09",
-      "establishes": "Pass@1 for Laguna S 2.1 40.4% [max].",
-      "readings": 1,
+      "accessed": "2026-10-10",
+      "establishes": "Pass@1 for Laguna S 2.1 16.5%–40.4% across 2 settings, with tokens.",
+      "readings": 2,
       "n": 7
     },
     {
@@ -239,9 +240,9 @@
       "publisher": "Alibaba (Qwen)",
       "type": "Lab self-report",
       "published": "2026-08-05",
-      "accessed": "2026-10-09",
-      "establishes": "Pass@1 for Qwen3.8-27B 42.2%; Qwen3.6-27B 13.3%.",
-      "readings": 2,
+      "accessed": "2026-10-10",
+      "establishes": "Pass@1 for Qwen3.8-27B 42.2%; Qwen3.7 Plus 14.2%; Qwen3.6-27B 13.3%.",
+      "readings": 3,
       "n": 10
     },
     {
@@ -257,6 +258,18 @@
       "n": 11
     },
     {
+      "id": "r-7akg1l",
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "title": "DeepSeek-V4-Pro-0813 HuggingFace Model Card",
+      "publisher": "DeepSeek",
+      "type": "Lab self-report",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "establishes": "Pass@1 for DeepSeek V4 Pro 62.7% [max]; DeepSeek V4 Flash 54.4% [max]; DeepSeek V4 Pro (preview) 12.8% [max]; DeepSeek V4 Flash (preview) 7.3% [max].",
+      "readings": 4,
+      "n": 12
+    },
+    {
       "id": "r-tt3io3",
       "url": "https://media.x.ai/v1/website/card-4p6-4cd2dc57.pdf",
       "title": "xAI Grok 4.6 Model Card",
@@ -266,7 +279,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Grok 4.6 65.9% [high].",
       "readings": 1,
-      "n": 12
+      "n": 13
     },
     {
       "id": "r-qxom7y",
@@ -278,7 +291,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Qwen3.8-Flash-Next 58.7%; Qwen3.7 Plus 16.5%.",
       "readings": 2,
-      "n": 13
+      "n": 14
     },
     {
       "id": "r-1171e08",
@@ -290,7 +303,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for GLM-5.3 66.9% [max].",
       "readings": 1,
-      "n": 14
+      "n": 15
     },
     {
       "id": "r-p3aj15",
@@ -302,7 +315,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Hy4 Preview 64.3%; Hy3 28%.",
       "readings": 2,
-      "n": 15
+      "n": 16
     },
     {
       "id": "r-1b2qf5e",
@@ -314,7 +327,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Claude Fable 5.1 67.4% [max].",
       "readings": 1,
-      "n": 16
+      "n": 17
     },
     {
       "id": "r-1wqp1zm",
@@ -326,7 +339,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Muse Spark 1.3 75.4% [max].",
       "readings": 1,
-      "n": 17
+      "n": 18
     },
     {
       "id": "r-pixn6e",
@@ -338,7 +351,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Nex-N2.5-Max 65.6%; Nex-N2.5-Pro 55.8%; Nex-N2.5-Mini 36.1%.",
       "readings": 3,
-      "n": 18
+      "n": 19
     },
     {
       "id": "r-prwi23",
@@ -350,7 +363,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for SWE-2 73%; SWE-1.7 37.7%.",
       "readings": 2,
-      "n": 19
+      "n": 20
     },
     {
       "id": "r-1ftq9xa",
@@ -360,9 +373,9 @@
       "type": "Lab self-report",
       "published": "2026-09-10",
       "accessed": "2026-10-09",
-      "establishes": "Pass@1 for DeepSeek V4.1 Flash 65.5%–74.2% across 8 settings; DeepSeek V4 Pro 62.7% [max]; DeepSeek V4 Flash 54.4% [max].",
-      "readings": 10,
-      "n": 20
+      "establishes": "Pass@1 for DeepSeek V4.1 Flash 65.5%–74.2% across 8 settings.",
+      "readings": 8,
+      "n": 21
     },
     {
       "id": "r-s5arsj",
@@ -374,7 +387,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Gemini 3.8 Flash 73.7% [high], with cost per task, tokens.",
       "readings": 1,
-      "n": 21
+      "n": 22
     },
     {
       "id": "r-1o5c47s",
@@ -386,7 +399,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Step 5 Preview 67.7% [high].",
       "readings": 1,
-      "n": 22
+      "n": 23
     },
     {
       "id": "r-1g5kt5u",
@@ -398,7 +411,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Grok 4.7 71% [high].",
       "readings": 1,
-      "n": 23
+      "n": 24
     },
     {
       "id": "r-1mttwp9",
@@ -410,7 +423,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for MiMo-V2.6-Pro 71.9% [max]; MiMo-V2.6-Flash 67.9% [max].",
       "readings": 2,
-      "n": 24
+      "n": 25
     },
     {
       "id": "r-1jseipb",
@@ -422,7 +435,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Claude Opus 5.5 74.2% [max].",
       "readings": 1,
-      "n": 25
+      "n": 26
     },
     {
       "id": "r-1m7ewdf",
@@ -434,7 +447,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for GPT-6 Sol 37.2%–68.8% across 5 settings; GPT-6 Luna 2.4%–66.6% across 5 settings; GPT-5.6 Luna 1.2%–62.2% across 5 settings, with cost per task.",
       "readings": 15,
-      "n": 26
+      "n": 27
     },
     {
       "id": "r-1vlr43v",
@@ -446,7 +459,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Ember-1 75.2% [thinking]; Kimi K3 55.8%–66.4% across 3 settings, with cost per task.",
       "readings": 4,
-      "n": 27
+      "n": 28
     },
     {
       "id": "r-1ctctri",
@@ -458,7 +471,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Gemini 4 Argon 77.9%.",
       "readings": 1,
-      "n": 28
+      "n": 29
     },
     {
       "id": "r-1tiaoyx",
@@ -470,7 +483,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Claude Sonnet 5.5 71% [max].",
       "readings": 1,
-      "n": 29
+      "n": 30
     },
     {
       "id": "r-1ntqzs0",
@@ -482,7 +495,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for GPT-6.1 Sol 64.4%–75.2% across 5 settings, with cost per task.",
       "readings": 5,
-      "n": 30
+      "n": 31
     },
     {
       "id": "r-1x8ip3p",
@@ -494,7 +507,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Beam 44.4%.",
       "readings": 1,
-      "n": 31
+      "n": 32
     },
     {
       "id": "r-d2tk0p",
@@ -506,7 +519,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Mistral Large 4 61.7% [thinking].",
       "readings": 1,
-      "n": 32
+      "n": 33
     },
     {
       "id": "r-1kqtfhm",
@@ -519,7 +532,7 @@
       "establishes": "Reports SWE-bench Pro, FrontierSWE v2 and ProgramBench for Haiku 5.5, and no DeepSWE 1.1 result.",
       "key": "anthropic-haiku-55",
       "readings": 0,
-      "n": 33
+      "n": 34
     },
     {
       "id": "r-hzsdm7",
@@ -531,7 +544,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for MiniMax M3 13.3%–16.8% across 2 settings, with cost per task, tokens.",
       "readings": 2,
-      "n": 34
+      "n": 35
     },
     {
       "id": "r-17v6sj",
@@ -543,7 +556,7 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Grok 4.7 73% [xhigh]; Grok 4.6 65% [high].",
       "readings": 2,
-      "n": 35
+      "n": 36
     },
     {
       "id": "r-14zikky",
@@ -555,7 +568,19 @@
       "accessed": "2026-10-09",
       "establishes": "Pass@1 for Claude Opus 5.5 72.3% [max]; GPT-6.1 Sol 72.3% [max]; GPT-6 Astra 72% [max]; DeepSeek V4.1 Flash 71.7% [max]; Claude Opus 5 70.2%–71.4% across 2 settings; Gemini 3.8 Flash 71.4% [high]; and 43 more models, with confidence intervals.",
       "readings": 52,
-      "n": 36
+      "n": 37
+    },
+    {
+      "id": "r-182356w",
+      "url": "https://sleev.ai/performance",
+      "title": "Sleev Performance & Benchmarks",
+      "publisher": "OpenAI",
+      "type": "Independent run",
+      "published": "",
+      "accessed": "2026-10-10",
+      "establishes": "Pass@1 for GPT-5.5 57.5% [high], with cost per task, confidence intervals.",
+      "readings": 1,
+      "n": 38
     },
     {
       "id": "r-1tuhx3r",
@@ -568,7 +593,7 @@
       "establishes": "Rates DeepSWE v1.1 flawed: grading defects in at least 23 of 113 tasks, most from hidden tests colliding with tests the agent wrote.",
       "key": "epoch-review",
       "readings": 0,
-      "n": 37
+      "n": 39
     },
     {
       "id": "r-18kp64f",
@@ -581,7 +606,7 @@
       "establishes": "Documents 70 ways a submission can rewrite test outcomes, because the test harness sits inside the repository the agent edits.",
       "key": "tokenless-envcheck",
       "readings": 0,
-      "n": 38
+      "n": 40
     },
     {
       "id": "r-i0raoa",
@@ -594,7 +619,7 @@
       "establishes": "Notes the board has published no new model since 3 Sep and quotes Datacurve's CEO saying the team is building the next generation of DeepSWE.",
       "key": "gh-issue-103",
       "readings": 0,
-      "n": 39
+      "n": 41
     },
     {
       "id": "r-isoxsa",
@@ -607,7 +632,7 @@
       "establishes": "Per-token list prices used to estimate cost where a source published tokens but no cost: Laguna S 2.1 at $0.09 per million input tokens and $0.18 per million output tokens.",
       "key": "ai-gateway-pricing",
       "readings": 0,
-      "n": 40
+      "n": 42
     }
   ],
   "rows": [
@@ -639,7 +664,7 @@
       "model_released": "2026-09-24",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ctctri",
-      "source_n": 28
+      "source_n": 29
     },
     {
       "model_key": "muse-spark-1.3",
@@ -669,7 +694,7 @@
       "model_released": "2026-09-02",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1wqp1zm",
-      "source_n": 17
+      "source_n": 18
     },
     {
       "model_key": "gpt-6.1-sol",
@@ -699,7 +724,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
-      "source_n": 30
+      "source_n": 31
     },
     {
       "model_key": "ember-1",
@@ -729,7 +754,7 @@
       "model_released": "2026-09-23",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
-      "source_n": 27
+      "source_n": 28
     },
     {
       "model_key": "claude-opus-5.5",
@@ -759,7 +784,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1jseipb",
-      "source_n": 25
+      "source_n": 26
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -789,7 +814,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "gpt-6-astra",
@@ -879,7 +904,7 @@
       "model_released": "2026-09-01",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-s5arsj",
-      "source_n": 21
+      "source_n": 22
     },
     {
       "model_key": "claude-opus-5",
@@ -1029,7 +1054,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
-      "source_n": 30
+      "source_n": 31
     },
     {
       "model_key": "grok-4.7",
@@ -1059,7 +1084,7 @@
       "model_released": "2026-09-21",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-17v6sj",
-      "source_n": 35
+      "source_n": 36
     },
     {
       "model_key": "swe-2",
@@ -1089,7 +1114,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-prwi23",
-      "source_n": 19
+      "source_n": 20
     },
     {
       "model_key": "claude-opus-5",
@@ -1209,7 +1234,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "claude-opus-5.5",
@@ -1239,7 +1264,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-6.1-sol",
@@ -1269,7 +1294,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-6-astra",
@@ -1299,7 +1324,7 @@
       "model_released": "2026-09-03",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-6.1-sol",
@@ -1329,7 +1354,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
-      "source_n": 30
+      "source_n": 31
     },
     {
       "model_key": "gpt-6.1-sol",
@@ -1359,7 +1384,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
-      "source_n": 30
+      "source_n": 31
     },
     {
       "model_key": "mimo-v2.6-pro",
@@ -1389,7 +1414,7 @@
       "model_released": "2026-09-21",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1mttwp9",
-      "source_n": 24
+      "source_n": 25
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -1419,7 +1444,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-5",
@@ -1449,7 +1474,7 @@
       "model_released": "2026-07-24",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gemini-3.8-flash",
@@ -1479,7 +1504,7 @@
       "model_released": "2026-09-01",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gemini-3.8-flash",
@@ -1539,7 +1564,7 @@
       "model_released": "2026-09-28",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1tiaoyx",
-      "source_n": 29
+      "source_n": 30
     },
     {
       "model_key": "grok-4.7",
@@ -1569,7 +1594,7 @@
       "model_released": "2026-09-21",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1g5kt5u",
-      "source_n": 23
+      "source_n": 24
     },
     {
       "model_key": "gpt-5.6-sol",
@@ -1629,7 +1654,7 @@
       "model_released": "2026-09-28",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -1659,7 +1684,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "glm-5.3",
@@ -1689,7 +1714,7 @@
       "model_released": "2026-08-20",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-sol",
@@ -1719,7 +1744,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-6-sol",
@@ -1749,7 +1774,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-5",
@@ -1779,7 +1804,7 @@
       "model_released": "2026-07-24",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-terra",
@@ -1809,7 +1834,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-fable-5",
@@ -1869,7 +1894,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "claude-fable-5",
@@ -2049,7 +2074,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "claude-opus-5",
@@ -2169,7 +2194,7 @@
       "model_released": "2026-09-21",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1mttwp9",
-      "source_n": 24
+      "source_n": 25
     },
     {
       "model_key": "step-5-preview",
@@ -2199,7 +2224,7 @@
       "model_released": "2026-09-20",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1o5c47s",
-      "source_n": 22
+      "source_n": 23
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -2229,7 +2254,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "kimi-k3",
@@ -2319,7 +2344,7 @@
       "model_released": "2026-09-01",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1b2qf5e",
-      "source_n": 16
+      "source_n": 17
     },
     {
       "model_key": "claude-fable-5",
@@ -2349,7 +2374,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-fable-5.1",
@@ -2379,7 +2404,7 @@
       "model_released": "2026-09-01",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -2499,7 +2524,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "glm-5.3",
@@ -2529,7 +2554,7 @@
       "model_released": "2026-08-20",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1171e08",
-      "source_n": 14
+      "source_n": 15
     },
     {
       "model_key": "grok-4.6",
@@ -2589,7 +2614,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "gpt-6-sol",
@@ -2619,7 +2644,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "kimi-k3",
@@ -2649,7 +2674,7 @@
       "model_released": "2026-07-18",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
-      "source_n": 27
+      "source_n": 28
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -2679,7 +2704,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "gpt-5.5",
@@ -2709,7 +2734,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "grok-4.6",
@@ -2739,7 +2764,7 @@
       "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-tt3io3",
-      "source_n": 12
+      "source_n": 13
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -2769,7 +2794,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "nex-n2.5-max",
@@ -2799,7 +2824,7 @@
       "model_released": "2026-09-08",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
-      "source_n": 18
+      "source_n": 19
     },
     {
       "model_key": "deepseek-v4.1-flash",
@@ -2829,7 +2854,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_n": 21
     },
     {
       "model_key": "gemini-3.7-flash",
@@ -2859,7 +2884,7 @@
       "model_released": "2026-08-13",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gemini-3.7-flash",
@@ -2979,7 +3004,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "grok-4.6",
@@ -3039,7 +3064,7 @@
       "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-17v6sj",
-      "source_n": 35
+      "source_n": 36
     },
     {
       "model_key": "claude-fable-5.1",
@@ -3069,7 +3094,7 @@
       "model_released": "2026-09-01",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.5",
@@ -3129,7 +3154,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1ntqzs0",
-      "source_n": 30
+      "source_n": 31
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -3159,7 +3184,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "hy4-preview",
@@ -3189,7 +3214,7 @@
       "model_released": "2026-08-27",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-p3aj15",
-      "source_n": 15
+      "source_n": 16
     },
     {
       "model_key": "grok-4.6",
@@ -3219,7 +3244,7 @@
       "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "glm-5.3-flash",
@@ -3276,7 +3301,7 @@
       "lab": "DeepSeek",
       "open_weights": true,
       "row_id": "row-eakg9h",
-      "model_released": "2026-06-15",
+      "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
@@ -3309,13 +3334,13 @@
       "model_released": "2026-07-18",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
-      "source_n": 27
+      "source_n": 28
     },
     {
       "model_key": "deepseek-v4-pro",
-      "model_as_reported": "DS-V4-Pro",
+      "model_as_reported": "DeepSeek-V4-Pro-0813",
       "effort": "max",
-      "harness": "mini-swe-agent",
+      "harness": "DeepSeek Harness (minimal mode)",
       "score_pct": 62.7,
       "ci_pct": null,
       "n_samples": null,
@@ -3326,20 +3351,20 @@
       "steps_per_task": null,
       "source_type": "lab_self_reported",
       "verified_primary": true,
-      "source_name": "DeepSeek-V4.1-Flash HuggingFace Model Card",
-      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
-      "published": "2026-09-10",
-      "accessed": "2026-10-09",
-      "quote": "| DeepSWE v1.1 (Resolved) | 74.0 | 73.0 | 67.5 | 66.9 | 62.7 | 54.4 | **74.2** |",
-      "notes": "Reported under frontier comparisons table in DS-V4.1-Flash README for DS-V4-Pro at max reasoning effort using mini-SWE harness.",
+      "source_name": "DeepSeek-V4-Pro-0813 HuggingFace Model Card",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "quote": "| \"DeepSWE\" | \"62.7\" | \"54.4\" | \"12.8\" | \"7.3\" | \"46.2\" | \"67.5\" | \"58.0\" | \"70.0\" |; Note 1: \"For the code-agent tasks among the public benchmarks above, DeepSeek-V4-Pro-0813 is evaluated with the minimal mode of DeepSeek Harness as the agent framework, using the max reasoning effort level with temperature = 1.0, top_p = 0.95.\"",
+      "notes": "Lab self-reported on official HF model card. Evaluated using DeepSeek Harness minimal mode at max reasoning effort (temp=1.0, top_p=0.95, 384K output token ceiling). Previous tracker only had Mercor 56.3.",
       "display_name": "DeepSeek V4 Pro",
       "lab": "DeepSeek",
       "open_weights": true,
-      "row_id": "row-1fioxzl",
-      "model_released": "2026-06-15",
+      "row_id": "row-8oa950",
+      "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
-      "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_id": "r-7akg1l",
+      "source_n": 12
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -3369,7 +3394,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "mistral-large-4",
@@ -3399,7 +3424,7 @@
       "model_released": "2026-10-06",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-d2tk0p",
-      "source_n": 32
+      "source_n": 33
     },
     {
       "model_key": "gpt-6-luna",
@@ -3429,7 +3454,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "gpt-5.6-sol",
@@ -3519,7 +3544,7 @@
       "model_released": "2026-09-29",
       "model_released_basis": "stated",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.8",
@@ -3549,7 +3574,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-fable-5",
@@ -3609,7 +3634,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "claude-opus-4.8",
@@ -3669,7 +3694,7 @@
       "model_released": "2026-08-24",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-qxom7y",
-      "source_n": 13
+      "source_n": 14
     },
     {
       "model_key": "claude-opus-5",
@@ -3700,6 +3725,36 @@
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-16wwn5l",
       "source_n": 1
+    },
+    {
+      "model_key": "gpt-5.5",
+      "model_as_reported": "GPT-5.5",
+      "effort": "high",
+      "harness": "Codex",
+      "score_pct": 57.5,
+      "ci_pct": 5,
+      "n_samples": 4,
+      "cost_per_task_usd": 3.71,
+      "tokens_per_task": null,
+      "input_tokens_per_task": null,
+      "output_tokens_per_task": null,
+      "steps_per_task": null,
+      "source_type": "third_party_run",
+      "verified_primary": true,
+      "source_name": "Sleev Performance & Benchmarks",
+      "source_url": "https://sleev.ai/performance",
+      "published": "",
+      "accessed": "2026-10-10",
+      "quote": "Standard runs: one task per context window running GPT-5.5 at high reasoning. Baseline 57.5% ± 5.0; mean cost per task $3.71",
+      "notes": "Baseline (without Sleev) in Sleev's tool comparison; Codex CLI replaces DeepSWE's reference harness, so Sleev says the figures are not comparable to the official board; 4 runs, 95% interval; runs 21 Jun to 2 Jul 2026.; harness as reported: Codex CLI",
+      "display_name": "GPT-5.5",
+      "lab": "OpenAI",
+      "open_weights": false,
+      "row_id": "row-ve85ra",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
+      "source_id": "r-182356w",
+      "source_n": 38
     },
     {
       "model_key": "qwen3.8-max",
@@ -3789,7 +3844,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "deepseek-v4-flash",
@@ -3819,7 +3874,7 @@
       "model_released": "2026-08-06",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "qwen3.8-max",
@@ -3852,7 +3907,7 @@
       "source_n": 11
     },
     {
-      "model_key": "deepseek-v4-pro-0813",
+      "model_key": "deepseek-v4-pro",
       "model_as_reported": "DeepSeek V4 Pro 0813",
       "effort": "max",
       "harness": "mini-swe-agent",
@@ -3872,14 +3927,14 @@
       "accessed": "2026-10-09",
       "quote": "DeepSeek V4 Pro 0813 | effort: max | score: 56.3% ± 7.2% | n_samples: 339 | provider: DeepSeek",
       "notes": "Mercor shows no per-model dates; on its board as of the 2026-10-07 capture. Mercor independent evaluation using mini-swe-agent (500 max steps, 2 hour time limit), unit tests all must pass, judge of None, k=3 (113 tasks, 339 samples; 113 samples for k=1).; harness as reported: mini-swe-agent (500 max steps, 2 hour time limit)",
-      "display_name": "DeepSeek V4 Pro 0813",
+      "display_name": "DeepSeek V4 Pro",
       "lab": "DeepSeek",
       "open_weights": true,
-      "row_id": "row-10qeqvl",
-      "model_released": null,
-      "model_released_basis": null,
+      "row_id": "row-gjm39c",
+      "model_released": "2026-08-12",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -3909,7 +3964,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "kimi-k3",
@@ -3939,7 +3994,7 @@
       "model_released": "2026-07-18",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1vlr43v",
-      "source_n": 27
+      "source_n": 28
     },
     {
       "model_key": "nex-n2.5-pro",
@@ -3969,7 +4024,7 @@
       "model_released": "2026-09-08",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
-      "source_n": 18
+      "source_n": 19
     },
     {
       "model_key": "muse-spark-1.2",
@@ -4003,9 +4058,9 @@
     },
     {
       "model_key": "deepseek-v4-flash",
-      "model_as_reported": "DS-V4-Flash",
+      "model_as_reported": "DeepSeek-V4-Flash-0731",
       "effort": "max",
-      "harness": "mini-swe-agent",
+      "harness": "DeepSeek Harness (minimal mode)",
       "score_pct": 54.4,
       "ci_pct": null,
       "n_samples": null,
@@ -4016,20 +4071,20 @@
       "steps_per_task": null,
       "source_type": "lab_self_reported",
       "verified_primary": true,
-      "source_name": "DeepSeek-V4.1-Flash HuggingFace Model Card",
-      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
-      "published": "2026-09-10",
-      "accessed": "2026-10-09",
-      "quote": "| DeepSWE v1.1 (Resolved) | 74.0 | 73.0 | 67.5 | 66.9 | 62.7 | 54.4 | **74.2** |",
-      "notes": "Reported under frontier comparisons table in DS-V4.1-Flash README for DS-V4-Flash (also referenced as DeepSeek-V4-Flash-0731 in Qwen3.8-Flash-Next README).",
+      "source_name": "DeepSeek-V4-Pro-0813 HuggingFace Model Card",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "quote": "| \"DeepSWE\" | \"62.7\" | \"54.4\" | \"12.8\" | \"7.3\" | \"46.2\" | \"67.5\" | \"58.0\" | \"70.0\" |; Note 1: \"For the code-agent tasks among the public benchmarks above, DeepSeek-V4-Pro-0813 is evaluated with the minimal mode of DeepSeek Harness as the agent framework, using the max reasoning effort level with temperature = 1.0, top_p = 0.95.\"",
+      "notes": "Second column of the DeepSeek-V4-Pro-0813 card table; same Note 1: DeepSeek Harness minimal mode, max reasoning effort, temperature 1.0, top_p 0.95.",
       "display_name": "DeepSeek V4 Flash",
       "lab": "DeepSeek",
       "open_weights": true,
-      "row_id": "row-1yrhm2q",
+      "row_id": "row-111pl4r",
       "model_released": "2026-08-06",
       "model_released_basis": "first DeepSWE 1.1 result",
-      "source_id": "r-1ftq9xa",
-      "source_n": 20
+      "source_id": "r-7akg1l",
+      "source_n": 12
     },
     {
       "model_key": "claude-opus-4.8",
@@ -4329,7 +4384,7 @@
       "model_released": "2026-08-04",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.8",
@@ -4449,7 +4504,7 @@
       "model_released": "2026-07-02",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.7",
@@ -4479,7 +4534,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gemini-3.6-flash",
@@ -4509,7 +4564,7 @@
       "model_released": "2026-07-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "grok-4.5",
@@ -4539,7 +4594,7 @@
       "model_released": "2026-07-16",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.4",
@@ -4569,7 +4624,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.8",
@@ -4779,7 +4834,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "beam",
@@ -4809,7 +4864,7 @@
       "model_released": "2026-10-05",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1x8ip3p",
-      "source_n": 31
+      "source_n": 32
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -4899,7 +4954,7 @@
       "model_released": "2026-08-26",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -4929,7 +4984,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "qwen3.8-27b",
@@ -5030,9 +5085,9 @@
       "ci_pct": null,
       "n_samples": 3,
       "cost_per_task_usd": null,
-      "tokens_per_task": 249000,
+      "tokens_per_task": null,
       "input_tokens_per_task": null,
-      "output_tokens_per_task": null,
+      "output_tokens_per_task": 249000,
       "steps_per_task": null,
       "source_type": "lab_self_reported",
       "verified_primary": true,
@@ -5041,18 +5096,13 @@
       "published": "2026-07-21",
       "accessed": "2026-10-09",
       "quote": "On DeepSWE v1.1, Laguna S 2.1 scores 40.4 in thinking mode in pool harness.",
-      "notes": "Evaluated using Poolside's proprietary 'pool' agent harness (not mini-swe-agent as aggregators cited) with 500-step limit and 6-hour timeout. pass@1 averaged over 3 attempts per task. Thinking mode lifts score from 16.5% (99k tokens, thinking off) to 40.4% (249k tokens, thinking max).",
+      "notes": "Token count is mean completion (output) tokens per trajectory, read from the launch post chart labels (\"DeepSWE: 40 at 249k, thinking\"; \"17 at 99k, no-thinking\"). Evaluated using Poolside's proprietary 'pool' agent harness (not mini-swe-agent as aggregators cited) with 500-step limit and 6-hour timeout. pass@1 averaged over 3 attempts per task. Thinking mode lifts score from 16.5% (99k tokens, thinking off) to 40.4% (249k tokens, thinking max).",
       "display_name": "Laguna S 2.1",
       "lab": "Poolside",
       "open_weights": true,
       "row_id": "row-befdi5",
       "model_released": "2026-07-21",
       "model_released_basis": "first DeepSWE 1.1 result",
-      "cost_estimate": {
-        "low": 0.0224,
-        "high": 0.0448,
-        "basis": "249000 total tokens with no input/output split, priced all as input (low) to all as output (high) at poolside/laguna-s-2.1 list prices (AI Gateway, 2026-10-09); cached input would cost less"
-      },
       "source_id": "r-12e8ru1",
       "source_n": 7
     },
@@ -5084,7 +5134,7 @@
       "model_released": "2026-07-14",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.7",
@@ -5174,7 +5224,7 @@
       "model_released": "2026-06-16",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "swe-1.7",
@@ -5204,7 +5254,7 @@
       "model_released": "2026-09-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-prwi23",
-      "source_n": 19
+      "source_n": 20
     },
     {
       "model_key": "gpt-6-sol",
@@ -5234,7 +5284,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "gemini-3.5-flash",
@@ -5264,7 +5314,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "glm-5.2",
@@ -5324,7 +5374,7 @@
       "model_released": "2026-09-08",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-pixn6e",
-      "source_n": 18
+      "source_n": 19
     },
     {
       "model_key": "gemini-3.5-flash",
@@ -5414,7 +5464,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "grok-4.7",
@@ -5444,7 +5494,7 @@
       "model_released": "2026-09-21",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.6",
@@ -5474,7 +5524,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-opus-4.7",
@@ -5594,7 +5644,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-sonnet-4.6",
@@ -5646,7 +5696,7 @@
       "published": "2026-06-15",
       "accessed": "2026-10-09",
       "quote": "gemini-3-5-flash [medium]: 28.32% ±3.54%, cost $7.42, output tokens 189024, steps 75.1",
-      "notes": "On the v1.1 launch board on 2026-06-15; no longer on the live board.",
+      "notes": "On the v1.1 launch board on 2026-06-15; no longer on the live board.; The board later revised this configuration: its leaderboard-live.json of 17 Jul 2026 (archived https://web.archive.org/web/20260721100146/https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json) gives 37.39% at $7.34 per task, and the configuration was then dropped from the board.",
       "display_name": "Gemini 3.5 Flash",
       "lab": "Google",
       "open_weights": false,
@@ -5684,7 +5734,7 @@
       "model_released": "2026-08-27",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-p3aj15",
-      "source_n": 15
+      "source_n": 16
     },
     {
       "model_key": "claude-opus-4.6",
@@ -5774,7 +5824,7 @@
       "model_released": "2026-08-12",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.4-mini",
@@ -5984,7 +6034,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "qwen3.7-max",
@@ -6074,7 +6124,37 @@
       "model_released": "2026-06-02",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-hzsdm7",
-      "source_n": 34
+      "source_n": 35
+    },
+    {
+      "model_key": "laguna-s-2.1",
+      "model_as_reported": "Laguna S 2.1",
+      "effort": "off",
+      "harness": "pool",
+      "score_pct": 16.5,
+      "ci_pct": null,
+      "n_samples": null,
+      "cost_per_task_usd": null,
+      "tokens_per_task": null,
+      "input_tokens_per_task": null,
+      "output_tokens_per_task": 99000,
+      "steps_per_task": null,
+      "source_type": "lab_self_reported",
+      "verified_primary": true,
+      "source_name": "Poolside Laguna S 2.1 launch post",
+      "source_url": "https://poolside.ai/blog/introducing-laguna-s-2-1",
+      "published": "2026-07-21",
+      "accessed": "2026-10-10",
+      "quote": "Max thinking lifts S 2.1’s score on Terminal-Bench 2.1 from 60.4% to 70.2% and on DeepSWE from 16.5% to 40.4%.",
+      "notes": "Token count is mean completion (output) tokens per trajectory, read from the launch post chart labels (\"DeepSWE: 40 at 249k, thinking\"; \"17 at 99k, no-thinking\"). Poolside launch post states Laguna S 2.1 has two thinking modes: off and max (enabled by default); released without user-configurable low/medium/high control. In thinking-off mode, S 2.1 scored 16.5% (plotted as ~17% with 99k mean completion tokens/trajectory) in the pool harness, compared to 40.4% at max thinking (~249k completion tokens).",
+      "display_name": "Laguna S 2.1",
+      "lab": "Poolside",
+      "open_weights": true,
+      "row_id": "row-tg416",
+      "model_released": "2026-07-21",
+      "model_released_basis": "first DeepSWE 1.1 result",
+      "source_id": "r-12e8ru1",
+      "source_n": 7
     },
     {
       "model_key": "qwen3.7-plus",
@@ -6101,10 +6181,40 @@
       "lab": "Alibaba",
       "open_weights": null,
       "row_id": "row-1exbwot",
-      "model_released": "2026-08-24",
+      "model_released": "2026-08-13",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-qxom7y",
-      "source_n": 13
+      "source_n": 14
+    },
+    {
+      "model_key": "qwen3.7-plus",
+      "model_as_reported": "Qwen3.7-Plus",
+      "effort": "",
+      "harness": "Claude Code",
+      "score_pct": 14.2,
+      "ci_pct": null,
+      "n_samples": null,
+      "cost_per_task_usd": null,
+      "tokens_per_task": null,
+      "input_tokens_per_task": null,
+      "output_tokens_per_task": null,
+      "steps_per_task": null,
+      "source_type": "lab_self_reported",
+      "verified_primary": true,
+      "source_name": "Qwen3.8-27B HuggingFace Model Card",
+      "source_url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "quote": "| \"Coding\" | \"Agentic coding\" | \"DeepSWE 1.1\" | \"**42.2**\" | \"13.3\" | \"14.2\" | \"--\" | \"--\" |; Footnote 3: \"DeepSWE 1.1: Evaluated with the Claude Code harness at temp=1.0, top_p=0.95, and a 256K context window.\"",
+      "notes": "New harness/setting measurement: 14.2% on Claude Code harness (temp=1.0, top_p=0.95, 256K context window, thinking mode/xhigh). Differs from earlier recorded 16.5% which was obtained via mini-SWE-agent. [lead: effort left unstated; the card documents the default setting but does not state the one used for DeepSWE]",
+      "display_name": "Qwen3.7 Plus",
+      "lab": "Alibaba",
+      "open_weights": null,
+      "row_id": "row-1uo50jh",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
+      "source_id": "r-190dm7p",
+      "source_n": 10
     },
     {
       "model_key": "minimax-m3",
@@ -6134,7 +6244,7 @@
       "model_released": "2026-06-02",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-hzsdm7",
-      "source_n": 34
+      "source_n": 35
     },
     {
       "model_key": "qwen3.6-27b",
@@ -6195,6 +6305,36 @@
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
+    },
+    {
+      "model_key": "deepseek-v4-pro-preview",
+      "model_as_reported": "DeepSeek-V4-Pro (Preview)",
+      "effort": "max",
+      "harness": "DeepSeek Harness (minimal mode)",
+      "score_pct": 12.8,
+      "ci_pct": null,
+      "n_samples": null,
+      "cost_per_task_usd": null,
+      "tokens_per_task": null,
+      "input_tokens_per_task": null,
+      "output_tokens_per_task": null,
+      "steps_per_task": null,
+      "source_type": "lab_self_reported",
+      "verified_primary": true,
+      "source_name": "DeepSeek-V4-Pro-0813 HuggingFace Model Card",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "quote": "| \"DeepSWE\" | \"62.7\" | \"54.4\" | \"12.8\" | \"7.3\" | \"46.2\" | \"67.5\" | \"58.0\" | \"70.0\" |",
+      "notes": "Sibling preview baseline reported in DeepSeek-V4-Pro-0813 and DeepSeek-V4-Flash-0731 benchmark tables under max reasoning effort.",
+      "display_name": "DeepSeek V4 Pro (preview)",
+      "lab": "DeepSeek",
+      "open_weights": true,
+      "row_id": "row-wg3gzd",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
+      "source_id": "r-7akg1l",
+      "source_n": 12
     },
     {
       "model_key": "gemini-3.1-pro-preview",
@@ -6314,10 +6454,10 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
-      "model_key": "deepseek-v4-pro",
+      "model_key": "deepseek-v4-pro-preview",
       "model_as_reported": "DeepSeek V4 Pro",
       "effort": "max",
       "harness": "mini-swe-agent",
@@ -6336,15 +6476,15 @@
       "published": "",
       "accessed": "2026-10-09",
       "quote": "DeepSeek V4 Pro | effort: max | score: 9.1% ± 3.8% | n_samples: 337 | provider: DeepSeek",
-      "notes": "Mercor shows no per-model dates; on its board as of the 2026-10-07 capture. Mercor independent evaluation using mini-swe-agent (500 max steps, 2 hour time limit), unit tests all must pass, judge of None, k=3 (113 tasks, 339 samples; 113 samples for k=1).; harness as reported: mini-swe-agent (500 max steps, 2 hour time limit)",
-      "display_name": "DeepSeek V4 Pro",
+      "notes": "Mercor shows no per-model dates; on its board as of the 2026-10-07 capture. Mercor lists this unsuffixed DeepSeek V4 Pro beside a separate \"DeepSeek V4 Pro 0813\", so it is the April preview. Mercor independent evaluation using mini-swe-agent (500 max steps, 2 hour time limit), unit tests all must pass, judge of None, k=3 (113 tasks, 339 samples; 113 samples for k=1).; harness as reported: mini-swe-agent (500 max steps, 2 hour time limit)",
+      "display_name": "DeepSeek V4 Pro (preview)",
       "lab": "DeepSeek",
       "open_weights": true,
-      "row_id": "row-1gab77k",
+      "row_id": "row-dy35ap",
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "minimax-m3",
@@ -6374,10 +6514,10 @@
       "model_released": "2026-06-02",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
-      "model_key": "gemini-3.1-pro",
+      "model_key": "gemini-3.1-pro-preview",
       "model_as_reported": "Gemini 3.1 Pro",
       "effort": "high",
       "harness": "mini-swe-agent",
@@ -6396,18 +6536,18 @@
       "published": "",
       "accessed": "2026-10-09",
       "quote": "Gemini 3.1 Pro | effort: high | score: 7.7% ± 3.1% | n_samples: 339 | provider: Google",
-      "notes": "Mercor shows no per-model dates; on its board as of the 2026-10-07 capture. Mercor independent evaluation using mini-swe-agent (500 max steps, 2 hour time limit), unit tests all must pass, judge of None, k=3 (113 tasks, 339 samples; 113 samples for k=1).; harness as reported: mini-swe-agent (500 max steps, 2 hour time limit)",
-      "display_name": "Gemini 3.1 Pro",
+      "notes": "Mercor shows no per-model dates; on its board as of the 2026-10-07 capture. Mercor names it Gemini 3.1 Pro; Google released 3.1 Pro only as gemini-3.1-pro-preview (ai.google.dev model docs), the model the official board ran. Mercor independent evaluation using mini-swe-agent (500 max steps, 2 hour time limit), unit tests all must pass, judge of None, k=3 (113 tasks, 339 samples; 113 samples for k=1).; harness as reported: mini-swe-agent (500 max steps, 2 hour time limit)",
+      "display_name": "Gemini 3.1 Pro (preview)",
       "lab": "Google",
       "open_weights": false,
-      "row_id": "row-se9nz3",
-      "model_released": null,
-      "model_released_basis": null,
+      "row_id": "row-166i7y8",
+      "model_released": "2026-06-15",
+      "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
-      "model_key": "deepseek-v4-pro",
+      "model_key": "deepseek-v4-pro-preview",
       "model_as_reported": "deepseek-v4-pro",
       "effort": "",
       "harness": "mini-swe-agent",
@@ -6426,15 +6566,45 @@
       "published": "2026-06-15",
       "accessed": "2026-10-09",
       "quote": "deepseek-v4-pro [None]: 7.52% ±2.7%, cost $4.22, output tokens 49949, steps 111.3",
-      "notes": "On the v1.1 launch board on 2026-06-15; no longer on the live board.",
-      "display_name": "DeepSeek V4 Pro",
+      "notes": "On the v1.1 launch board on 2026-06-15; no longer on the live board.; This is the April preview of DeepSeek V4 Pro: DeepSeek re-released V4 Pro as 0813 under the same API name, and the live board row (62.83%) is the re-release.",
+      "display_name": "DeepSeek V4 Pro (preview)",
       "lab": "DeepSeek",
       "open_weights": true,
-      "row_id": "row-183svb6",
+      "row_id": "row-ppsxc9",
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1fnts5d",
       "source_n": 2
+    },
+    {
+      "model_key": "deepseek-v4-flash-preview",
+      "model_as_reported": "DeepSeek-V4-Flash (Preview)",
+      "effort": "max",
+      "harness": "DeepSeek Harness (minimal mode)",
+      "score_pct": 7.3,
+      "ci_pct": null,
+      "n_samples": null,
+      "cost_per_task_usd": null,
+      "tokens_per_task": null,
+      "input_tokens_per_task": null,
+      "output_tokens_per_task": null,
+      "steps_per_task": null,
+      "source_type": "lab_self_reported",
+      "verified_primary": true,
+      "source_name": "DeepSeek-V4-Pro-0813 HuggingFace Model Card",
+      "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+      "published": "2026-08-13",
+      "accessed": "2026-10-10",
+      "quote": "| \"DeepSWE\" | \"62.7\" | \"54.4\" | \"12.8\" | \"7.3\" | \"46.2\" | \"67.5\" | \"58.0\" | \"70.0\" |",
+      "notes": "Sibling preview baseline reported in DeepSeek-V4-Pro-0813 and DeepSeek-V4-Flash-0731 benchmark tables under max reasoning effort.",
+      "display_name": "DeepSeek V4 Flash (preview)",
+      "lab": "DeepSeek",
+      "open_weights": true,
+      "row_id": "row-l10ntr",
+      "model_released": "2026-08-13",
+      "model_released_basis": "first DeepSWE 1.1 result",
+      "source_id": "r-7akg1l",
+      "source_n": 12
     },
     {
       "model_key": "gemini-3-flash-preview",
@@ -6494,7 +6664,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "qwen3.6-plus",
@@ -6554,7 +6724,7 @@
       "model_released": "2026-09-22",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "glm-5",
@@ -6584,7 +6754,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-5.6-luna",
@@ -6644,7 +6814,7 @@
       "model_released": "2026-07-10",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-1m7ewdf",
-      "source_n": 26
+      "source_n": 27
     },
     {
       "model_key": "deepseek-v3.2",
@@ -6674,7 +6844,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "nemotron-3-ultra",
@@ -6704,7 +6874,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "claude-haiku-4.5",
@@ -6794,7 +6964,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "gpt-oss-120b",
@@ -6824,7 +6994,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "kimi-k2",
@@ -6854,7 +7024,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "minimax-m2.7",
@@ -6884,7 +7054,7 @@
       "model_released": "2026-06-15",
       "model_released_basis": "first DeepSWE 1.1 result",
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     },
     {
       "model_key": "qwen3.5",
@@ -6914,7 +7084,7 @@
       "model_released": null,
       "model_released_basis": null,
       "source_id": "r-14zikky",
-      "source_n": 36
+      "source_n": 37
     }
   ]
 }

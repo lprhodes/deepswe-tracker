@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS } from '../site/charts.mjs';
+import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS, unplottedNote } from '../site/charts.mjs';
 import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -90,8 +90,7 @@ const days = WINDOWS[DEFAULT_WINDOW];
 const recent = rows.filter(r => inWindow(r, days, anchor));
 const fmtDay = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 const span = `${fmtDay(windowStart(anchor, days)).replace(/ \d{4}$/, '')} – ${fmtDay(anchor)}`;
-const missing = recent.filter(r => !(r[METRICS.cost.field] > 0)).length;
-const unplotted = `Models released ${span}.` + (missing ? ` ${missing} of their ${recent.length} readings publish a score but no cost per task; they sit in the right-hand column at their score.` : '');
+const unplotted = `Models released ${span}.` + unplottedNote(recent, METRICS.cost);
 const priceSrc = sources.find(x => x.key === 'ai-gateway-pricing');
 // The README's bar chart shows each model's best result per source across every date.
 const best = new Map();

@@ -265,7 +265,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. A model whose source gives a score but no cost sits in the column at the right, at its score. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Models whose sources give a score but no cost are listed beside it by best score. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
@@ -650,8 +650,7 @@ function render() {
   } else {
     const M = METRICS[state.metric];
     mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
-    const missing = rows.filter(r => !(r[M.field] > 0)).length;
-    $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + (missing ? ` ${missing} of their ${rows.length} readings publish a score but no ${M.noun}; they sit in the right-hand column at their score.` : '');
+    $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + unplottedNote(rows, M);
     mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
   renderTable(rows);

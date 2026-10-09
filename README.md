@@ -4,7 +4,7 @@ Every published DeepSWE 1.1 score in one dataset: the official [Datacurve leader
 
 The official board has added no model since **3 September 2026** (GPT-6 Astra). Since then labs have kept publishing DeepSWE 1.1 numbers for GPT-6.1 Sol, Claude Opus 5.5 and Sonnet 5.5, Gemini 4 Argon, Grok 4.7, DeepSeek V4.1 Flash, Mistral Large 4 and others, and Mercor has run its own independent evaluation. This repo puts them side by side without pretending they are the same measurement.
 
-**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). It uses the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be. A release-date slider opens on the models released in the last 30 days and widens to 60, 90 days or any time. A model whose source gives a score but no cost (most Anthropic, Google and Meta claims) sits in a column beside the chart, at its score.
+**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). It uses the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be. A release-date slider opens on the models released in the last 30 days and widens to 60, 90 days or any time. A model whose sources give a score but no cost (most Anthropic, Google and Meta claims) is listed beside the chart by its best score.
 
 ![Score against cost per task, models released in the last 30 days](charts/score-vs-cost.svg)
 
@@ -21,7 +21,7 @@ The official board has added no model since **3 September 2026** (GPT-6 Astra). 
 | `SOURCES.md` | Generated: every original source, numbered as on the page, with what it establishes. |
 | `data/pricing/ai-gateway.json` | List prices from Vercel AI Gateway, used only to estimate cost where a source published tokens but no cost (refresh with `node scripts/sync-pricing.mjs`). |
 | `data/official/` | The official board's rows as embedded in its page, its JSON artifact, and the date each configuration first appeared. |
-| `research/` | The October 2026 research sweep: raw findings per search task, the fact-check, and the merge script and log. |
+| `research/` | The October 2026 research sweeps (every score, then other effort levels for single-setting models): raw findings per search task, the fact-checks, the reports, and the merge script and log. |
 
 Columns in `deepswe-1.1.csv`:
 

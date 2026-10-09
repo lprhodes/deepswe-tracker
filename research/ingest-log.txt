@@ -1,5 +1,7 @@
-kept 121 rows; rejected 468
+kept 126 rows; rejected 475
 REJECT lab citing the official board: Gemini 3.7 Flash [high] 65.3 https://storage.googleapis.com/deepmind-media/gemini/gemini_3-8_flash_model_evaluation.pdf
+REJECT reprint of the figure DeepSeek published on the V4-Pro-0813 card, which is ingested instead: DS-V4-Pro [max] 62.7 https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash
+REJECT reprint of the figure DeepSeek published on the V4-Pro-0813 card, which is ingested instead: DS-V4-Flash [max] 54.4 https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash
 REJECT lab citing the official board: DeepSeek V4 Pro 0813 [max] 63 https://codingfleet.com/blog/deepswe-v11-leaderboard-2026/
 REJECT lab citing the official board: Kimi K3 (mini-SWE-agent) [max] 67.3 https://huggingface.co/moonshotai/Kimi-K3
 REJECT training-run checkpoint, not the released model: MiMo-V2.6-Pro (RL end of run) [max] 72.57 https://mimo.xiaomi.com/mimo-v2-6
@@ -448,6 +450,9 @@ REJECT mirror of a source already ingested: gpt-5-6-terra [low] [low] 24.05 http
 REJECT mirror of a source already ingested: gemini-3-1-pro-preview [high] [high] 11.73 https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json
 REJECT mirror of a source already ingested: gpt-5-6-luna [medium] [medium] 11.28 https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json
 REJECT mirror of a source already ingested: gpt-5-6-luna [low] [low] 1.55 https://deepswe.datacurve.ai/artifacts/v1.1/leaderboard-live.json
+REJECT non-standard protocol: several tasks share one context window: GPT-5.6 Sol [medium] 61.1 https://sleev.ai/performance
+REJECT repeats the official board figure: MiMo-V2.5 Pro [] 19 https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL
+REJECT repeats the official board figure: GLM-5.3-Flash [max] 63.4 https://huggingface.co/zai-org/GLM-5.3-Flash/raw/main/.eval_results/GLM-5.3-Flash.yaml
 REJECT repeats the official board figure: MiMo-V2.5-Pro [] 19 https://mimo.xiaomi.com/mimo-v2-6
 REJECT repeats the official board figure: GLM-5.3-Flash [max] 63.4 https://z.ai/blog/glm-5.3-flash
 REJECT repeats the official board figure: Muse Spark 1.2 [xhigh] 55 https://research.meta.ai/blog/introducing-muse-spark-1-3
@@ -467,3 +472,5 @@ REJECT repeats the official board figure: GPT-6 Astra [xhigh] 74.12 https://open
 REJECT repeats the official board figure: GPT-6 Astra [high] 73.23 https://openai.com/index/gpt-6-astra/
 REJECT repeats the official board figure: GPT-6 Astra [medium] 72.79 https://openai.com/index/gpt-6-astra/
 REJECT repeats the official board figure: GPT-6 Astra [low] 67.04 https://openai.com/index/gpt-6-astra/
+REJECT same figure as Hy4 preview 64.3 from t3: Hy4 preview [] 64.3 https://huggingface.co/tencent/Hy4-preview
+REJECT same figure as Qwen3.7-Max 21.6 from t3: Qwen3.7-Max [] 21.6 https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B

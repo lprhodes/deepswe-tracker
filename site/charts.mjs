@@ -33,7 +33,10 @@ export const labClass = lab => (LAB_COLORS[lab] ? 'lab-' + slug(lab) : 'lab-othe
 export const LAB_CSS = Object.entries(LAB_COLORS).map(([l, c]) => `.lab-${slug(l)}{--c:${c}}`).join('') + `.lab-other{--c:${OTHER_LAB}}`;
 
 export const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
-export const effortRank = e => { const i = EFFORTS.indexOf(e); return i < 0 ? -1 : i; };
+// Order for effort lines and sorting. "off" (thinking disabled) sits below low; it has no filter chip
+// of its own and falls under "other".
+const LADDER = ['off', ...EFFORTS];
+export const effortRank = e => LADDER.indexOf(e);
 
 export const METRICS = {
   cost: { field: 'cost_per_task_usd', label: 'Avg cost per task', short: 'Cost', noun: 'cost per task', better: 'cheaper', fmt: v => fmtUsd(v) },
@@ -76,6 +79,7 @@ export const STYLE_RULES = `
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
 .viz .rail-bg{fill:var(--v-grid);opacity:.45}
 .viz .rail-h{fill:var(--v-ink);font-size:12px;font-weight:650}
+.viz .glbl text,.viz .glbl .leader{pointer-events:none}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
 .viz .best-a{stop-color:var(--v-good);stop-opacity:.16} .viz .best-b{stop-color:var(--v-good);stop-opacity:0}
@@ -120,7 +124,10 @@ export function fmtCount(v) {
 export const fmtPct = v => (v == null ? '' : `${(+v).toFixed(1).replace(/\.0$/, '')}%`);
 export const pointLabel = r => `${r.display_name}${r.effort ? ` [${r.effort}]` : ''}`;
 export const rowKey = r => [r.model_key, r.source_type, r.effort, r.harness, r.score_pct, r.source_url].join('|');
-const groupKey = r => [r.model_key, r.source_type, r.harness, r.source_url].join('|');
+// One effort line per measurer: the official board's live page and its archived copies are one
+// measurer, as is a lab across its blog and system card; independent runners stay apart by site.
+const hostOf = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+const groupKey = r => [r.model_key, r.source_type, r.harness, r.source_type === 'third_party_run' ? hostOf(r.source_url) : ''].join('|');
 
 // Marker shape encodes who measured the result; its fill encodes the lab.
 function markPath(src, lab, x, y, cls = 'mk') {
@@ -128,11 +135,9 @@ function markPath(src, lab, x, y, cls = 'mk') {
   if (src === 's3') return `<rect class="${cls} ${src} ${lab}" x="${x - 4.5}" y="${y - 4.5}" width="9" height="9" pointer-events="none"/>`;
   return `<circle class="${cls} ${src} ${lab}" cx="${x}" cy="${y}" r="5" pointer-events="none"/>`;
 }
-// The hit target is larger than the mark, except where points pack closer than its radius (the column
-// of unmeasured results), where it shrinks so every point keeps its own centre.
-function mark(r, i, x, y, hitR = 12) {
+function mark(r, i, x, y) {
   const fx = x.toFixed(1), fy = y.toFixed(1);
-  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="${hitR}"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
+  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="12"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
 }
 
 function open(w, h, id, title, desc, embedStyle) {
@@ -228,19 +233,20 @@ export function frontier(rows, field) {
 // runs from the most expensive on the left to the cheapest on the right (log by default, or linear),
 // and each model's effort levels are joined in order from low to max. Lines are drawn first and every
 // point after, so a model measured at one effort level is never hidden under another model's line.
-// Results that publish a score but not this measure sit in a column at the right, on the same score
-// axis, so a model without a published cost is still on the chart.
+// A model with no result that publishes this measure is listed beside the plot by its best score, so a
+// model without a published cost still appears. Other unmeasured readings are in the table.
 export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 680, id = 'sc', labelTop = 30, title: titleText } = {}) {
   const M = METRICS[metric];
   const all = rows.map((r, i) => ({ r, i }));
   const pts = all.filter(p => p.r[M.field] > 0);
-  const miss = all.filter(p => !(p.r[M.field] > 0));
+  const plotted = new Set(pts.map(p => p.r.model_key));
+  const unlisted = bestOf(all.filter(p => !plotted.has(p.r.model_key))).sort((a, b) => b.r.score_pct - a.r.score_pct);
   const title = titleText || `DeepSWE 1.1 score against ${M.noun}`;
   const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.` +
-    (miss.length ? ` A column at the right holds ${miss.length} results with no published ${M.noun}, placed by score only.` : '');
+    (unlisted.length ? ` Beside it, ${unlisted.length} models with no published ${M.noun}, listed by best score.` : '');
   if (!all.length) return open(width, 120, id, title, 'No results in this selection.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection.</text></svg>`;
   const key = embedStyle ? legend(24, 80, rows, width - 28) : null;
-  const railW = miss.length ? 236 : 0;
+  const railW = unlisted.length ? 236 : 0;
   const m = { left: 60, right: 28 + railW, top: key ? key.y + 44 : 48, bottom: 58 };
   const right = width - m.right, bottom = height - m.bottom;
   const railX = right + 30, railR = width - 28;
@@ -280,12 +286,7 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     svg += `<defs><radialGradient id="${id}-best" cx="1" cy="0" r="0.7"><stop offset="0" class="best-a"/><stop offset="1" class="best-b"/></radialGradient></defs>`;
     svg += `<rect x="${m.left}" y="${m.top}" width="${plotW}" height="${plotH}" fill="url(#${id}-best)" aria-hidden="true"/>`;
   }
-  if (miss.length) {
-    svg += `<rect class="rail-bg" x="${railX - 14}" y="${m.top}" width="${railR - railX + 14}" height="${plotH}" rx="6" aria-hidden="true"/>`;
-    svg += `<text class="rail-h" x="${railX - 6}" y="${m.top - 20}">No ${esc(M.short.toLowerCase())} published</text>`;
-    svg += `<text class="tick" x="${railX - 6}" y="${bottom + 18}">placed by score only</text>`;
-  }
-  svg += yAxis(0, y1, sy, m.left, miss.length ? railR : right);
+  svg += yAxis(0, y1, sy, m.left, right);
   for (const t of ticks) {
     const x = sx(t).toFixed(1);
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${esc(M.fmt(t))}</text>`;
@@ -297,13 +298,6 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   if (clamped) svg += `<text class="note" x="${m.left + 6}" y="${bottom - 8}">◂ ${clamped} result${clamped === 1 ? '' : 's'} above ${esc(M.fmt(clampAt))}, pinned to this edge</text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
-  // The column: one centre line, each point nudged sideways until it clears the ones above it.
-  const colX = railX + 18, railPts = [];
-  for (const p of [...miss].sort((a, b) => b.r.score_pct - a.r.score_pct)) {
-    const cy = sy(p.r.score_pct);
-    const dx = [0, 9, -9, 16, -16].find(d => railPts.every(q => Math.hypot(q.cx - (colX + d), q.cy - cy) >= 9)) ?? 0;
-    railPts.push({ ...p, cx: colX + dx, cy, g: groupKey(p.r) });
-  }
 
   // The efficient frontier, a wide neutral band under the data in both scales. It is keyed in the
   // header rather than labelled on the plot, where its label would compete with the model labels.
@@ -317,62 +311,68 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   }
   // Layer 1: every line. Layer 2: every point, single-effort models drawn larger.
   let lines = '', points = '';
-  for (const [set, hitR] of [[placed, 12], [railPts, 7]]) {
-    const groups = new Map();
-    for (const p of set) { if (!groups.has(p.g)) groups.set(p.g, []); groups.get(p.g).push(p); }
-    for (const [g, ps] of groups) {
-      const model = esc(ps[0].r.model_key);
-      const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
-      if (laddered.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
-      points += `<g class="grp${ps.length === 1 ? ' solo' : ''}" data-g="${esc(g)}" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy, hitR)).join('') + '</g>';
-    }
+  const groups = new Map();
+  for (const p of placed) { if (!groups.has(p.g)) groups.set(p.g, []); groups.get(p.g).push(p); }
+  for (const [g, ps] of groups) {
+    const model = esc(ps[0].r.model_key);
+    // The line runs through one point per effort level (the best, where a measurer gave several).
+    const byEffort = new Map();
+    for (const p of ps) if (effortRank(p.r.effort) >= 0 && !(byEffort.get(p.r.effort)?.r.score_pct >= p.r.score_pct)) byEffort.set(p.r.effort, p);
+    const laddered = [...byEffort.values()].sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
+    if (laddered.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
+    points += `<g class="grp${ps.length === 1 ? ' solo' : ''}" data-g="${esc(g)}" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy)).join('') + '</g>';
   }
   svg += lines + points;
   // Layer 3: one label per model, at its best visible result, tinted in its lab colour.
-  const bestOf = set => { const b = new Map(); for (const p of set) { const x = b.get(p.r.model_key); if (!x || p.r.score_pct > x.r.score_pct) b.set(p.r.model_key, p); } return [...b.values()]; };
   const frontModels = new Set(front.map(r => r.model_key));
   const chosen = bestOf(placed).sort((a, b) => b.r.score_pct - a.r.score_pct)
     .filter((p, k) => k < labelTop || frontModels.has(p.r.model_key));
   const items = chosen.map(p => ({ cx: p.cx, cy: p.cy, model: p.r.model_key, cls: labClass(p.r.lab), text: p.r.display_name, sub: (p.r.effort || '').toUpperCase() }));
   svg += placeLabels(items, { left: m.left, right, top: m.top, bottom }, placed.map(p => ({ x: p.cx - 5, y: p.cy - 5, w: 10, h: 10 })));
-  if (railPts.length) svg += railLabels(bestOf(railPts), { x: railX + 42, right: railR - 4, top: m.top + 8, bottom: bottom - 6 });
+  if (unlisted.length) svg += unlistedPanel(unlisted, M, { x: railX, right: railR, top: m.top, bottom });
   return svg + '</svg>';
 }
 
-// Labels for the column of unmeasured results, stacked beside it in the same top-to-bottom order as
-// their points so no two leaders cross. Labels that would overlap are merged into a block centred on
-// their points. Highest scores are taken first; a label the stack would push further than `reach`
-// from its point is left off, and that point keeps its tooltip.
-function stackLabels(list, top, bottom, H) {
-  const blocks = [];
-  for (const p of [...list].sort((a, b) => a.cy - b.cy)) {
-    blocks.push({ ps: [p], sum: p.cy });
-    for (;;) {
-      const n = blocks.length;
-      const fit = bk => Math.min(Math.max(bk.sum / bk.ps.length - (bk.ps.length - 1) * H / 2, top), bottom - (bk.ps.length - 1) * H);
-      if (n < 2 || fit(blocks[n - 2]) + blocks[n - 2].ps.length * H <= fit(blocks[n - 1])) { blocks.forEach(bk => (bk.y = fit(bk))); break; }
-      const last = blocks.pop(); blocks[n - 2].ps.push(...last.ps); blocks[n - 2].sum += last.sum;
-    }
-  }
-  return blocks.flatMap(bk => bk.ps.map((p, k) => ({ p, y: bk.y + k * H })));
+// The line under the score chart: what the list beside it holds and what only the table holds.
+export function unplottedNote(rows, M) {
+  const plotted = new Set(rows.filter(r => r[M.field] > 0).map(r => r.model_key));
+  const listed = new Set(rows.filter(r => !plotted.has(r.model_key)).map(r => r.model_key)).size;
+  const loose = rows.filter(r => !(r[M.field] > 0) && plotted.has(r.model_key)).length;
+  return (listed ? ` ${listed} model${listed === 1 ? ' publishes' : 's publish'} a score but no ${M.noun}; ${listed === 1 ? 'it is' : 'they are'} listed beside the chart.` : '') +
+    (loose ? ` ${loose} more reading${loose === 1 ? '' : 's'} without ${/^[aeiou]/i.test(M.noun) ? 'an' : 'a'} ${M.noun} ${loose === 1 ? 'is' : 'are'} in the table.` : '');
 }
-function railLabels(best, box, reach = 150) {
-  const H = 15;
-  let kept = [];
-  for (const p of [...best].sort((a, b) => b.r.score_pct - a.r.score_pct)) {
-    const trial = stackLabels([...kept, p], box.top, box.bottom, H);
-    if (trial.every(t => Math.abs(t.y - t.p.cy) <= reach) && kept.length + 1 <= Math.floor((box.bottom - box.top) / H) + 1) kept.push(p);
-  }
-  const room = box.right - box.x;
-  return stackLabels(kept, box.top, box.bottom, H).map(({ p, y }) => {
-    const eff = (p.r.effort || '').toUpperCase();
-    let name = p.r.display_name;
-    const nameW = textW(name, 12), effW = eff ? textW(eff, 9) + 6 : 0;
-    const showEff = eff && nameW + effW <= room;
-    if (nameW > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
-    return `<g class="grp glbl ${labClass(p.r.lab)}" data-model="${esc(p.r.model_key)}"><line class="leader" x1="${(p.cx + 6).toFixed(1)}" y1="${p.cy.toFixed(1)}" x2="${(box.x - 4).toFixed(1)}" y2="${y.toFixed(1)}"/>` +
-      `<text class="lbl" x="${box.x}" y="${(y + 4).toFixed(1)}">${esc(name)}${showEff ? `<tspan class="lbl-eff" dx="6">${esc(eff)}</tspan>` : ''}</text></g>`;
-  }).join('');
+
+// Each model's best result in a set of placed or unplaced results.
+function bestOf(set) {
+  const b = new Map();
+  for (const p of set) { const x = b.get(p.r.model_key); if (!x || p.r.score_pct > x.r.score_pct) b.set(p.r.model_key, p); }
+  return [...b.values()];
+}
+
+// The models a chart cannot place, as a short ranked list beside it: mark, name, effort, best score.
+// Rows that do not fit are counted rather than drawn; the table has every reading.
+function unlistedPanel(list, M, box) {
+  const H = 22, cap = Math.floor((box.bottom - box.top - 12) / H);
+  const shown = list.length > cap ? list.slice(0, cap - 1) : list;
+  const scoreX = box.right - 6, nameX = box.x + 14;
+  let out = `<rect class="rail-bg" x="${box.x - 10}" y="${box.top}" width="${box.right - box.x + 10}" height="${box.bottom - box.top}" rx="6" aria-hidden="true"/>` +
+    `<text class="rail-h" x="${box.x - 2}" y="${box.top - 20}">No ${esc(M.short.toLowerCase())} published</text>` +
+    `<text class="tick" x="${scoreX}" y="${box.top - 20}" text-anchor="end">best</text>`;
+  shown.forEach((p, k) => {
+    const y = box.top + 18 + k * H, r = p.r;
+    const room = scoreX - 38 - nameX;
+    let name = r.display_name;
+    if (textW(name, 12) > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
+    const eff = (r.effort || '').toUpperCase();
+    const showEff = eff && textW(name, 12) + textW(eff, 9) + 6 <= room;
+    out += `<g class="grp glbl ${labClass(r.lab)}" data-model="${esc(r.model_key)}"><g class="pt" data-k="${esc(rowKey(r))}">` +
+      `<rect class="hit" data-i="${p.i}" tabindex="0" x="${box.x - 6}" y="${y - 11}" width="${box.right - box.x + 2}" height="${H}"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></rect>` +
+      markPath(CLS[r.source_type], labClass(r.lab), box.x + 4, y - 4) + '</g>' +
+      `<text class="lbl" x="${nameX}" y="${y}">${esc(name)}${showEff ? `<tspan class="lbl-eff" dx="6">${esc(eff)}</tspan>` : ''}</text>` +
+      `<text class="val" x="${scoreX}" y="${y}" text-anchor="end">${fmtPct(r.score_pct)}</text></g>`;
+  });
+  if (shown.length < list.length) out += `<text class="note" x="${nameX}" y="${box.top + 18 + shown.length * H}">and ${list.length - shown.length} more in the table</text>`;
+  return out;
 }
 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%

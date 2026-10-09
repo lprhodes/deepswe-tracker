@@ -24,6 +24,7 @@ const load = f => (existsSync(p(`research/raw/${f}`)) ? JSON.parse(readFileSync(
 
 export function keyFor(name) {
   let s = String(name).toLowerCase().trim()
+    .replace(/\s*\(preview\)/, ' preview')                         // "DeepSeek-V4-Pro (Preview)" is its own model
     .replace(/\(.*?\)|\[.*?\]/g, ' ')
     .replace(/^[\w.-]+\//, '')                                   // HuggingFace org prefix, "Qwen/Qwen3.8-27B"
     .replace(/^(anthropic|openai|google|meta|xai)\s+/, '')
@@ -41,7 +42,13 @@ export function keyFor(name) {
 }
 const ALIASES = {
   'claude-opus-5.5-max': 'claude-opus-5.5',
-  'gemini-3.1-pro': 'gemini-3.1-pro',
+  // Google has served Gemini 3.1 Pro only as gemini-3.1-pro-preview (no other id on its API or on the
+  // AI Gateway), so Mercor's "Gemini 3.1 Pro" is the board's preview model.
+  'gemini-3.1-pro': 'gemini-3.1-pro-preview',
+  // DeepSeek re-released V4 Pro and V4 Flash in August under the same API names; the official board's
+  // live rows are the re-releases (62.83% and 53.32%, against 7.52% for Pro at launch).
+  'deepseek-v4-pro-0813': 'deepseek-v4-pro',
+  'deepseek-v4-flash-0731': 'deepseek-v4-flash',
 };
 
 const nameFor = displayName;
@@ -79,6 +86,11 @@ const raw = [
   ...load('b1-factcheck.json').map(r => ({ ...r, _task: 'b1' })),
   ...load('t6-aggregator-only.json').map(r => ({ ...r, _task: 't6' })),
   ...load('t4-aggregators.json').map(r => ({ ...r, _task: 't4' })),
+  // 10 Oct 2026 sweep for effort levels beyond the one recorded (research/raw/t7-*.json).
+  ...load('t7-us-labs.json').map(r => ({ ...r, _task: 't7' })),
+  ...load('t7-cn-open.json').map(r => ({ ...r, _task: 't7' })),
+  ...load('t7-independent.json').map(r => ({ ...r, _task: 't7' })),
+  ...load('t7-sleev.json').map(r => ({ ...r, _task: 't7' })),
 ];
 
 const rejected = [];
@@ -89,6 +101,8 @@ for (const r of raw) {
   if (typeof r.score_pct !== 'number' || !Number.isFinite(r.score_pct)) { rejected.push([r, 'no numeric score']); continue; }
   if (/nvfp4|quantiz/i.test(`${r.model} ${r.notes}`)) { rejected.push([r, 'quantised community variant, not the released model']); continue; }
   if (/RL end/i.test(r.model)) { rejected.push([r, 'training-run checkpoint, not the released model']); continue; }
+  if (/six tasks (per session|chained)/i.test(`${r.quote} ${r.notes}`)) { rejected.push([r, 'non-standard protocol: several tasks share one context window']); continue; }
+  if (/^DS-V4-(Pro|Flash)$/.test(r.model) && /DeepSeek-V4\.1-Flash/.test(r.source_url)) { rejected.push([r, 'reprint of the figure DeepSeek published on the V4-Pro-0813 card, which is ingested instead']); continue; }
   if (r.source_type !== 'third_party_run' && /official DeepSWE leaderboard|public leaderboard from deepswe\.datacurve\.ai|cited from Datacurve|cites? the Datacurve/i.test(`${r.quote} ${r.notes} ${r.source_name}`)) {
     rejected.push([r, 'lab citing the official board']); continue;
   }
@@ -113,7 +127,7 @@ for (let i = candidates.length - 1; i >= 0; i--) if (citesOfficial(candidates[i]
 }
 
 // Keep one row per (model, effort, harness, kind, score). Prefer verified, then the lab-focused tasks.
-const rank = c => (c.verified ? 0 : 10) + ({ b1: 0, t2: 1, t3: 1, t6: 1, t5: 2, t4: 3 }[c.r._task] ?? 5);
+const rank = c => (c.verified ? 0 : 10) + ({ b1: 0, t2: 1, t3: 1, t6: 1, t7: 1, t5: 2, t4: 3 }[c.r._task] ?? 5);
 const best = new Map();
 for (const c of candidates) {
   // A lab printing its figure in two places (card and blog) is one claim; two runners are two runs.
@@ -135,7 +149,12 @@ for (const c of pool) {
   const dup = kept.find(k => k.key === c.key && k.kind === c.kind && (c.kind === 'lab_self_reported' || host(k.r.source_url) === host(c.r.source_url))
     && (!k.effort || !c.effort || k.effort === c.effort) && (!k.harness || !c.harness || k.harness === c.harness || c.r._task === 't5' || k.r._task === 't5')
     && sameFigure(k, c));
-  if (dup) { rejected.push([c.r, `same figure as ${dup.r.model} ${dup.r.score_pct} from ${dup.r._task}`]); if (!dup.effort && c.effort) dup.effort = c.effort; continue; }
+  if (dup) {
+    rejected.push([c.r, `same figure as ${dup.r.model} ${dup.r.score_pct} from ${dup.r._task}`]);
+    if (!dup.effort && c.effort) dup.effort = c.effort;
+    if (!dup.harness && c.harness) dup.harness = c.harness;
+    continue;
+  }
   kept.push(c);
 }
 
@@ -152,13 +171,21 @@ const CORRECTIONS = [
     note: 'OpenAI re-ran GPT-5.6 Luna internally for its GPT-6 Sol/Luna post; the official board measured 67.2% at max.' },
   { when: c => c.key === 'step-5-preview', set: {},
     note: 'Source is StepFun\u2019s homepage rather than a dated release page; the figure has not been re-checked on a page that is still reachable.' },
+  { when: c => c.key === 'deepseek-v4-pro' && host(c.r.source_url) === 'mercor.com' && c.r.model === 'DeepSeek V4 Pro', set: { key: 'deepseek-v4-pro-preview' },
+    note: 'Mercor lists this unsuffixed DeepSeek V4 Pro beside a separate "DeepSeek V4 Pro 0813", so it is the April preview.' },
+  { when: c => c.key === 'laguna-s-2.1', set: { tokens_per_task: null, output_tokens_per_task: c => (c.effort === 'max' ? 249000 : 99000) },
+    note: 'Token count is mean completion (output) tokens per trajectory, read from the launch post chart labels ("DeepSWE: 40 at 249k, thinking"; "17 at 99k, no-thinking").' },
+  { when: c => c.key === 'gemini-3.1-pro-preview' && host(c.r.source_url) === 'mercor.com', set: {},
+    note: 'Mercor names it Gemini 3.1 Pro; Google released 3.1 Pro only as gemini-3.1-pro-preview (ai.google.dev model docs), the model the official board ran.' },
   { when: c => host(c.r.source_url) === 'mercor.com', set: { published: '' },
     note: 'Mercor shows no per-model dates; on its board as of the 2026-10-07 capture.' },
 ];
 for (const c of kept) for (const fix of CORRECTIONS) if (fix.when(c)) {
+  if ('key' in fix.set) c.key = fix.set.key;
   if ('effort' in fix.set) c.effort = fix.set.effort;
   if ('harness' in fix.set) c.harness = fix.set.harness;
   if ('published' in fix.set) c.r = { ...c.r, published: fix.set.published };
+  for (const k of ['tokens_per_task', 'output_tokens_per_task']) if (k in fix.set) c.r = { ...c.r, [k]: typeof fix.set[k] === 'function' ? fix.set[k](c) : fix.set[k] };
   c.r = { ...c.r, notes: [fix.note, c.r.notes].filter(Boolean).join(' ') };
 }
 // Corrections can make two rows identical (Gemini 4 Argon read as "max" by one task and "high" by
