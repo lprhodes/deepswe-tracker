@@ -19,6 +19,7 @@ The official board has added no model since **3 September 2026** (GPT-6 Astra). 
 | `data/deepswe-1.1.csv` | One row per reading: a model at an effort level, from one source. The file you edit. |
 | `data/models.csv` | One row per model: display name, lab, open weights (blank when not established). |
 | `data/deepswe-1.1.json` | Generated: the two CSVs joined and typed, plus the notes shown on the page. |
+| `SOURCES.md` | Generated: every original source, numbered as on the page, with what it establishes. |
 | `data/official/` | The official board's rows as embedded in its page, its JSON artifact, and the date each configuration first appeared. |
 | `research/` | The October 2026 research sweep: raw findings per search task, the fact-check, and the merge script and log. |
 
@@ -45,6 +46,8 @@ Columns in `deepswe-1.1.csv`:
 - **Official board.** Datacurve runs every model on mini-swe-agent, four passes over the 113 tasks, and publishes pass@1 with a run-to-run 95% interval and the mean cost, tokens and steps per task. The leaderboard page and its JSON artifact give different costs for 19 of 70 configurations (GPT-5.6 Luna [max]: $0.61 on the page, $3.03 in the artifact). This repo uses the page's figure and records the artifact's in `notes`.
 - **Lab claims.** Run by the lab, on its own harness, effort settings and trial count. Anthropic reports a five-trial average; OpenAI publishes a score and cost per effort level; Google and Meta say they used mini-swe-agent. xAI's Grok 4.7 card says its numbers came from evaluations Datacurve ran but never posted. These are not directly comparable with the official runs.
 - **Independent runs.** Mercor (mini-swe-agent, 500 steps, 2-hour limit, 3 passes; no per-model dates), Artificial Analysis (Grok Build harness), Fireworks (Kimi K3 at three efforts) and entrpi (MiniMax M3).
+
+Every original source is numbered in [SOURCES.md](SOURCES.md) and at the foot of the page, where each entry says what it establishes and links back to the readings that cite it. On the page, each score carries its source number; hovering, focusing or tapping it shows the source, and with scripts off it jumps to the list.
 
 A number is included only when it was read at the source that published it. Figures that appear only on aggregator sites are left out; `research/ingest-log.txt` lists every rejected figure and the reason.
 

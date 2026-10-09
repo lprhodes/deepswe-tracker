@@ -274,3 +274,57 @@ export function spreadPlot(rows, { embedStyle = false, width = 1080, id = 'sp', 
   });
   return svg + '</svg>';
 }
+
+// ---------- readings table, shared by the build (pre-rendered, works without script) and the page ----------
+
+// Stable short id from a string (FNV-1a), for row and source anchors that survive re-sorting.
+export function hashId(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(36);
+}
+
+export function shapeSvg(cls) {
+  const shape = cls === 's2' ? '<path d="M6 0L12 6L6 12L0 6Z" fill="var(--s2)"/>' : cls === 's3' ? '<rect x="1.5" y="1.5" width="9" height="9" fill="var(--s3)"/>' : '<circle cx="6" cy="6" r="5" fill="var(--s1)"/>';
+  return `<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">${shape}</svg>`;
+}
+
+const fmtDay = d => (d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '');
+export const TABLE_COLS = [
+  ['rank', '#', 'n'], ['display_name', 'Model'], ['effort', 'Effort'], ['source_type', 'Measured by'],
+  ['score_pct', 'Pass@1', 'n'], ['bar', 'Reading'], ['cost_per_task_usd', 'Cost / task', 'n'],
+  ['output_tokens_per_task', 'Out tokens', 'n'], ['steps_per_task', 'Steps', 'n'], ['published', 'Published', 'n'],
+];
+export const TABLE_SORTABLE = new Set(['display_name', 'effort', 'source_type', 'score_pct', 'cost_per_task_usd', 'output_tokens_per_task', 'steps_per_task', 'published']);
+
+export function theadHtml(sort) {
+  return '<tr>' + TABLE_COLS.map(([k, label, cls]) => {
+    const aria = sort && k === sort.key ? ` aria-sort="${sort.dir > 0 ? 'ascending' : 'descending'}"` : '';
+    const inner = TABLE_SORTABLE.has(k) ? `<button type="button" data-sort="${k}">${label}</button>` : label;
+    return `<th scope="col" class="${cls || ''}"${aria}>${inner}</th>`;
+  }).join('') + '</tr>';
+}
+
+// One reading. The pass@1 figure carries its citation marker: an anchor into the source registry,
+// so the claim-to-source link works with no script at all; the page layers a preview on top.
+export function readingRowHtml(r, rank, src) {
+  const s = SERIES.find(x => x.key === r.source_type);
+  const na = t => `<span class="na">${t}</span>`;
+  const ci = r.ci_pct != null
+    ? `<div class="ci" style="left:${Math.max(0, r.score_pct - r.ci_pct)}%;width:${Math.min(100, r.score_pct + r.ci_pct) - Math.max(0, r.score_pct - r.ci_pct)}%"></div>` : '';
+  // Attribute names held in a constant so this template is not itself read as a marker by tools
+  // that scan the page source for data-cite.
+  const CITE = 'data-cite';
+  const cite = src ? `<a class="cite" href="#${src.id}" ${CITE}="${src.id}" data-n="${src.n}" aria-describedby="${src.id}">${src.n}</a>` : '';
+  return `<tr id="${r.row_id}" data-flip-id="${r.row_id}" data-model="${esc(r.model_key)}">` +
+    `<td class="n na">${rank}</td>` +
+    `<td><span class="name">${esc(r.display_name)}</span><span class="id">${esc(r.lab)}${r.harness ? ' · ' + esc(r.harness) : ''}</span></td>` +
+    `<td><span class="eff">${esc(r.effort || '—')}</span></td>` +
+    `<td><span class="hall ${s.cls}">${shapeSvg(s.cls)}${s.mark}</span><span class="via">${esc(src ? src.publisher : r.source_name)}</span></td>` +
+    `<td class="n score">${fmtPct(r.score_pct)}${r.ci_pct != null ? ` ±${r.ci_pct}` : ''}<sup>${cite}</sup></td>` +
+    `<td><div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${s.cls}" style="width:${r.score_pct}%"></div>${ci}</div></td>` +
+    `<td class="n">${r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd) : na('not given')}</td>` +
+    `<td class="n">${r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : na('—')}</td>` +
+    `<td class="n">${r.steps_per_task != null ? fmtCount(r.steps_per_task) : na('—')}</td>` +
+    `<td class="n">${r.published ? fmtDay(r.published) : na('not given')}</td></tr>`;
+}

@@ -74,6 +74,7 @@ export function typeObservations(rows, modelKeys) {
       if (r[k] && !DATE.test(r[k])) errors.push(`${where}: ${k} "${r[k]}" is not YYYY-MM-DD`);
     }
     if (!r.accessed) errors.push(`${where}: accessed is empty`);
+    if (/^(null|nan|none|undefined)$/i.test(r.effort)) errors.push(`${where}: effort "${r.effort}" is a placeholder; leave it blank when the source states none`);
     return o;
   });
   const dupes = new Map();

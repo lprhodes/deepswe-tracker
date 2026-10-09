@@ -1,0 +1,255 @@
+{
+  "project": "deepswe-tracker",
+  "updated": "2026-10-09T18:10:00+11:00",
+  "verdict": {
+    "token": "done",
+    "number": "210",
+    "unit": "readings of 80 models",
+    "headline": "Live at lprhodes.github.io/deepswe-tracker; every score cites its source. CI commit awaits a token scope.",
+    "run_label": "first build",
+    "head_sha": "ca9b65f"
+  },
+  "tasks": [
+    {
+      "id": "R-1",
+      "title": "Find every DeepSWE 1.1 score since 12 Sep",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "6 searches + fact-check, 39 sources"
+    },
+    {
+      "id": "D-1",
+      "title": "Official board rows, synced daily",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "89 rows, page figures primary"
+    },
+    {
+      "id": "D-2",
+      "title": "Lab and independent results merged",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "62 lab, 59 independent"
+    },
+    {
+      "id": "P-1",
+      "title": "Tracker page with effort-level controls",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "GSAP + three.js, light and dark"
+    },
+    {
+      "id": "P-2",
+      "title": "README charts and docs",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "done"
+    },
+    {
+      "id": "G-1",
+      "title": "Push the CI workflows to GitHub",
+      "origin": "planned",
+      "stage": "code written",
+      "outcome": "stuck",
+      "blocked_by": "gh token lacks the workflow scope",
+      "waiting_hours": 0
+    },
+    {
+      "id": "P-3",
+      "title": "Cite every original source, dossier-report style",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "39 sources, 226 markers"
+    },
+    {
+      "id": "G-2",
+      "title": "Make the repo public with GitHub Pages",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "lprhodes.github.io/deepswe-tracker"
+    }
+  ],
+  "gates": [
+    {
+      "name": "Data validates and generated files are current",
+      "command": "npm run check",
+      "exit_code": 0,
+      "counts": "210/210",
+      "state": "done",
+      "kind": "build"
+    },
+    {
+      "name": "Every cited source resolves",
+      "command": "dossier research_verify_citations",
+      "exit_code": 0,
+      "counts": "22/22",
+      "state": "done",
+      "kind": "tests"
+    },
+    {
+      "name": "Chart colours tell apart for colour-blind readers",
+      "command": "validate_palette.py --pairs all (light, dark)",
+      "exit_code": 0,
+      "counts": "2/2",
+      "state": "done",
+      "kind": "design"
+    },
+    {
+      "name": "Design lint: 0 critical; its 1 major flag misreads a hyperlink",
+      "command": "design-lint.py index.html",
+      "exit_code": 1,
+      "state": "done",
+      "kind": "design",
+      "counts": "1/1"
+    },
+    {
+      "name": "UX lint: no failures",
+      "command": "ux-lint.py --static index.html",
+      "exit_code": 0,
+      "counts": "13/13",
+      "state": "done",
+      "kind": "design"
+    },
+    {
+      "name": "Page loads with no errors at three sizes",
+      "command": "Playwright: 1360 light, 1360 dark, 390 mobile",
+      "exit_code": 0,
+      "counts": "3/3",
+      "state": "done",
+      "kind": "tests"
+    },
+    {
+      "name": "Every score cites a listed source, and every source is cited",
+      "command": "dossier-report audit_page.py index.html",
+      "exit_code": 0,
+      "counts": "39/39",
+      "state": "done",
+      "kind": "tests"
+    },
+    {
+      "name": "Citations work with scripts off, by keyboard and by tap",
+      "command": "Playwright: no-JS, focus + Escape, touch tap, backlink",
+      "exit_code": 0,
+      "counts": "6/6",
+      "state": "done",
+      "kind": "tests"
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-01",
+      "score": 40,
+      "severity": "medium",
+      "file_line": "data/deepswe-1.1.csv (step-5-preview)",
+      "claim": "Step 5 Preview's score points at StepFun's homepage, not a dated release page",
+      "state": "needs-work"
+    },
+    {
+      "id": "F-02",
+      "score": 20,
+      "severity": "low",
+      "file_line": "index.html",
+      "claim": "Design lint flags the GitHub link as an external load; it is a hyperlink",
+      "state": "waived"
+    }
+  ],
+  "corrections": [
+    {
+      "earlier_claim": "GPT-6.1 Sol scores 71.0% at xhigh and max",
+      "said_pct": 71,
+      "true_pct": 72,
+      "true_state": "OpenAI's chart data says 71.9% at both.",
+      "mechanism": "A community post rounded the figures.",
+      "caught_by": "fact-check read the launch page's chart data"
+    },
+    {
+      "earlier_claim": "xAI reported Grok 4.7 at 73% on Grok Build",
+      "said_pct": 73,
+      "true_pct": 71,
+      "true_state": "xAI reported 71.0% at high; 73% is Artificial Analysis's run.",
+      "mechanism": "A news write-up merged two sources.",
+      "caught_by": "fact-check against the xAI model card PDF"
+    }
+  ],
+  "coverage": [
+    {
+      "axis": "Models you named that have a score",
+      "covered": 10,
+      "denominator": 11
+    }
+  ],
+  "not_checked": [
+    {
+      "axis": "3D overview frame rate",
+      "why_not": "The headless browser reports no frame timing."
+    },
+    {
+      "axis": "Screen-reader reading of the page",
+      "why_not": "Needs a device and a person."
+    },
+    {
+      "axis": "Dates for Mercor's results",
+      "why_not": "Mercor shows none; those rows are off the timeline."
+    },
+    {
+      "axis": "GPT-6.1 Luna",
+      "why_not": "It does not exist; OpenAI released GPT-6.1 Sol only."
+    }
+  ],
+  "not_done": [
+    {
+      "action": "Cost figures for Anthropic, Google and Meta models",
+      "reason": "Those labs publish none.",
+      "what_would_unblock": "A lab publishing them, or the official board resuming.",
+      "size": "unknown"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "index.html",
+      "kind": "html",
+      "contains": "The interactive tracker.",
+      "open_first": true
+    },
+    {
+      "path": "SOURCES.md",
+      "kind": "md",
+      "contains": "Every original source, numbered as on the page."
+    },
+    {
+      "path": "README.md",
+      "kind": "md",
+      "contains": "What the data is, the charts, and how to add a score."
+    },
+    {
+      "path": "research/2026-10-09-deepswe-scores-report.md",
+      "kind": "md",
+      "contains": "The cited research report behind the dataset."
+    },
+    {
+      "path": "research/ingest-log.txt",
+      "kind": "txt",
+      "contains": "Every figure left out, and why."
+    }
+  ],
+  "needs_you": [
+    {
+      "ask": "Add the workflow scope to gh, then push",
+      "kind": "credential",
+      "waiting_since": "2026-10-09T06:00:00Z",
+      "one_line": "Run gh auth refresh -s workflow, then git push in ~/Dev/deepswe-tracker."
+    }
+  ],
+  "git": {
+    "branch": "main",
+    "commits_ahead": 1,
+    "worktree_clean": true,
+    "pushed": false
+  }
+}

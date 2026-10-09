@@ -182,7 +182,37 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
   .dek{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+/* citations: marker, preview, registry */
+sup{line-height:0}
+a.cite{font:600 10.5px/1 var(--mono);color:var(--link);text-decoration:none;padding:1px 3px;margin-left:2px;border:1px solid color-mix(in oklch, var(--link) 35%, transparent);border-radius:2px;vertical-align:super;font-variant-numeric:tabular-nums;cursor:pointer;transition:background-color .15s var(--ease)}
+a.cite:hover,a.cite[aria-expanded="true"]{background:color-mix(in oklch, var(--link) 14%, transparent)}
+.citepop{position:absolute;z-index:60;width:min(360px,calc(100vw - 32px));background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-2);padding:var(--space-3) var(--space-4);font-size:13px;line-height:1.45}
+.citepop[hidden]{display:none}
+.citepop .pn{font:600 11px/1 var(--mono);letter-spacing:.06em;color:var(--muted)}
+.citepop .pt{display:block;margin:6px 0 2px;font-weight:650;font-size:14px;color:var(--ink)}
+.citepop .pm{color:var(--ink-2);font-size:12px}
+.citepop .pe{margin:8px 0;color:var(--ink)}
+.citepop .pa{display:flex;gap:var(--space-4);font-size:12.5px}
+.registry{list-style:none;margin:0;padding:0;counter-reset:none;columns:1}
+.registry li{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:var(--space-3);padding:var(--space-3) 0;border-top:1px solid var(--grid);scroll-margin-top:140px}
+.registry li::before{content:attr(value);grid-row:span 4;font:600 13px/1.4 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.registry li:target{background:color-mix(in oklch, var(--link) 8%, transparent)}
+.registry .reg-title{font-weight:650}
+.registry .src{font-size:12.5px;color:var(--muted)}
+.registry .est{font-size:13.5px;color:var(--ink-2);max-width:90ch}
+.registry .back{font-size:12.5px;color:var(--muted);max-width:110ch}
+.registry .back a{color:var(--ink-2)}
+.registry details{display:inline}
+.registry summary{display:inline;cursor:pointer;color:var(--link)}
+.registry details[open] summary{display:block;margin-bottom:4px}
+tbody tr{scroll-margin-top:150px}
+tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
+.methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--space-4) var(--space-7);margin:0}
+.methods div{border-top:1px solid var(--rule);padding-top:var(--space-3)}
+.methods dt{font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.methods dd{margin:0;color:var(--ink-2);text-wrap:pretty}
 </style>
+<style id="viz-style">/*__VIZSTYLE__*/</style>
 </head>
 <body>
 <div class="wrap top">
@@ -199,7 +229,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
   <aside class="seal" aria-labelledby="seal-h">
     <span class="stamp-void" aria-hidden="true">LAPSED</span>
     <span class="field">Reference standard</span>
-    <h2 id="seal-h">Official board last added a model on <span id="lastAdded"></span></h2>
+    <h2 id="seal-h">Official board last added a model on <span id="lastAdded"></span><!--__CITE_CHANGELOG__--></h2>
     <div class="lapse"><b id="lapseDays"></b><span>days without a new model, while labs kept publishing</span></div>
     <dl id="sinceList"></dl>
     <div class="foot" id="asof"></div>
@@ -256,7 +286,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
       <div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div>
     </div>
     <div class="legend" id="legend"></div>
-    <div class="panel" id="c-scatter"></div>
+    <div class="panel" id="c-scatter"><!--__SCATTER__--></div>
     <p class="unplotted" id="unplotted"></p>
   </section>
 
@@ -265,11 +295,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
       <div>
         <span class="field">Fig. 3 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
-        <p>Bars run from 0 to 100%; the bracket is the 95% interval where the source gives one. Select a heading to sort.</p>
+        <p>Bars run from 0 to 100%; the bracket is the 95% interval where the source gives one. The number after each score is its source in the list below. Select a heading to sort.</p>
       </div>
       <span class="field" id="tableCount"></span>
     </div>
-    <div class="tablewrap"><table id="tbl"><caption class="sr">DeepSWE 1.1 readings for the current filters</caption><thead></thead><tbody></tbody></table></div>
+    <div class="tablewrap"><table id="tbl"><caption class="sr">DeepSWE 1.1 readings for the current filters</caption><thead><!--__THEAD__--></thead><tbody><!--__ROWS__--></tbody></table></div>
   </section>
 
   <section class="block" aria-labelledby="sp-h">
@@ -280,7 +310,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
         <p>Each model’s best result from each source. Where a lab’s claim and an independent re-run disagree, the rule between them is the gap. Only models measured by at least two sources are shown.</p>
       </div>
     </div>
-    <div class="panel" id="c-spread"></div>
+    <div class="panel" id="c-spread"><!--__SPREAD__--></div>
   </section>
 
   <section class="block" aria-labelledby="tl-h">
@@ -291,22 +321,38 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
         <p>The flat view of Fig. 1. After the official board’s last addition, every new result came from a lab or an independent runner.</p>
       </div>
     </div>
-    <div class="panel" id="c-time"></div>
+    <div class="panel" id="c-time"><!--__TIME__--></div>
   </section>
 
   <section class="block" aria-labelledby="nt-h">
     <div class="bhead"><div><span class="field">Notes on the readings</span><h2 id="nt-h">How to read these numbers</h2></div></div>
-    <ol class="notes" id="notes"></ol>
+    <ol class="notes" id="notes"><!--__NOTES__--></ol>
+  </section>
+
+  <section class="block" aria-labelledby="mt-h">
+    <div class="bhead"><div><span class="field">Methods</span><h2 id="mt-h">How this was made</h2></div></div>
+    <dl class="methods">
+      <div><dt>What was gathered</dt><dd>On 9 Oct 2026, Claude (Anthropic’s model) ran Dossier’s free local research loop with its own web search: six search tasks covering the official board, the US labs, Chinese and open-weight labs and Mistral, aggregator sites, and community and press coverage. A separate fact-check pass then settled the conflicts between them. No paid research API was used.</dd></div>
+      <div><dt>What was kept</dt><dd>The sweep returned 605 raw figures. {{READING_COUNT}} readings of {{MODEL_COUNT}} models survived the rule that a number is read at the source that published it, and the page cites {{SOURCE_COUNT}} sources in the list below. Official rows are re-read from the board’s own page every day.</dd></div>
+      <div><dt>What was verified</dt><dd>Every lab figure was re-read on the lab’s own page or PDF. Three conflicts were settled against the primary document: GPT-6.1 Sol’s xhigh and max scores, who published Grok 4.7’s 73%, and the harness behind Muse Spark 1.3. Of the 22 sources the research report cites, none were fabricated; two OpenAI pages block automated reads and one StepFun page did not load.</dd></div>
+      <div><dt>What could not be established</dt><dd>When each model joined Mercor’s board; cost per task for Anthropic, Google and Meta models, which those labs do not publish; a dated StepFun page for Step 5 Preview; and why Datacurve ran Grok 4.7 without posting the result. No person has yet re-checked every row; corrections are welcome as issues on the repository.</dd></div>
+    </dl>
+  </section>
+
+  <section class="block" id="sources-section" aria-labelledby="src-h">
+    <div class="bhead"><div><span class="field">Sources</span><h2 id="src-h">Every original source, numbered</h2><p>{{SOURCE_COUNT}} sources. Each entry says what it establishes and links back to the readings that cite it. The same list is in <a href="SOURCES.md">SOURCES.md</a>, and every row of the dataset carries its source URL and the line quoted from it.</p></div></div>
+    <ol class="registry" id="sources"><!--__REGISTRY__--></ol>
   </section>
 </main>
 
 <footer>
   <div class="wrap">
-    <span>Data: <a href="data/deepswe-1.1.csv">deepswe-1.1.csv</a> · <a href="data/deepswe-1.1.json">deepswe-1.1.json</a> · <a href="data/models.csv">models.csv</a></span>
+    <span>Data: <a href="data/deepswe-1.1.csv">deepswe-1.1.csv</a> · <a href="data/deepswe-1.1.json">deepswe-1.1.json</a> · <a href="data/models.csv">models.csv</a> · <a href="SOURCES.md">SOURCES.md</a></span>
     <span id="footAsOf"></span>
   </div>
 </footer>
 <div id="tip" role="status" aria-live="polite"></div>
+<div class="citepop" id="citepop" role="dialog" aria-modal="false" aria-labelledby="citepop-t" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js" integrity="sha384-lg3+EgIwmxYq9YD4ix279pdUEasqmOS17fF+2mI/NEg6JHkawYaWYpJ6nKZenPOy" crossorigin="anonymous"></script>
@@ -340,7 +386,6 @@ $('#sinceList').append(
 );
 $('#asof').append(`Readings as of ${fmtDate(meta.as_of)} · `, el('a', { href: meta.official_url, textContent: 'official board' }));
 $('#footAsOf').textContent = `${DATA.observations} readings of ${DATA.models} models · as of ${fmtDate(meta.as_of)}`;
-for (const n of meta.notes || []) $('#notes').append(el('li', { textContent: n }));
 
 // ---------- theme ----------
 const THEMES = ['auto', 'light', 'dark'];
@@ -470,7 +515,7 @@ function tip(r, ev, target) {
   const v = el('div', { className: 'v', textContent: fmtPct(r.score_pct) });
   if (r.ci_pct != null) v.append(el('small', { textContent: `± ${r.ci_pct}` }));
   tipEl.replaceChildren(v, el('div', {}, [k, `${r.display_name}${r.effort ? ` [${r.effort}]` : ''}`]),
-    el('div', { className: 'who', textContent: `${SERIES.find(s => s.key === r.source_type).long} · ${r.source_name}` }),
+    el('div', { className: 'who', textContent: `${SERIES.find(s => s.key === r.source_type).long} · source ${r.source_n}: ${SRC.get(r.source_id)?.title ?? r.source_name}` }),
     ...facts.map(f => el('div', { className: 'who', textContent: f })));
   tipEl.style.display = 'block';
   const p = ev && ev.type === 'pointermove' ? { x: ev.clientX, y: ev.clientY } : (() => { const b = target.getBoundingClientRect(); return { x: b.right, y: b.top }; })();
@@ -496,7 +541,7 @@ function mount(id, svg, rows) {
     h.addEventListener('pointermove', show); h.addEventListener('focus', show);
     h.addEventListener('pointerleave', () => { hideTip(); highlight(null); }); h.addEventListener('blur', () => { hideTip(); highlight(null); });
   });
-  if (!motionOK() || !before.size) return;
+  if (!motionOK() || !before.size || firstRender) return;
   // Marks travel from their previous reading to the new one; arrivals grow in, lines fade up.
   host.querySelectorAll('.pt').forEach(g => {
     const prev = before.get(g.dataset.k);
@@ -516,12 +561,9 @@ function highlight(model) {
 }
 
 // ---------- table ----------
-const COLS = [
-  ['rank', '#', 'n'], ['display_name', 'Model'], ['effort', 'Effort'], ['source_type', 'Measured by'],
-  ['score_pct', 'Pass@1', 'n'], ['bar', 'Reading'], ['cost_per_task_usd', 'Cost / task', 'n'],
-  ['output_tokens_per_task', 'Out tokens', 'n'], ['steps_per_task', 'Steps', 'n'], ['published', 'Published', 'n'],
-];
-const SORTABLE = new Set(['display_name', 'effort', 'source_type', 'score_pct', 'cost_per_task_usd', 'output_tokens_per_task', 'steps_per_task', 'published']);
+// Rows come from the same renderer the build uses for the pre-rendered table, so the page reads the
+// same with or without script; here they are re-rendered for the current filters and sort.
+const SRC = new Map((DATA.sources || []).map(x => [x.id, x]));
 function renderTable(rows) {
   const { key, dir } = state.sort;
   const val = r => (key === 'effort' ? effortRank(r.effort) : r[key]);
@@ -531,47 +573,83 @@ function renderTable(rows) {
     if (x == null) return 1; if (y == null) return -1;
     return (x > y ? 1 : x < y ? -1 : b.score_pct - a.score_pct) * dir;
   });
-  $('#tbl thead').replaceChildren(el('tr', {}, COLS.map(([k, label, cls]) => {
-    const th = el('th', { scope: 'col', className: cls || '' });
-    if (!SORTABLE.has(k)) { th.textContent = label; return th; }
-    if (k === key) th.setAttribute('aria-sort', dir > 0 ? 'ascending' : 'descending');
-    th.append(el('button', { type: 'button', textContent: label, onclick: () => { state.sort = { key: k, dir: k === key ? -dir : (k === 'display_name' || k === 'source_type' ? 1 : -1) }; renderTable(rows); } }));
-    return th;
-  })));
+  $('#tbl thead').innerHTML = theadHtml(state.sort);
   const tbody = $('#tbl tbody');
-  const flipState = motionOK() && typeof Flip !== 'undefined' && tbody.children.length ? Flip.getState(tbody.querySelectorAll('tr')) : null;
-  tbody.replaceChildren(...sorted.map((r, n) => {
-    const tr = el('tr'); tr.dataset.flipId = r._key;
-    tr.addEventListener('pointerenter', () => highlight(r.model_key)); tr.addEventListener('pointerleave', () => highlight(null));
-    const s = SERIES.find(x => x.key === r.source_type);
-    const td = (cls, kids) => el('td', { className: cls || '' }, kids);
-    const bar = el('div', { className: 'bar' }, [el('div', { className: 'track' })]);
-    const fill = el('div', { className: `fill ${s.cls}` }); fill.style.width = `${r.score_pct}%`; bar.append(fill);
-    if (r.ci_pct != null) { const ci = el('div', { className: 'ci' }); ci.style.left = `${Math.max(0, r.score_pct - r.ci_pct)}%`; ci.style.width = `${Math.min(100, r.score_pct + r.ci_pct) - Math.max(0, r.score_pct - r.ci_pct)}%`; bar.append(ci); }
-    bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', `${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}`);
-    const hall = el('span', { className: `hall ${s.cls}`, innerHTML: shapeSvg(s.cls) }); hall.append(s.mark);
-    const via = el('a', { className: 'via', href: r.source_url, textContent: r.source_name, title: r.quote || r.source_name });
-    tr.append(
-      td('n na', String(n + 1)),
-      td('', [el('span', { className: 'name', textContent: r.display_name }), el('span', { className: 'id', textContent: `${r.lab}${r.harness ? ' · ' + r.harness : ''}` })]),
-      td('', [el('span', { className: 'eff', textContent: r.effort || '—' })]),
-      td('', [hall, via]),
-      td('n score', fmtPct(r.score_pct) + (r.ci_pct != null ? ` ±${r.ci_pct}` : '')),
-      td('', [bar]),
-      td('n', r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd) : el('span', { className: 'na', textContent: 'not given' })),
-      td('n', r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : el('span', { className: 'na', textContent: '—' })),
-      td('n', r.steps_per_task != null ? fmtCount(r.steps_per_task) : el('span', { className: 'na', textContent: '—' })),
-      td('n', r.published ? fmtDate(r.published) : el('span', { className: 'na', textContent: 'not given' })),
-    );
-    return tr;
-  }));
-  if (flipState) Flip.from(flipState, { targets: tbody.querySelectorAll('tr'), duration: 0.45, ease: 'power2.inOut', fade: true, absolute: false, simple: true });
+  const flipState = !firstRender && motionOK() && typeof Flip !== 'undefined' && tbody.children.length ? Flip.getState(tbody.querySelectorAll('tr')) : null;
+  tbody.innerHTML = sorted.length ? sorted.map((r, n) => readingRowHtml(r, n + 1, SRC.get(r.source_id))).join('')
+    : `<tr><td colspan="${TABLE_COLS.length}" class="empty">No readings match these filters.</td></tr>`;
+  if (flipState) Flip.from(flipState, { targets: tbody.querySelectorAll('tr'), duration: 0.45, ease: 'power2.inOut', fade: true, simple: true });
   $('#tbl').dataset.state = sorted.length ? 'ideal' : 'empty';
-  if (!sorted.length) tbody.append(el('tr', {}, [el('td', { colSpan: COLS.length, className: 'empty', textContent: 'No readings match these filters.' })]));
   $('#tableCount').textContent = `${sorted.length} reading${sorted.length === 1 ? '' : 's'} · ${new Set(sorted.map(r => r.model_key)).size} models`;
 }
+$('#tbl thead').addEventListener('click', e => {
+  const b = e.target.closest('button[data-sort]'); if (!b) return;
+  const k = b.dataset.sort, { key, dir } = state.sort;
+  state.sort = { key: k, dir: k === key ? -dir : (k === 'display_name' || k === 'source_type' ? 1 : -1) };
+  renderTable(selected());
+  $(`#tbl thead button[data-sort="${k}"]`)?.focus();
+});
+$('#tbl tbody').addEventListener('pointerover', e => { const tr = e.target.closest('tr[data-model]'); if (tr) highlight(tr.dataset.model); });
+$('#tbl tbody').addEventListener('pointerleave', () => highlight(null));
+
+// ---------- citation previews ----------
+// The marker is an anchor into the source list and works with no script. Here a preview is layered
+// on: hover, keyboard focus or tap opens it, it stays open while the pointer is over it, Escape
+// closes it and returns focus. A click navigates only if the preview could not be shown.
+const pop = $('#citepop');
+let popFor = null, hideTimer = 0, quietFocus = false;
+function openPop(a) {
+  const s = SRC.get(a.dataset.cite); if (!s) return false;
+  clearTimeout(hideTimer);
+  if (popFor && popFor !== a) popFor.setAttribute('aria-expanded', 'false');
+  const date = d => (d ? fmtDate(d) : 'undated');
+  const t = el('a', { id: 'citepop-t', className: 'pt', href: s.url, textContent: s.title, rel: 'noopener' });
+  pop.replaceChildren(
+    el('span', { className: 'pn', textContent: `SOURCE ${s.n} · ${s.type.toUpperCase()}` }), t,
+    el('div', { className: 'pm', textContent: `${s.publisher} · published ${date(s.published)} · read ${date(s.accessed)}` }),
+    el('p', { className: 'pe', textContent: s.establishes }),
+    el('div', { className: 'pa' }, [el('a', { href: s.url, textContent: 'Open original ↗', rel: 'noopener' }), el('a', { href: `#${s.id}`, textContent: 'In the source list' })]),
+  );
+  pop.hidden = false;
+  const r = a.getBoundingClientRect();
+  const left = Math.min(scrollX + r.left, scrollX + innerWidth - pop.offsetWidth - 16);
+  const below = r.bottom + pop.offsetHeight + 12 < innerHeight;
+  pop.style.left = `${Math.max(scrollX + 16, left)}px`;
+  pop.style.top = `${scrollY + (below ? r.bottom + 6 : r.top - pop.offsetHeight - 6)}px`;
+  a.setAttribute('aria-expanded', 'true'); popFor = a;
+  if (motionOK()) gsap.fromTo(pop, { autoAlpha: 0, y: below ? -4 : 4 }, { autoAlpha: 1, y: 0, duration: 0.18, ease: 'power2.out' });
+  return true;
+}
+function closePop(refocus) {
+  clearTimeout(hideTimer);
+  if (pop.hidden) return;
+  pop.hidden = true;
+  if (popFor) { popFor.setAttribute('aria-expanded', 'false'); if (refocus) { quietFocus = true; popFor.focus(); quietFocus = false; } }
+  popFor = null;
+}
+const laterClose = () => { clearTimeout(hideTimer); hideTimer = setTimeout(() => closePop(false), 260); };
+document.addEventListener('pointerover', e => { const a = e.target.closest('a.cite'); if (a && e.pointerType === 'mouse') openPop(a); else if (e.target.closest('#citepop')) clearTimeout(hideTimer); });
+document.addEventListener('pointerout', e => { if (e.target.closest('a.cite, #citepop') && !e.relatedTarget?.closest?.('a.cite, #citepop')) laterClose(); });
+document.addEventListener('focusin', e => { if (quietFocus) return; const a = e.target.closest('a.cite'); if (a) openPop(a); else if (!e.target.closest('#citepop')) closePop(false); });
+document.addEventListener('click', e => {
+  const a = e.target.closest('a.cite');
+  if (a) { if (popFor === a && !pop.hidden && e.pointerType === 'mouse') return; if (openPop(a)) e.preventDefault(); return; }
+  if (!e.target.closest('#citepop')) closePop(false);
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !pop.hidden) closePop(true); });
+
+// A backlink from the source list to a reading the filters are hiding resets them first.
+function showRow() {
+  const id = location.hash.slice(1);
+  if (!id.startsWith('row-') || document.getElementById(id)) return;
+  $('#reset').click();
+  document.querySelector('[data-mode="all"]').click();
+  requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'center' }));
+}
+window.addEventListener('hashchange', showRow);
 
 // ---------- render ----------
+let firstRender = true;
 function render() {
   const rows = selected();
   $('#reset').hidden = isDefault();
@@ -589,10 +667,11 @@ function render() {
     mount('#c-time', timeline(rows, { id: 'tl', marker: { date: last, label: `Official board’s last addition · ${fmtDate(last)}` }, asOf: meta.as_of }), rows);
   }
   renderTable(rows);
+  firstRender = false;
   window.dispatchEvent(new CustomEvent('dsw-filter', { detail: rows }));
 }
-const style = document.createElement('style'); style.textContent = STYLE; document.head.append(style);
 render();
+showRow();
 window.__dsw = { ROWS, state, selected, last };
 })();
 </script>

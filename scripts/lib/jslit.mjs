@@ -22,7 +22,8 @@ export function parseLiteral(src, refs = new Map()) {
     const m = /^(-?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?|true|false|null|undefined|void 0|!0|!1|NaN|Infinity)/.exec(src.slice(i));
     if (!m) fail('unexpected token');
     i += m[0].length;
-    return { true: true, '!0': true, false: false, '!1': false, null: null, undefined: null, 'void 0': null, NaN: null, Infinity: null }[m[0]] ?? Number(m[0]);
+    const WORDS = { true: true, '!0': true, false: false, '!1': false, null: null, undefined: null, 'void 0': null, NaN: null, Infinity: null };
+    return m[0] in WORDS ? WORDS[m[0]] : Number(m[0]);
   }
   function string() {
     const q = src[i++]; let out = '';

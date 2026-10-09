@@ -83,7 +83,7 @@ function artCostNote(r) {
 const official = boardRows.map(r => ({
   model_key: modelKey(r.model),
   model_as_reported: r.model,
-  effort: r.reasoning_effort ?? '',
+  effort: typeof r.reasoning_effort === 'string' && !/^(null|nan|none)$/i.test(r.reasoning_effort) ? r.reasoning_effort : '',
   harness: r.harness ?? '',
   score_pct: round(r.pass_at_1 * 100, 2),
   ci_pct: r.ci_half == null ? '' : round(r.ci_half * 100, 2),

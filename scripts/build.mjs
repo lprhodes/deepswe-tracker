@@ -10,7 +10,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, timeline, spreadPlot } from '../site/charts.mjs';
+import { effortScatter, timeline, spreadPlot, readingRowHtml, theadHtml, hashId, rowKey, STYLE_RULES } from '../site/charts.mjs';
+import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const p = rel => join(root, rel);
@@ -29,6 +30,14 @@ if (errors.length) {
 const rows = obs
   .map(o => ({ ...o, display_name: modelByKey.get(o.model_key).display_name, lab: modelByKey.get(o.model_key).lab, open_weights: modelByKey.get(o.model_key).open_weights }))
   .sort((a, b) => b.score_pct - a.score_pct || a.model_key.localeCompare(b.model_key));
+for (const r of rows) r.row_id = 'row-' + hashId(rowKey(r));
+if (new Set(rows.map(r => r.row_id)).size !== rows.length) { console.error('row id collision'); process.exit(1); }
+
+// The source registry: every original source, numbered once; every row points into it.
+const sources = buildSources(rows, meta);
+const srcByUrl = new Map(sources.map(s => [s.url, s]));
+for (const r of rows) { const s = srcByUrl.get(r.source_url); r.source_id = s.id; r.source_n = s.n; }
+const rowsById = new Map(rows.map(r => [r.row_id, r]));
 
 const dataset = {
   benchmark: 'DeepSWE 1.1',
@@ -38,6 +47,7 @@ const dataset = {
   source_types: SOURCE_TYPES,
   models: models.length,
   observations: rows.length,
+  sources: sources.map(({ rowIds, ...s }) => s),
   rows,
 };
 
@@ -57,7 +67,20 @@ const outputs = {
   'charts/score-vs-cost.svg': effortScatter(rows, { embedStyle: true, id: 'readme-sc', height: 640 }) + '\n',
   'charts/score-over-time.svg': timeline(rows, { embedStyle: true, marker, asOf: meta.as_of, id: 'readme-tl', height: 460 }) + '\n',
   'charts/best-per-model.svg': spreadPlot(bestRows, { embedStyle: true, id: 'readme-sp' }) + '\n',
+  'SOURCES.md': sourcesMarkdown(sources),
   'index.html': readFileSync(p('site/template.html'), 'utf8')
+    .replace('/*__VIZSTYLE__*/', () => PAGE_TOKENS + STYLE_RULES)
+    .replace('<!--__THEAD__-->', () => theadHtml({ key: 'score_pct', dir: -1 }))
+    .replace('<!--__ROWS__-->', () => rows.map((r, i) => readingRowHtml(r, i + 1, srcByUrl.get(r.source_url))).join('\n'))
+    .replace('<!--__SCATTER__-->', () => effortScatter(rows, { id: 'sc' }))
+    .replace('<!--__SPREAD__-->', () => spreadPlot(rows, { id: 'sp', onlyMulti: true }))
+    .replace('<!--__TIME__-->', () => timeline(rows, { id: 'tl', marker, asOf: meta.as_of }))
+    .replace('<!--__NOTES__-->', () => renderNotes(meta.notes, sources))
+    .replace('<!--__REGISTRY__-->', () => registryHtml(sources, rowsById))
+    .replace('<!--__CITE_CHANGELOG__-->', () => `<sup>${citeHtml(sources.find(x => x.key === 'datacurve-changelog'))}</sup>`)
+    .replaceAll('{{SOURCE_COUNT}}', String(sources.length))
+    .replaceAll('{{READING_COUNT}}', String(rows.length))
+    .replaceAll('{{MODEL_COUNT}}', String(models.length))
     .replace('/*__DATA__*/null', () => JSON.stringify(dataset).replace(/</g, '\\u003c'))
     .replace('/*__CHARTS__*/', () => readFileSync(p('site/charts.mjs'), 'utf8').replace(/^export /gm, '')
       .replace(/const STYLE_TOKENS = `[\s\S]*?`;/, () => `const STYLE_TOKENS = \`${PAGE_TOKENS}\`;`)),
@@ -75,4 +98,4 @@ if (check && stale.length) {
   process.exit(1);
 }
 const bySource = Object.keys(SOURCE_TYPES).map(k => `${k} ${rows.filter(r => r.source_type === k).length}`).join(', ');
-console.log(`${check ? 'OK' : 'Built'}: ${models.length} models, ${rows.length} observations (${bySource}).`);
+console.log(`${check ? 'OK' : 'Built'}: ${models.length} models, ${rows.length} observations (${bySource}), ${sources.length} sources.`);
