@@ -2,6 +2,11 @@
 // Each returns an SVG string. Every mark carries data-i (its index into the rows passed in) and
 // data-k (a stable key) so the page can attach tooltips and animate marks between renders.
 // Styling is by class, so one stylesheet themes light and dark.
+//
+// The grammar follows the official DeepSWE board so the two can be read side by side: colour is
+// the lab, each model's effort levels are joined by a line, and cost runs high-to-low so the most
+// efficient results sit top right. Who measured a result is the second encoding: marker shape and
+// line style (official solid circle, lab claim dashed diamond, independent run dotted square).
 
 export const SERIES = [
   { key: 'official_leaderboard', label: 'Official board', long: 'Official Datacurve leaderboard', cls: 's1', mark: 'DC' },
@@ -10,58 +15,75 @@ export const SERIES = [
 ];
 const CLS = Object.fromEntries(SERIES.map(s => [s.key, s.cls]));
 
+// Eight labs get a colour, in the validated slot order (blue, orange, aqua, yellow, magenta, green,
+// violet, red); every other lab is grey and identified by its label. Hues follow the official board
+// where the palette allows: Google blue, Anthropic orange, OpenAI green, Moonshot red.
+export const LAB_SLOTS = { Google: 'l1', Anthropic: 'l2', 'Z.ai': 'l3', Alibaba: 'l4', xAI: 'l5', OpenAI: 'l6', DeepSeek: 'l7', 'Moonshot AI': 'l8' };
+export const labClass = lab => LAB_SLOTS[lab] || 'l0';
+
 export const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 export const effortRank = e => { const i = EFFORTS.indexOf(e); return i < 0 ? -1 : i; };
 
 export const METRICS = {
-  cost: { field: 'cost_per_task_usd', label: 'Cost per task (USD, log scale)', short: 'Cost / task', noun: 'cost per task', fmt: v => fmtUsd(v) },
-  output: { field: 'output_tokens_per_task', label: 'Output tokens per task (log scale)', short: 'Output tokens', noun: 'output-token count', fmt: v => fmtCount(v) },
-  steps: { field: 'steps_per_task', label: 'Agent steps per task (log scale)', short: 'Agent steps', noun: 'agent-step count', fmt: v => fmtCount(v) },
+  cost: { field: 'cost_per_task_usd', label: 'Avg cost per task', short: 'Cost', noun: 'cost per task', fmt: v => fmtUsd(v) },
+  output: { field: 'output_tokens_per_task', label: 'Avg output tokens per task', short: 'Output tokens', noun: 'output-token count', fmt: v => fmtCount(v) },
+  steps: { field: 'steps_per_task', label: 'Avg agent steps per task', short: 'Agent steps', noun: 'agent-step count', fmt: v => fmtCount(v) },
 };
+
+const LAB_LIGHT = ['#8a908d', '#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300', '#4a3aa7', '#e34948'];
+const LAB_DARK = ['#7d8582', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300', '#9085e9', '#e66767'];
+const labVars = list => list.map((c, i) => `--l${i}:${c}`).join(';');
 
 // Colour tokens for a standalone SVG (the README charts). The page swaps this block for one that
 // points at its own tokens, so the page has a single source of colour.
 export const STYLE_TOKENS = `
-.viz{--v-paper:#f3f6f1;--v-ink:#14212b;--v-ink2:#44535c;--v-muted:#5f6e74;--v-grid:#dde6df;--v-rule:#b9c8be;--s1:#2453a6;--s2:#d4502a;--s3:#118a6c;font-family:Archivo,system-ui,sans-serif}
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;--s1:#5b8be0;--s2:#e8693f;--s3:#28a682}}
-:root[data-theme="dark"] .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;--s1:#5b8be0;--s2:#e8693f;--s3:#28a682}
+.viz{--v-paper:#fbfcfa;--v-ink:#14212b;--v-ink2:#44535c;--v-muted:#5f6e74;--v-grid:#e3e9e4;--v-rule:#b9c8be;${labVars(LAB_LIGHT)};font-family:Archivo,system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;${labVars(LAB_DARK)}}}
+:root[data-theme="dark"] .viz{--v-paper:#141a18;--v-ink:#e8efe9;--v-ink2:#b4c2bb;--v-muted:#93a39c;--v-grid:#222b28;--v-rule:#34423c;${labVars(LAB_DARK)}}
 `;
+export const LAB_TOKENS_LIGHT = labVars(LAB_LIGHT);
+export const LAB_TOKENS_DARK = labVars(LAB_DARK);
 export const STYLE_RULES = `
 .viz .bg{fill:var(--v-paper)}
 .viz .grid{stroke:var(--v-grid);stroke-width:1}
 .viz .axis{stroke:var(--v-rule);stroke-width:1}
 .viz .tick{fill:var(--v-muted);font-size:11px;font-variant-numeric:tabular-nums}
 .viz .axis-title{fill:var(--v-ink2);font-size:12px}
+.viz .y-title{fill:var(--v-ink);font-size:13px;font-weight:620}
 .viz .title{fill:var(--v-ink);font-size:16px;font-weight:650}
 .viz .sub{fill:var(--v-ink2);font-size:12px}
-.viz .lbl{fill:var(--v-ink);font-size:11.5px;font-weight:560}
+.viz .lbl{fill:var(--v-ink);font-size:11.5px;font-weight:600}
 .viz .lbl-eff{fill:var(--v-muted);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
+.viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
 .viz .ref{stroke:var(--v-ink2);stroke-width:1}
 .viz .ref-lbl{fill:var(--v-ink2);font-size:11px}
 .viz .span{stroke:var(--v-rule);stroke-width:2;stroke-linecap:round}
-.viz .eline{fill:none;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;opacity:.55}
-.viz .eline.s1{stroke:var(--s1)} .viz .eline.s2{stroke:var(--s2)} .viz .eline.s3{stroke:var(--s3)}
+.viz .eline{fill:none;stroke-width:2;stroke-linejoin:round;stroke-linecap:round;opacity:.8}
+.viz .eline.s2{stroke-dasharray:6 4} .viz .eline.s3{stroke-dasharray:1.5 4}
 .viz .mk{stroke:var(--v-paper);stroke-width:2}
-.viz .mk.s1{fill:var(--s1)} .viz .mk.s2{fill:var(--s2)} .viz .mk.s3{fill:var(--s3)}
+.viz .key{fill:var(--v-ink2)}
+${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `.viz .l${i}{--c:var(--l${i})}`).join(' ')}
+.viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c)}
 .viz .hit{fill:transparent;cursor:pointer}
 .viz .hit:focus-visible{fill:transparent;stroke:var(--v-ink);stroke-width:2}
 .viz .hit:hover+.mk,.viz .hit:focus-visible+.mk{stroke:var(--v-ink)}
-.viz.dim .grp{opacity:.14} .viz.dim .grp.on{opacity:1} .viz.dim .grp.on .eline{opacity:1;stroke-width:2.5}
+.viz.dim .grp{opacity:.12} .viz.dim .grp.on{opacity:1} .viz.dim .grp.on .eline{opacity:1;stroke-width:3}
 `;
 export const STYLE = STYLE_TOKENS + STYLE_RULES;
 
 export const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const textW = (s, size = 11.5) => String(s).length * size * 0.53;
+const textW = (s, size = 11.5) => String(s).length * size * 0.55;
 export function fmtUsd(v) {
   if (v == null) return '';
+  if (v === 0) return '$0';
   if (v >= 10) return `$${v.toFixed(0)}`;
-  if (v >= 1) return `$${v.toFixed(2)}`;
   if (v >= 0.1) return `$${v.toFixed(2)}`;
   return `$${v.toFixed(3).replace(/0$/, '')}`;
 }
 export function fmtCount(v) {
   if (v == null) return '';
+  if (v === 0) return '0';
   if (v >= 1e6) return `${(v / 1e6).toFixed(v >= 1e7 ? 0 : 1)}M`;
   if (v >= 1e3) return `${(v / 1e3).toFixed(v >= 1e4 ? 0 : 1)}k`;
   return String(Math.round(v));
@@ -71,16 +93,15 @@ export const pointLabel = r => `${r.display_name}${r.effort ? ` [${r.effort}]` :
 export const rowKey = r => [r.model_key, r.source_type, r.effort, r.harness, r.score_pct, r.source_url].join('|');
 const groupKey = r => [r.model_key, r.source_type, r.harness, r.source_url].join('|');
 
-// Mark shapes are the second encoding of source, so identity survives without colour.
-function markPath(type, x, y) {
-  if (type === 's2') return `<path class="mk s2" d="M${x} ${y - 6}L${x + 6} ${y}L${x} ${y + 6}L${x - 6} ${y}Z" pointer-events="none"/>`;
-  if (type === 's3') return `<rect class="mk s3" x="${x - 4.5}" y="${y - 4.5}" width="9" height="9" pointer-events="none"/>`;
-  return `<circle class="mk s1" cx="${x}" cy="${y}" r="5" pointer-events="none"/>`;
+// Marker shape encodes who measured the result; its fill encodes the lab.
+function markPath(src, lab, x, y, cls = 'mk') {
+  if (src === 's2') return `<path class="${cls} ${src} ${lab}" d="M${x} ${y - 6}L${x + 6} ${y}L${x} ${y + 6}L${x - 6} ${y}Z" pointer-events="none"/>`;
+  if (src === 's3') return `<rect class="${cls} ${src} ${lab}" x="${x - 4.5}" y="${y - 4.5}" width="9" height="9" pointer-events="none"/>`;
+  return `<circle class="${cls} ${src} ${lab}" cx="${x}" cy="${y}" r="5" pointer-events="none"/>`;
 }
 function mark(r, i, x, y) {
-  const c = CLS[r.source_type];
   const fx = x.toFixed(1), fy = y.toFixed(1);
-  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="12"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(c, +fx, +fy)}</g>`;
+  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="12"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
 }
 
 function open(w, h, id, title, desc, embedStyle) {
@@ -90,19 +111,25 @@ function open(w, h, id, title, desc, embedStyle) {
     `<rect class="bg" width="${w}" height="${h}"/>`;
 }
 
-function legend(x, y, present) {
+// Two keys: shapes for who measured it (neutral ink), swatches for each lab present.
+function legend(x, y, rows) {
   let out = '', cx = x;
+  const present = new Set(rows.map(r => r.source_type));
   for (const s of SERIES.filter(s => present.has(s.key))) {
-    out += markPath(s.cls, cx + 6, y - 4) + `<text class="tick" x="${cx + 16}" y="${y}">${esc(s.long)}</text>`;
-    cx += 16 + textW(s.long, 11) + 24;
+    out += markPath(s.cls, '', cx + 6, y - 4, 'key') + `<text class="tick" x="${cx + 16}" y="${y}">${esc(s.label)}</text>`;
+    cx += 16 + textW(s.label, 11) + 20;
+  }
+  const labs = new Set(rows.map(r => r.lab));
+  const named = Object.keys(LAB_SLOTS).filter(l => labs.has(l));
+  const others = [...labs].some(l => !LAB_SLOTS[l]);
+  cx += 12;
+  for (const l of [...named, ...(others ? ['Other labs'] : [])]) {
+    out += `<rect class="sw ${l === 'Other labs' ? 'l0' : labClass(l)}" x="${cx}" y="${y - 9}" width="10" height="10" rx="2"/><text class="tick" x="${cx + 14}" y="${y}">${esc(l)}</text>`;
+    cx += 14 + textW(l, 11) + 14;
   }
   return out;
 }
 
-function scoreDomain(rows) {
-  const s = rows.map(r => r.score_pct);
-  return [Math.max(0, Math.floor((Math.min(...s) - 2) / 10) * 10), Math.min(100, Math.ceil((Math.max(...s) + 2) / 10) * 10)];
-}
 function yAxis(y0, y1, sy, left, right) {
   let out = '';
   for (let v = y0; v <= y1; v += 10) {
@@ -111,29 +138,34 @@ function yAxis(y0, y1, sy, left, right) {
   }
   return out;
 }
+const scoreTop = rows => Math.min(100, Math.ceil((Math.max(...rows.map(r => r.score_pct)) + 3) / 10) * 10);
 const LOG_TICKS = [0.001, 0.0025, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 25, 50, 100, 250, 500, 1e3, 2.5e3, 5e3, 1e4, 2.5e4, 5e4, 1e5, 2.5e5, 5e5, 1e6, 2.5e6, 5e6, 1e7, 2.5e7, 5e7, 1e8];
+function niceStep(max, target = 6) {
+  const raw = max / target, p = 10 ** Math.floor(Math.log10(raw));
+  return [1, 2, 2.5, 5, 10].map(m => m * p).find(s => s >= raw);
+}
 
-// Greedy label placement around a point: right, left, above, below. A label that collides with a
-// placed label, any mark or the plot edge is dropped; its value stays in the tooltip and table.
+// Greedy label placement around a point. A label that collides with a placed label, any mark or the
+// plot edge is dropped; its value stays in the tooltip and the table.
 function placeLabels(items, bounds, marks) {
   const placed = [];
   const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
   let out = '';
   for (const it of items) {
     const w = Math.max(textW(it.text), it.sub ? textW(it.sub, 9) + 6 : 0), h = it.sub ? 24 : 13;
-    const tries = [
-      { x: it.cx + 9, y: it.cy - h / 2 }, { x: it.cx - 9 - w, y: it.cy - h / 2 },
-      { x: it.cx - w / 2, y: it.cy - 10 - h }, { x: it.cx - w / 2, y: it.cy + 10 },
-      { x: it.cx + 7, y: it.cy - 7 - h }, { x: it.cx + 7, y: it.cy + 7 },
-      { x: it.cx - 7 - w, y: it.cy - 7 - h }, { x: it.cx - 7 - w, y: it.cy + 7 },
-    ];
+    // Nearest first: above, beside and below the point, then the diagonals, at growing distances.
+    const tries = [];
+    for (const d of [8, 18, 30]) tries.push(
+      { x: it.cx - w / 2, y: it.cy - d - h }, { x: it.cx + d, y: it.cy - h / 2 }, { x: it.cx - d - w, y: it.cy - h / 2 },
+      { x: it.cx - w / 2, y: it.cy + d }, { x: it.cx + d * 0.7, y: it.cy - d * 0.7 - h }, { x: it.cx - d * 0.7 - w, y: it.cy - d * 0.7 - h },
+      { x: it.cx + d * 0.7, y: it.cy + d * 0.7 }, { x: it.cx - d * 0.7 - w, y: it.cy + d * 0.7 });
     for (const t of tries) {
       const box = { x: t.x - 1, y: t.y - 1, w: w + 2, h: h + 2 };
       if (box.x < bounds.left || box.x + box.w > bounds.right || box.y < bounds.top || box.y + box.h > bounds.bottom) continue;
       if (placed.some(p => hit(p, box)) || marks.some(p => hit(p, box))) continue;
       placed.push(box);
-      out += `<g class="glbl" data-g="${esc(it.g)}"><text class="lbl" x="${t.x.toFixed(1)}" y="${(t.y + 10).toFixed(1)}">${esc(it.text)}</text>` +
-        (it.sub ? `<text class="lbl-eff" x="${t.x.toFixed(1)}" y="${(t.y + 21).toFixed(1)}">${esc(it.sub)}</text>` : '') + '</g>';
+      out += `<g class="glbl" data-g="${esc(it.g)}"><text class="lbl" x="${(t.x + w / 2).toFixed(1)}" y="${(t.y + 10).toFixed(1)}" text-anchor="middle">${esc(it.text)}</text>` +
+        (it.sub ? `<text class="lbl-eff" x="${(t.x + w / 2).toFixed(1)}" y="${(t.y + 21).toFixed(1)}" text-anchor="middle">${esc(it.sub)}</text>` : '') + '</g>';
       break;
     }
   }
@@ -147,36 +179,46 @@ export function frontier(rows, field) {
   return out;
 }
 
-// Score against a per-task metric. Each (model, source, harness) with two or more effort levels is
-// drawn as a line through its efforts in order, the way the official board draws them.
-export function effortScatter(rows, { metric = 'cost', embedStyle = false, width = 1080, height = 600, id = 'sc', labelTop = 12 } = {}) {
+// Score against a per-task measure, drawn like the official board: y is the DeepSWE score from 0,
+// x runs from the most expensive on the left to zero on the right (linear, or log when asked), and
+// each model's effort levels are joined in order from low to max.
+export function effortScatter(rows, { metric = 'cost', scale = 'linear', embedStyle = false, width = 1080, height = 660, id = 'sc', labelTop = 20 } = {}) {
   const M = METRICS[metric];
   const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r[M.field] > 0);
-  const title = `DeepSWE 1.1 pass@1 against ${M.noun}`;
-  const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal; each model’s effort levels are joined in order from low to max.`;
+  const title = `DeepSWE 1.1 score against ${M.noun}`;
+  const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.`;
   if (!pts.length) return open(width, 120, id, title, 'No results with this measure.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection report a ${esc(M.noun)}.</text></svg>`;
-  const m = { left: 60, right: 24, top: embedStyle ? 92 : 24, bottom: 54 };
+  const m = { left: 60, right: 28, top: embedStyle ? 112 : 44, bottom: 56 };
   const right = width - m.right, bottom = height - m.bottom;
   const vals = pts.map(p => p.r[M.field]);
-  const lx0 = Math.log10(Math.min(...vals) / 1.35), lx1 = Math.log10(Math.max(...vals) * 1.35);
-  const sx = v => m.left + (Math.log10(v) - lx0) / (lx1 - lx0) * (right - m.left);
-  const [y0, y1] = scoreDomain(pts.map(p => p.r));
-  const sy = v => bottom - (v - y0) / (y1 - y0) * (bottom - m.top);
+  let sx, ticks;
+  if (scale === 'log') {
+    const lx0 = Math.log10(Math.min(...vals) / 1.35), lx1 = Math.log10(Math.max(...vals) * 1.35);
+    sx = v => right - (Math.log10(v) - lx0) / (lx1 - lx0) * (right - m.left);
+    const all = LOG_TICKS.filter(t => Math.log10(t) >= lx0 && Math.log10(t) <= lx1);
+    ticks = all.filter((_, k) => k % Math.ceil(all.length / 8) === 0);
+  } else {
+    const step = niceStep(Math.max(...vals));
+    const max = Math.ceil(Math.max(...vals) * 1.04 / step) * step;
+    sx = v => right - (v / max) * (right - m.left);
+    ticks = []; for (let t = 0; t <= max + 1e-9; t += step) ticks.push(+t.toFixed(6));
+  }
+  const y1 = scoreTop(pts.map(p => p.r));
+  const sy = v => bottom - (v / y1) * (bottom - m.top);
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
-    svg += `<text class="title" x="24" y="34">${esc(title)}</text><text class="sub" x="24" y="54">Each line joins one model’s effort levels from low to max. Labelled points are the best result per model and the cost frontier.</text>`;
-    svg += legend(24, 78, new Set(pts.map(p => p.r.source_type)));
+    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Lines join each model’s effort levels from low to max, as on the official board. Colour is the lab; shape is who measured it.</text>`;
+    svg += legend(24, 80, pts.map(p => p.r));
   }
-  svg += yAxis(y0, y1, sy, m.left, right);
-  const ticks = LOG_TICKS.filter(t => Math.log10(t) >= lx0 && Math.log10(t) <= lx1);
-  const step = Math.ceil(ticks.length / 9);
-  ticks.filter((_, k) => k % step === 0).forEach(t => {
+  svg += `<text class="y-title" x="${m.left}" y="${m.top - 18}">DeepSWE score</text>`;
+  svg += `<text class="note" x="${right}" y="${m.top - 18}" text-anchor="end">most efficient ↗</text>`;
+  svg += yAxis(0, y1, sy, m.left, right);
+  for (const t of ticks) {
     const x = sx(t).toFixed(1);
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${esc(M.fmt(t))}</text>`;
-  });
+  }
   svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
-  svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}</text>`;
-  svg += `<text class="axis-title" x="${m.left + 8}" y="${m.top + 14}">↖ higher score for less</text>`;
+  svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''}</text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
   const groups = new Map();
@@ -184,11 +226,11 @@ export function effortScatter(rows, { metric = 'cost', embedStyle = false, width
   for (const [g, ps] of groups) {
     const laddered = ps.filter(p => effortRank(p.r.effort) >= 0).sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
     svg += `<g class="grp" data-g="${esc(g)}" data-model="${esc(ps[0].r.model_key)}">`;
-    if (laddered.length > 1) svg += `<path class="eline ${CLS[ps[0].r.source_type]}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/>`;
+    if (laddered.length > 1) svg += `<path class="eline ${CLS[ps[0].r.source_type]} ${labClass(ps[0].r.lab)}" d="M${laddered.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/>`;
     for (const p of ps) svg += mark(p.r, p.i, p.cx, p.cy);
     svg += '</g>';
   }
-  // Labels: each group's best point, highest scores first, plus the cost frontier.
+  // Labels as on the official board: the model's name over its best point, its effort beneath.
   const front = new Set(frontier(placed.map(p => p.r), M.field));
   const bestOf = [...groups.values()].map(ps => ps.reduce((a, b) => (b.r.score_pct > a.r.score_pct ? b : a)));
   const want = [...new Set([...bestOf.sort((a, b) => b.r.score_pct - a.r.score_pct).slice(0, labelTop), ...placed.filter(p => front.has(p.r))])];
@@ -200,23 +242,23 @@ export function effortScatter(rows, { metric = 'cost', embedStyle = false, width
 export function timeline(rows, { embedStyle = false, width = 1080, height = 420, marker = null, asOf, id = 'tl' } = {}) {
   const pts = rows.map((r, i) => ({ r, i })).filter(p => p.r.published);
   const title = 'DeepSWE 1.1 results by publication date';
-  const desc = `Each of ${pts.length} dated results placed on the day its score was published, by source.`;
+  const desc = `Each of ${pts.length} dated results placed on the day its score was published; colour is the lab, shape is who measured it.`;
   if (!pts.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No dated results in this selection.</text></svg>`;
-  const m = { left: 60, right: 24, top: embedStyle ? 92 : 24, bottom: 44 };
+  const m = { left: 60, right: 24, top: embedStyle ? 112 : 24, bottom: 44 };
   const right = width - m.right, bottom = height - m.bottom;
   const t = d => Date.parse(d + 'T00:00:00Z');
   const day = 864e5;
   const dates = pts.map(p => t(p.r.published));
   const x0 = Math.min(...dates) - 5 * day, x1 = Math.max(t(asOf || '1970-01-01'), ...dates) + 5 * day;
   const sx = v => m.left + (v - x0) / (x1 - x0) * (right - m.left);
-  const [y0, y1] = scoreDomain(pts.map(p => p.r));
-  const sy = v => bottom - (v - y0) / (y1 - y0) * (bottom - m.top);
+  const y1 = scoreTop(pts.map(p => p.r));
+  const sy = v => bottom - (v / y1) * (bottom - m.top);
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
-    svg += `<text class="title" x="24" y="34">${esc(title)}</text><text class="sub" x="24" y="54">Each point is one model at one effort level, on the date its score was published.</text>`;
-    svg += legend(24, 78, new Set(pts.map(p => p.r.source_type)));
+    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Each point is one model at one effort level, on the date its score was published.</text>`;
+    svg += legend(24, 80, pts.map(p => p.r));
   }
-  svg += yAxis(y0, y1, sy, m.left, right);
+  svg += yAxis(0, y1, sy, m.left, right);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const d = new Date(x0); d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + 1);
   for (; d.getTime() <= x1; d.setUTCMonth(d.getUTCMonth() + 1)) {
@@ -245,20 +287,19 @@ export function spreadPlot(rows, { embedStyle = false, width = 1080, id = 'sp', 
   if (onlyMulti) models = models.filter(mo => Object.keys(mo.best).length > 1);
   models.sort((a, b) => b.top - a.top);
   const rowH = 24;
-  const m = { left: 200, right: 64, top: embedStyle ? 92 : 16, bottom: 40 };
+  const m = { left: 200, right: 64, top: embedStyle ? 112 : 16, bottom: 40 };
   const height = m.top + models.length * rowH + m.bottom;
   const right = width - m.right, bottom = height - m.bottom;
   const title = 'Best DeepSWE 1.1 score per model, by who measured it';
   const desc = `${models.length} models; for each, the best official, lab-claimed and independent pass@1 at any effort level.`;
   if (!models.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No models in this selection.</text></svg>`;
-  const x0 = 0, x1 = 100;
-  const sx = v => m.left + (v - x0) / (x1 - x0) * (right - m.left);
+  const sx = v => m.left + (v / 100) * (right - m.left);
   let svg = open(width, height, id, title, desc, embedStyle);
   if (embedStyle) {
-    svg += `<text class="title" x="24" y="34">${esc(title)}</text><text class="sub" x="24" y="54">The rule spans the gap between sources for the same model.</text>`;
-    svg += legend(24, 78, new Set(rows.map(r => r.source_type)));
+    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">The rule spans the gap between sources for the same model. Colour is the lab; shape is who measured it.</text>`;
+    svg += legend(24, 80, rows);
   }
-  for (let v = x0; v <= x1; v += 10) {
+  for (let v = 0; v <= 100; v += 10) {
     const x = sx(v).toFixed(1);
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top - 6}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${v}%</text>`;
   }
@@ -285,15 +326,17 @@ export function hashId(s) {
 }
 
 export function shapeSvg(cls) {
-  const shape = cls === 's2' ? '<path d="M6 0L12 6L6 12L0 6Z" fill="var(--s2)"/>' : cls === 's3' ? '<rect x="1.5" y="1.5" width="9" height="9" fill="var(--s3)"/>' : '<circle cx="6" cy="6" r="5" fill="var(--s1)"/>';
+  const shape = cls === 's2' ? '<path d="M6 0L12 6L6 12L0 6Z" fill="currentColor"/>' : cls === 's3' ? '<rect x="1.5" y="1.5" width="9" height="9" fill="currentColor"/>' : '<circle cx="6" cy="6" r="5" fill="currentColor"/>';
   return `<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">${shape}</svg>`;
 }
 
 const fmtDay = d => (d ? new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : '');
+// Eight columns sized to fit the content width without scrolling; each carries a class so narrow
+// screens can fold the lowest-priority ones (the model cell repeats effort when its column folds).
 export const TABLE_COLS = [
-  ['rank', '#', 'n'], ['display_name', 'Model'], ['effort', 'Effort'], ['source_type', 'Measured by'],
-  ['score_pct', 'Pass@1', 'n'], ['bar', 'Reading'], ['cost_per_task_usd', 'Cost / task', 'n'],
-  ['output_tokens_per_task', 'Out tokens', 'n'], ['steps_per_task', 'Steps', 'n'], ['published', 'Published', 'n'],
+  ['rank', '#', 'n c-rank'], ['display_name', 'Model', 'c-model'], ['effort', 'Effort', 'c-eff'],
+  ['source_type', 'Measured by', 'c-src'], ['score_pct', 'Pass@1', 'c-score'], ['cost_per_task_usd', 'Cost / task', 'n c-cost'],
+  ['output_tokens_per_task', 'Usage per task', 'n c-use'], ['published', 'Published', 'n c-pub'],
 ];
 export const TABLE_SORTABLE = new Set(['display_name', 'effort', 'source_type', 'score_pct', 'cost_per_task_usd', 'output_tokens_per_task', 'steps_per_task', 'published']);
 
@@ -316,15 +359,16 @@ export function readingRowHtml(r, rank, src) {
   // that scan the page source for data-cite.
   const CITE = 'data-cite';
   const cite = src ? `<a class="cite" href="#${src.id}" ${CITE}="${src.id}" data-n="${src.n}" aria-describedby="${src.id}">${src.n}</a>` : '';
+  const usage = [r.output_tokens_per_task != null && `${fmtCount(r.output_tokens_per_task)} out tok`, r.steps_per_task != null && `${fmtCount(r.steps_per_task)} steps`].filter(Boolean);
   return `<tr id="${r.row_id}" data-flip-id="${r.row_id}" data-model="${esc(r.model_key)}">` +
-    `<td class="n na">${rank}</td>` +
-    `<td><span class="name">${esc(r.display_name)}</span><span class="id">${esc(r.lab)}${r.harness ? ' · ' + esc(r.harness) : ''}</span></td>` +
-    `<td><span class="eff">${esc(r.effort || '—')}</span></td>` +
-    `<td><span class="hall ${s.cls}">${shapeSvg(s.cls)}${s.mark}</span><span class="via">${esc(src ? src.publisher : r.source_name)}</span></td>` +
-    `<td class="n score">${fmtPct(r.score_pct)}${r.ci_pct != null ? ` ±${r.ci_pct}` : ''}<sup>${cite}</sup></td>` +
-    `<td><div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${s.cls}" style="width:${r.score_pct}%"></div>${ci}</div></td>` +
-    `<td class="n">${r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd) : na('not given')}</td>` +
-    `<td class="n">${r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : na('—')}</td>` +
-    `<td class="n">${r.steps_per_task != null ? fmtCount(r.steps_per_task) : na('—')}</td>` +
-    `<td class="n">${r.published ? fmtDay(r.published) : na('not given')}</td></tr>`;
+    `<td class="n na c-rank">${rank}</td>` +
+    `<td class="c-model"><span class="name">${esc(r.display_name)}</span>` +
+      `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="eff-inline">${r.effort ? ' · ' + esc(r.effort) : ''}</span></span></td>` +
+    `<td class="c-eff"><span class="eff">${esc(r.effort || '—')}</span></td>` +
+    `<td class="c-src"><span class="hall ${s.cls}">${shapeSvg(s.cls)}${s.mark}</span><span class="via">${esc(src ? src.publisher : r.source_name)}</span></td>` +
+    `<td class="c-score"><span class="sv">${fmtPct(r.score_pct)}${r.ci_pct != null ? `<small> ±${r.ci_pct}</small>` : ''}<sup>${cite}</sup></span>` +
+      `<div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${labClass(r.lab)}" style="width:${r.score_pct}%"></div>${ci}</div></td>` +
+    `<td class="n c-cost">${r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd) : na('not given')}</td>` +
+    `<td class="n c-use">${usage.length ? usage.join('<br>') : na('not given')}</td>` +
+    `<td class="n c-pub">${r.published ? fmtDay(r.published) : na('not given')}</td></tr>`;
 }

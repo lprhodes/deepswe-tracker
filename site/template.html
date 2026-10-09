@@ -12,7 +12,7 @@
   DIRECTION  metrology calibration certificate. Each reading carries the mark of who measured it and
              its uncertainty; the official board is a calibration standard that lapsed on 3 Sep.
   MODE       Read + Operate (reference dashboard). Motion only conveys state: marks travel between
-             readings, rows reorder, the three-sheet stack separates by source.
+             readings and rows reorder.
   AESTHETIC IDEATION  tier --any · frames metrologist × wild (split-flap board engineer / racing-form compiler)
              TOOK  calibration certificate grid, hallmark stamps per reading, lapsed-standard seal
              TOOK  "the line vs the drift": lab claim set against independent re-run (spread section)
@@ -25,7 +25,8 @@
 :root{
   --ground:#f3f6f1; --ground-2:#e8eee7; --sheet:#fbfcfa; --ink:#14212b; --ink-2:#44535c; --muted:#5f6e74;
   --rule:#b9c8be; --grid:#dde6df; --focus:#2453a6; --link:#1f4b97;
-  --s1:#2453a6; --s2:#d4502a; --s3:#118a6c;
+  /* lab colours: validated eight-slot palette (light) and grey for other labs */
+  --l0:#8a908d; --l1:#2a78d6; --l2:#eb6834; --l3:#1baf7a; --l4:#eda100; --l5:#e87ba4; --l6:#008300; --l7:#4a3aa7; --l8:#e34948;
   --shadow-1:0 1px 2px rgb(20 33 43 / .05), 0 2px 6px rgb(20 33 43 / .04);
   --shadow-2:0 2px 4px rgb(20 33 43 / .06), 0 10px 28px rgb(20 33 43 / .10);
   --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
@@ -33,60 +34,37 @@
   --sans:Archivo, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"Spline Sans Mono", ui-monospace, "SF Mono", Menlo, monospace;
   /* dark-theme values, applied by the two blocks below */
-  --dark-ground:#101614; --dark-ground-2:#17201d; --dark-sheet:#141a18; --dark-ink:#e8efe9; --dark-ink-2:#b4c2bb; --dark-muted:#93a39c; --dark-rule:#34423c; --dark-grid:#222b28; --dark-focus:#7ea6ec; --dark-link:#8fb2f0; --dark-s1:#5b8be0; --dark-s2:#e8693f; --dark-s3:#28a682;
+  --dark-ground:#101614; --dark-ground-2:#17201d; --dark-sheet:#141a18; --dark-ink:#e8efe9; --dark-ink-2:#b4c2bb; --dark-muted:#93a39c; --dark-rule:#34423c; --dark-grid:#222b28; --dark-focus:#7ea6ec; --dark-link:#8fb2f0; --dark-l0:#7d8582; --dark-l1:#3987e5; --dark-l2:#d95926; --dark-l3:#199e70; --dark-l4:#c98500; --dark-l5:#d55181; --dark-l6:#008300; --dark-l7:#9085e9; --dark-l8:#e66767;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){
-  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --s1:var(--dark-s1); --s2:var(--dark-s2); --s3:var(--dark-s3);
+  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --l0:var(--dark-l0); --l1:var(--dark-l1); --l2:var(--dark-l2); --l3:var(--dark-l3); --l4:var(--dark-l4); --l5:var(--dark-l5); --l6:var(--dark-l6); --l7:var(--dark-l7); --l8:var(--dark-l8);
   --shadow-1:0 1px 0 rgb(255 255 255 / .03) inset; --shadow-2:0 1px 0 rgb(255 255 255 / .05) inset, 0 12px 32px rgb(0 0 0 / .45);
   color-scheme:dark}}
 :root[data-theme="dark"]{
-  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --s1:var(--dark-s1); --s2:var(--dark-s2); --s3:var(--dark-s3);
+  --ground:var(--dark-ground); --ground-2:var(--dark-ground-2); --sheet:var(--dark-sheet); --ink:var(--dark-ink); --ink-2:var(--dark-ink-2); --muted:var(--dark-muted); --rule:var(--dark-rule); --grid:var(--dark-grid); --focus:var(--dark-focus); --link:var(--dark-link); --l0:var(--dark-l0); --l1:var(--dark-l1); --l2:var(--dark-l2); --l3:var(--dark-l3); --l4:var(--dark-l4); --l5:var(--dark-l5); --l6:var(--dark-l6); --l7:var(--dark-l7); --l8:var(--dark-l8);
   --shadow-1:0 1px 0 rgb(255 255 255 / .03) inset; --shadow-2:0 1px 0 rgb(255 255 255 / .05) inset, 0 12px 32px rgb(0 0 0 / .45);
   color-scheme:dark}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--ground);color:var(--ink);font:400 15px/1.55 var(--sans);font-variation-settings:"wdth" 100}
-::selection{background:color-mix(in oklch, var(--s1) 26%, transparent)}
+::selection{background:color-mix(in oklch, var(--l1) 26%, transparent)}
 a{color:var(--link);text-underline-offset:3px;text-decoration-thickness:1px}
 a:hover{text-decoration-thickness:2px}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:2px}
 .wrap{max-width:1240px;margin:0 auto;padding:0 var(--space-5)}
 .field{font:500 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
-/* masthead */
-.top{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);padding-block:var(--space-4);border-bottom:1px solid var(--rule)}
+/* title bar */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3) var(--space-5);flex-wrap:wrap;padding-block:var(--space-4);margin-bottom:var(--space-5);border-bottom:1px solid var(--rule)}
 .top .field a{color:inherit}
+.top h1{font:760 26px/1.1 var(--sans);font-variation-settings:"wdth" 115;letter-spacing:-.015em;margin:0 0 4px}
+.top .status{margin:0;font-size:14px;color:var(--ink-2);max-width:80ch;text-wrap:pretty}
+.top .status b{color:var(--ink)}
+.tb-r{display:flex;align-items:center;gap:var(--space-4);flex-wrap:wrap}
 .theme{white-space:nowrap;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:none;border:1px solid var(--rule);color:var(--ink-2);padding:6px 10px;border-radius:2px;cursor:pointer;transition:background-color .2s var(--ease),color .2s var(--ease)}
 .theme:hover{background:var(--ground-2);color:var(--ink)}
 .theme:active{transform:translateY(1px)}
-.mast{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:var(--space-7);padding-block:var(--space-7) var(--space-6)}
-h1{font:780 clamp(40px,6vw,76px)/.94 var(--sans);font-variation-settings:"wdth" 118;letter-spacing:-.025em;margin:var(--space-3) 0 var(--space-4)}
-h1 .v{font-variation-settings:"wdth" 70;font-weight:400;color:var(--ink-2)}
-.dek{font-size:18px;line-height:1.5;color:var(--ink-2);max-width:62ch;margin:0;text-wrap:pretty}
-.seal{position:relative;background:var(--sheet);border:1px solid var(--rule);padding:var(--space-5);box-shadow:var(--shadow-1);align-self:start}
-.seal::before{content:"";position:absolute;inset:6px;border:1px dashed var(--rule);pointer-events:none}
-.seal h2{margin:var(--space-2) 0 var(--space-1);font:650 19px/1.25 var(--sans)}
-.seal .lapse{display:flex;align-items:baseline;gap:var(--space-2);margin:var(--space-3) 0;padding:var(--space-3) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.seal .lapse b{font:750 44px/1 var(--sans);font-variation-settings:"wdth" 112;letter-spacing:-.02em}
-.seal .lapse span{color:var(--ink-2);font-size:14px;line-height:1.3}
-.seal dl{display:grid;grid-template-columns:1fr auto;gap:6px var(--space-4);margin:0;font-size:14px}
-.seal dt{color:var(--ink-2)} .seal dd{margin:0;font-weight:650;font-variant-numeric:tabular-nums;text-align:right}
-.seal .foot{margin-top:var(--space-3);font-size:12px;color:var(--muted)}
-.stamp-void{position:absolute;top:var(--space-4);right:var(--space-4);font:600 10px/1 var(--mono);letter-spacing:.14em;color:var(--ink-2);border:3px double var(--ink-2);padding:4px 6px;transform:rotate(-6deg)}
-
-/* three-sheet stage */
-.stage{position:relative;background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);margin-bottom:var(--space-6)}
-.stage-head{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-4);padding:var(--space-4) var(--space-5) 0}
-.stage-head h2{margin:var(--space-1) 0 0;font:650 20px/1.25 var(--sans)}
-.stage-head p{margin:var(--space-1) 0 0;color:var(--ink-2);max-width:70ch;font-size:14px}
-#gl{display:block;width:100%;height:420px;cursor:grab;touch-action:pan-y}
-#gl:active{cursor:grabbing}
-.gl-labels{position:absolute;inset:0;pointer-events:none}
-.gl-labels .tick{background:none;color:var(--muted);letter-spacing:.04em}
-.gl-labels span{position:absolute;transform:translate(-100%,-50%);white-space:nowrap;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:color-mix(in oklch, var(--sheet) 80%, transparent);padding:2px 4px}
-.gl-fallback{padding:var(--space-6) var(--space-5);color:var(--ink-2)}
-.stage-foot{display:flex;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap;padding:0 var(--space-5) var(--space-4);font-size:13px;color:var(--ink-2)}
 
 /* controls */
 .controls{position:sticky;top:0;z-index:20;background:color-mix(in oklch, var(--ground) 94%, transparent);backdrop-filter:blur(8px);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:0 0 var(--space-6)}
@@ -128,34 +106,43 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
 .panel svg{display:block;width:100%;height:auto;min-width:720px}
 .legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
+.legend svg{color:var(--ink-2)}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px}
+.legend .lsep{color:var(--muted);margin-left:var(--space-3)}
 .unplotted{font-size:13px;color:var(--muted);margin:var(--space-2) 0 0}
 .empty{padding:var(--space-7) var(--space-5);text-align:center;color:var(--ink-2)}
 .empty button{margin-top:var(--space-3)}
 
 /* readings table */
 .tablewrap{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:980px}
-thead th{background:var(--sheet);text-align:left;padding:10px 12px;border-bottom:1px solid var(--ink);font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:auto}
+thead th{background:var(--sheet);text-align:left;padding:10px;border-bottom:1px solid var(--ink);font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
 thead th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
 thead th button:hover{color:var(--ink)}
 thead th button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 thead th[aria-sort="ascending"] button::after{content:"↑"} thead th[aria-sort="descending"] button::after{content:"↓"}
-tbody td{padding:9px 12px;border-bottom:1px solid var(--grid);vertical-align:middle}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--grid);vertical-align:middle}
 tbody tr:hover{background:var(--ground)}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td .name{font-weight:620}
-td .id{display:block;font:400 11px/1.3 var(--mono);color:var(--muted);white-space:nowrap}
+td .id{display:block;font:400 11px/1.35 var(--mono);color:var(--muted)}
+td .id .h{white-space:nowrap}
+.eff-inline{display:none}
 td .eff{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .hall{display:inline-flex;align-items:center;gap:6px;font:600 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink);border:1px solid var(--rule);padding:3px 5px;border-radius:1px;white-space:nowrap}
-.hall.s1{border-color:var(--s1)} .hall.s2{border-color:var(--s2)} .hall.s3{border-color:var(--s3)}
-td .via{display:block;margin-top:4px;font-size:12px;max-width:26ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{position:relative;width:180px;height:14px}
+.hall{border-color:var(--ink-2)} .hall svg{color:var(--ink)}
+td .via{display:block;margin-top:4px;font-size:12px;max-width:16ch;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{position:relative;width:100%;max-width:170px;min-width:72px;height:12px;margin-top:5px}
 .bar .track{position:absolute;inset:4px 0;background:var(--grid)}
 .bar .fill{position:absolute;left:0;top:4px;bottom:4px}
-.bar .fill.s1{background:var(--s1)} .bar .fill.s2{background:var(--s2)} .bar .fill.s3{background:var(--s3)}
+.bar .fill.l0{background:var(--l0)} .bar .fill.l1{background:var(--l1)} .bar .fill.l2{background:var(--l2)} .bar .fill.l3{background:var(--l3)} .bar .fill.l4{background:var(--l4)} .bar .fill.l5{background:var(--l5)} .bar .fill.l6{background:var(--l6)} .bar .fill.l7{background:var(--l7)} .bar .fill.l8{background:var(--l8)}
 .bar .ci{position:absolute;top:1px;bottom:1px;border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink)}
 .bar .ci::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--ink)}
-td.score{font-weight:700;font-size:14px}
+td.c-score{min-width:110px}
+td .sv{font-weight:700;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}
+td .sv small{font-weight:500;font-size:12px;color:var(--ink-2)}
+td.c-use{font-size:12.5px;line-height:1.35;white-space:nowrap}
+th.c-score{text-align:left}
 .na{color:var(--muted)}
 
 /* notes and footer */
@@ -172,14 +159,23 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
 #tip .k{display:inline-block;width:14px;height:2px;vertical-align:middle;margin-right:6px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
+/* the readings table folds its lowest-priority columns instead of scrolling */
+@media (max-width:1100px){ .c-rank{display:none} }
+@media (max-width:960px){ .c-pub{display:none} tbody td,thead th{padding-left:8px;padding-right:8px} td .via{max-width:12ch} }
+@media (max-width:800px){ .c-use,.c-eff{display:none} .eff-inline{display:inline} }
+@media (max-width:560px){
+  .c-src,.hsep{display:none}
+  tbody td,thead th{padding:8px 6px}
+  td .name{font-size:13px}
+  td.c-score{min-width:0}
+  td .sv small{display:none}
+  .bar{max-width:none}
+}
 @media (max-width:900px){
-  .mast{grid-template-columns:1fr;gap:var(--space-5);padding-block-start:var(--space-6)}
-  #gl{height:320px}
 }
 @media (max-width:560px){
   .wrap{padding:0 var(--space-4)}
   .controls{position:static}
-  .dek{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 /* citations: marker, preview, registry */
@@ -215,46 +211,18 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
 <style id="viz-style">/*__VIZSTYLE__*/</style>
 </head>
 <body>
-<div class="wrap top">
-  <span class="field">Independent tracker · not affiliated with Datacurve · <a href="https://github.com/lprhodes/deepswe-tracker">source and data</a></span>
-  <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Theme: auto</button>
-</div>
-
-<header class="wrap mast">
-  <div>
-    <span class="field">Certificate of readings · DeepSWE 1.1 · 113 long-horizon tasks</span>
-    <h1>DeepSWE 1.1 <span class="v">Tracker</span></h1>
-    <p class="dek">Every published DeepSWE 1.1 score in one place: the official Datacurve board, the scores labs report for their own models at each effort level, and independent re-runs. Each reading carries the mark of who measured it, and its cost per task where one was published.</p>
+<header class="wrap top">
+  <div class="tb">
+    <h1>DeepSWE 1.1 Tracker</h1>
+    <p class="status">Official board last added a model on <span id="lastAdded"></span><!--__CITE_CHANGELOG__-->, <b id="lapseDays"></b> days ago. <span id="sinceLine"></span></p>
   </div>
-  <aside class="seal" aria-labelledby="seal-h">
-    <span class="stamp-void" aria-hidden="true">LAPSED</span>
-    <span class="field">Reference standard</span>
-    <h2 id="seal-h">Official board last added a model on <span id="lastAdded"></span><!--__CITE_CHANGELOG__--></h2>
-    <div class="lapse"><b id="lapseDays"></b><span>days without a new model, while labs kept publishing</span></div>
-    <dl id="sinceList"></dl>
-    <div class="foot" id="asof"></div>
-  </aside>
+  <div class="tb-r">
+    <span class="field">Independent · not affiliated with Datacurve · <a href="https://github.com/lprhodes/deepswe-tracker">source and data</a></span>
+    <button class="theme" id="theme" type="button" aria-label="Switch colour theme">Theme: auto</button>
+  </div>
 </header>
 
-<div class="wrap">
-  <section class="stage" aria-labelledby="stage-h">
-    <div class="stage-head">
-      <div>
-        <span class="field">Fig. 1 · Three sheets</span>
-        <h2 id="stage-h">One sheet per source, laid over time</h2>
-        <p>Every dated result, placed by publication date (left to right) and pass@1 (bottom to top), on the sheet of whoever measured it. The front sheet, the official board, runs out on <span class="lastAddedShort"></span>. Drag to turn the stack; exact values are in the charts below.</p>
-      </div>
-      <div class="seg" role="group" aria-label="Sheet arrangement">
-        <button type="button" id="sepBtn" aria-pressed="true">Separate</button>
-        <button type="button" id="stackBtn" aria-pressed="false">Stack</button>
-      </div>
-    </div>
-    <canvas id="gl" role="img" aria-label="Three-dimensional overview: results by publication date and score, one layer per source. The official layer has no results after the board's last addition."></canvas>
-    <div class="gl-labels" id="glLabels" aria-hidden="true"></div>
-    <div class="gl-fallback" id="glFallback" hidden>The 3D overview needs WebGL, which this browser has not provided. The same results are on the timeline in Fig. 5.</div>
-    <div class="stage-foot"><span id="glCount"></span><span class="field">x: publication date · y: pass@1 · depth: source</span></div>
-  </section>
-</div>
+
 
 <nav class="controls" aria-label="Filters for every chart and table below">
   <div class="wrap">
@@ -267,6 +235,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <span role="group" aria-label="Effort levels" id="effortGroup" class="cgroup"></span>
     </div>
     <div class="cgroup">
+      <details class="pop" id="labPop"><summary>Labs <span class="n" id="labCount"></span></summary><div class="pop-body" id="labBody"></div></details>
       <details class="pop" id="modelPop"><summary>Models <span class="n" id="modelCount"></span></summary><div class="pop-body" id="modelBody"></div></details>
       <details class="pop" id="configPop"><summary>Configs <span class="n" id="configCount"></span></summary><div class="pop-body" id="configBody"></div></details>
       <div class="seg" role="group" aria-label="Period" id="periodGroup"></div>
@@ -279,11 +248,11 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="sc-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 2 · Readings against cost</span>
+        <span class="field">Fig. 1 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Lines join one model’s effort levels from low to max, as the official board draws them. Hover a point for its source and settings; hover a name in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it: colour is the lab, each line joins one model’s effort levels from low to max, and cost runs from high on the left to zero on the right. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
       </div>
-      <div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div>
+      <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
     <div class="legend" id="legend"></div>
     <div class="panel" id="c-scatter"><!--__SCATTER__--></div>
@@ -293,7 +262,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="tb-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 3 · Readings</span>
+        <span class="field">Fig. 2 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
         <p>Bars run from 0 to 100%; the bracket is the 95% interval where the source gives one. The number after each score is its source in the list below. Select a heading to sort.</p>
       </div>
@@ -305,7 +274,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="sp-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 4 · The spread</span>
+        <span class="field">Fig. 3 · The spread</span>
         <h2 id="sp-h">Same model, different measurer</h2>
         <p>Each model’s best result from each source. Where a lab’s claim and an independent re-run disagree, the rule between them is the gap. Only models measured by at least two sources are shown.</p>
       </div>
@@ -316,9 +285,9 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="tl-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 5 · Timeline</span>
+        <span class="field">Fig. 4 · Timeline</span>
         <h2 id="tl-h">When each result was published</h2>
-        <p>The flat view of Fig. 1. After the official board’s last addition, every new result came from a lab or an independent runner.</p>
+        <p>After the official board’s last addition, every new result came from a lab or an independent runner.</p>
       </div>
     </div>
     <div class="panel" id="c-time"><!--__TIME__--></div>
@@ -375,16 +344,9 @@ const fmtDate = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { da
 const last = meta.official_last_added;
 const lapse = Math.round((Date.parse(meta.as_of) - Date.parse(last)) / day);
 $('#lastAdded').textContent = fmtDate(last);
-document.querySelectorAll('.lastAddedShort').forEach(n => (n.textContent = fmtDate(last)));
 $('#lapseDays').textContent = lapse;
-const since = ROWS.filter(r => r.published && r.published > last);
-const short = fmtDate(last).replace(/ \d{4}$/, '');
-$('#sinceList').append(
-  el('dt', { textContent: `Lab claims published after ${short}` }), el('dd', { textContent: String(since.filter(r => r.source_type === 'lab_self_reported').length) }),
-  el('dt', { textContent: `Models with a new lab claim after ${short}` }), el('dd', { textContent: String(new Set(since.filter(r => r.source_type === 'lab_self_reported').map(r => r.model_key)).size) }),
-  el('dt', { textContent: 'Independent results on record' }), el('dd', { textContent: String(ROWS.filter(r => r.source_type === 'third_party_run').length) }),
-);
-$('#asof').append(`Readings as of ${fmtDate(meta.as_of)} · `, el('a', { href: meta.official_url, textContent: 'official board' }));
+const since = ROWS.filter(r => r.published && r.published > last && r.source_type === 'lab_self_reported');
+$('#sinceLine').textContent = `Since then, labs have published ${since.length} results for ${new Set(since.map(r => r.model_key)).size} models. Readings as of ${fmtDate(meta.as_of)}.`;
 $('#footAsOf').textContent = `${DATA.observations} readings of ${DATA.models} models · as of ${fmtDate(meta.as_of)}`;
 
 // ---------- theme ----------
@@ -402,11 +364,11 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => wind
 
 // ---------- state ----------
 const ALL_EFF = [...EFFORTS, 'other'];
-const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offModels: new Set(), offConfigs: new Set(), period: 'all', metric: 'cost', sort: { key: 'score_pct', dir: -1 } };
-const isDefault = () => state.sources.size === 3 && state.mode === 'best' && state.efforts.size === ALL_EFF.length && !state.offModels.size && !state.offConfigs.size && state.period === 'all';
+const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all', metric: 'cost', scale: 'linear', sort: { key: 'score_pct', dir: -1 } };
+const isDefault = () => state.sources.size === 3 && state.mode === 'best' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.period === 'all';
 
 function selected() {
-  let rows = ROWS.filter(r => state.sources.has(r.source_type) && state.efforts.has(r._eff) && !state.offModels.has(r.model_key) && !state.offConfigs.has(r._key)
+  let rows = ROWS.filter(r => state.sources.has(r.source_type) && state.efforts.has(r._eff) && !state.offLabs.has(r.lab) && !state.offModels.has(r.model_key) && !state.offConfigs.has(r._key)
     && (state.period === 'all' || (r.published && r.published > state.period)));
   if (state.mode === 'best') {
     const best = new Map();
@@ -421,7 +383,6 @@ function selected() {
 }
 
 // ---------- controls ----------
-const shapeSvg = cls => `<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">${cls === 's2' ? '<path d="M6 0L12 6L6 12L0 6Z" fill="var(--s2)"/>' : cls === 's3' ? '<rect x="1.5" y="1.5" width="9" height="9" fill="var(--s3)"/>' : '<circle cx="6" cy="6" r="5" fill="var(--s1)"/>'}</svg>`;
 for (const s of SERIES) {
   const b = el('button', { type: 'button', className: 'chip src' });
   b.setAttribute('aria-pressed', 'true');
@@ -429,7 +390,12 @@ for (const s of SERIES) {
   b.append(s.label, el('span', { className: 'n', textContent: String(ROWS.filter(r => r.source_type === s.key).length) }));
   b.addEventListener('click', () => { state.sources.has(s.key) ? state.sources.delete(s.key) : state.sources.add(s.key); b.setAttribute('aria-pressed', String(state.sources.has(s.key))); render(); });
   $('#srcGroup').append(b);
-  $('#legend').append(el('span', { innerHTML: shapeSvg(s.cls) }, [s.long]));
+  $('#legend').append(el('span', { innerHTML: shapeSvg(s.cls) }, [s.label]));
+}
+$('#legend').append(el('span', { className: 'lsep', textContent: 'Colour is the lab:' }));
+for (const [lab, cls] of [...Object.entries(LAB_SLOTS), ['Other labs', 'l0']]) {
+  const sw = el('span', { className: 'sw' }); sw.style.background = `var(--${cls})`;
+  $('#legend').append(el('span', {}, [sw, lab]));
 }
 for (const e of ALL_EFF) {
   const b = el('button', { type: 'button', className: 'chip', textContent: e === 'other' ? 'other' : e });
@@ -454,6 +420,7 @@ const segment = (host, options, get, set) => {
 };
 segment($('#periodGroup'), [['all', 'All dates'], [last, `After ${fmtDate(last).replace(/ \d{4}$/, '')}`]], () => state.period, v => (state.period = v));
 segment($('#metricGroup'), Object.entries(METRICS).map(([k, m]) => [k, m.short]), () => state.metric, v => (state.metric = v));
+segment($('#scaleGroup'), [['linear', 'Linear'], ['log', 'Log']], () => state.scale, v => (state.scale = v));
 
 // Models and configs pickers: grouped checklists with search, all and none.
 const MODELS = [...new Map(ROWS.map(r => [r.model_key, { key: r.model_key, name: r.display_name, lab: r.lab }])).values()].sort((a, b) => a.lab.localeCompare(b.lab) || a.name.localeCompare(b.name));
@@ -484,6 +451,9 @@ function buildPicker(body, groups, isOn, toggle, setAll, labelOf, countOf) {
   return draw;
 }
 const byLab = new Map(); for (const m of MODELS) { if (!byLab.has(m.lab)) byLab.set(m.lab, []); byLab.get(m.lab).push(m); }
+const LABS = [...new Set(ROWS.map(r => r.lab))].sort((a, b) => a.localeCompare(b)).map(l => ({ key: l, name: l }));
+const drawLabs = buildPicker($('#labBody'), [['Labs', LABS]], l => !state.offLabs.has(l.key), (l, on) => (on ? state.offLabs.delete(l.key) : state.offLabs.add(l.key)),
+  on => { state.offLabs.clear(); if (!on) LABS.forEach(l => state.offLabs.add(l.key)); }, l => l.name, l => String(ROWS.filter(r => r.lab === l.key).length));
 const drawModels = buildPicker($('#modelBody'), [...byLab], m => !state.offModels.has(m.key), (m, on) => (on ? state.offModels.delete(m.key) : state.offModels.add(m.key)),
   on => { state.offModels.clear(); if (!on) MODELS.forEach(m => state.offModels.add(m.key)); }, m => m.name, m => String(ROWS.filter(r => r.model_key === m.key).length));
 const byModelRows = new Map(); for (const r of ROWS) { const n = r.display_name; if (!byModelRows.has(n)) byModelRows.set(n, []); byModelRows.get(n).push(r); }
@@ -494,17 +464,17 @@ document.querySelectorAll('.pop').forEach(p => p.addEventListener('toggle', () =
 document.addEventListener('click', e => { if (!e.target.closest('.pop')) document.querySelectorAll('.pop[open]').forEach(p => (p.open = false)); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.pop[open]').forEach(p => { p.open = false; p.querySelector('summary').focus(); }); });
 $('#reset').addEventListener('click', () => {
-  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offModels: new Set(), offConfigs: new Set(), period: 'all' });
+  Object.assign(state, { sources: new Set(SERIES.map(s => s.key)), mode: 'best', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), period: 'all' });
   document.querySelectorAll('#srcGroup .chip, #effortGroup .chip').forEach(b => b.setAttribute('aria-pressed', 'true'));
   document.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === 'best')));
   $('#periodGroup').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.v === 'all')));
-  drawModels(); drawConfigs(); render();
+  drawLabs(); drawModels(); drawConfigs(); render();
 });
 
 // ---------- tooltip ----------
 const tipEl = $('#tip');
 function tip(r, ev, target) {
-  const k = el('span', { className: 'k' }); k.style.background = `var(--${SCLS[r.source_type]})`;
+  const k = el('span', { className: 'k' }); k.style.background = `var(--${labClass(r.lab)})`;
   const facts = [
     r.harness && `Harness: ${r.harness}`,
     r.cost_per_task_usd != null && `Cost per task: ${fmtUsd(r.cost_per_task_usd)}`,
@@ -653,6 +623,7 @@ let firstRender = true;
 function render() {
   const rows = selected();
   $('#reset').hidden = isDefault();
+  $('#labCount').textContent = `(${LABS.length - state.offLabs.size}/${LABS.length})`;
   $('#modelCount').textContent = `(${MODELS.length - state.offModels.size}/${MODELS.length})`;
   $('#configCount').textContent = `(${ROWS.length - state.offConfigs.size}/${ROWS.length})`;
   if (!rows.length) {
@@ -660,7 +631,7 @@ function render() {
     $('#unplotted').textContent = '';
   } else {
     const M = METRICS[state.metric];
-    mount('#c-scatter', effortScatter(rows, { metric: state.metric, id: 'sc' }), rows);
+    mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
     const missing = rows.filter(r => !(r[M.field] > 0)).length;
     $('#unplotted').textContent = missing ? `${missing} of ${rows.length} readings in this selection have no published ${M.noun} and are not plotted; they are in the table.` : '';
     mount('#c-spread', spreadPlot(rows, { id: 'sp', onlyMulti: true }), rows);
@@ -674,158 +645,6 @@ render();
 showRow();
 window.__dsw = { ROWS, state, selected, last };
 })();
-</script>
-
-<script type="module">
-// Fig. 1: every dated result on one of three translucent sheets (official, lab, independent), laid
-// over time. GSAP separates or stacks the sheets; the render loop pauses off-screen and under
-// reduced motion the scene renders once and holds still.
-const canvas = document.getElementById('gl');
-const fallback = () => { canvas.hidden = true; document.getElementById('glFallback').hidden = false; document.getElementById('glLabels').hidden = true; };
-let THREE;
-try {
-  THREE = await import('https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js');
-  const probe = document.createElement('canvas');
-  if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) throw new Error('no webgl');
-} catch { fallback(); }
-if (THREE && window.__dsw) {
-  const { ROWS, last } = window.__dsw;
-  const SOURCES = ['official_leaderboard', 'lab_self_reported', 'third_party_run'];
-  const NAMES = ['Official board', 'Lab claims', 'Independent runs'];
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const css = () => getComputedStyle(document.documentElement);
-  const col = name => new THREE.Color(css().getPropertyValue(name).trim() || 'gray');
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(32, 2, 0.1, 100);
-  const root = new THREE.Group(); scene.add(root);
-
-  const dated = ROWS.filter(r => r.published);
-  const t = d => Date.parse(d + 'T00:00:00Z');
-  const t0 = Math.min(...dated.map(r => t(r.published))) - 5 * 864e5;
-  const t1 = t(window.__dsw.ROWS.reduce((a, r) => (r.accessed > a ? r.accessed : a), '')) + 5 * 864e5;
-  const W = 6, H = 3.2;
-  const X = d => -W / 2 + (t(d) - t0) / (t1 - t0) * W;
-  const Y = s => -H / 2 + (s / 100) * H;
-  const SEP = 1.45;
-  const sheets = SOURCES.map((src, k) => {
-    const g = new THREE.Group();
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(W + 0.3, H + 0.3), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.22, depthWrite: false, side: THREE.DoubleSide }));
-    g.add(plane);
-    const lines = [];
-    for (let s = 0; s <= 100; s += 20) lines.push(-W / 2 - 0.15, Y(s), 0.001, W / 2 + 0.15, Y(s), 0.001);
-    for (let m = 6; m <= 10; m++) { const d = `2026-${String(m).padStart(2, '0')}-01`; if (t(d) > t0 && t(d) < t1) lines.push(X(d), -H / 2 - 0.15, 0.001, X(d), H / 2 + 0.15, 0.001); }
-    const grid = new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(lines, 3)), new THREE.LineBasicMaterial({ transparent: true, opacity: 0.5 }));
-    g.add(grid);
-    const pts = dated.filter(r => r.source_type === src);
-    const pos = new Float32Array(pts.length * 3);
-    pts.forEach((r, i) => { pos[i * 3] = X(r.published); pos[i * 3 + 1] = Y(r.score_pct); pos[i * 3 + 2] = 0.02; });
-    const dots = new THREE.Points(new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pos, 3)), new THREE.PointsMaterial({ size: 0.13, sizeAttenuation: true, depthWrite: false }));
-    g.add(dots);
-    root.add(g);
-    return { g, plane, grid, dots, src, count: pts.length, z: (1 - k) * SEP };
-  });
-  // The lapse: a cut through the stack at the official board's last addition.
-  const lapseX = X(last);
-  const cut = new THREE.Mesh(new THREE.PlaneGeometry(SEP * 2 + 0.6, H + 0.5), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.12, side: THREE.DoubleSide, depthWrite: false }));
-  cut.rotation.y = Math.PI / 2; cut.position.x = lapseX; root.add(cut);
-  const cutEdge = new THREE.LineSegments(new THREE.EdgesGeometry(cut.geometry), new THREE.LineBasicMaterial());
-  cutEdge.rotation.copy(cut.rotation); cutEdge.position.copy(cut.position); root.add(cutEdge);
-
-  const labelHost = document.getElementById('glLabels');
-  const labels = NAMES.map(n => { const s = document.createElement('span'); s.textContent = n; labelHost.append(s); return s; });
-  const monthLabels = [];
-  for (let m = 6; m <= 10; m++) {
-    const d = `2026-${String(m).padStart(2, '0')}-01`;
-    if (t(d) <= t0 || t(d) >= t1) continue;
-    const s = document.createElement('span'); s.className = 'tick'; s.style.transform = 'translate(-50%, 6px)';
-    s.textContent = new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' });
-    labelHost.append(s); monthLabels.push([X(d), s]);
-  }
-  const lapseLabel = document.createElement('span'); labelHost.append(lapseLabel);
-  lapseLabel.style.transform = 'translate(-50%,-140%)';
-  lapseLabel.textContent = 'Official board stops';
-  document.getElementById('glCount').textContent = `${dated.length} dated results · ${ROWS.length - dated.length} without a publication date are left out of this view`;
-
-  function paint() {
-    const series = ['--s1', '--s2', '--s3'].map(col);
-    const sheet = col('--sheet'), rule = col('--rule'), ink = col('--ink');
-    sheets.forEach((s, k) => { s.plane.material.color = sheet.clone().lerp(series[k], 0.06); s.grid.material.color = rule; s.dots.material.color = series[k]; });
-    cut.material.color = ink; cutEdge.material.color = ink; cutEdge.material.opacity = 0.6; cutEdge.material.transparent = true;
-  }
-  paint();
-  window.addEventListener('dsw-theme', () => { paint(); draw(); });
-
-  // Separation and orientation are tweened values; the camera orbits the stack's centre.
-  const view = { sep: 0, yaw: -0.05, pitch: 0.02, drag: 0, dragPitch: 0 };
-  const place = () => {
-    sheets.forEach(s => (s.g.position.z = s.z * view.sep));
-    cut.scale.x = Math.max(0.05, view.sep); cutEdge.scale.x = cut.scale.x;
-    const yaw = view.yaw + view.drag, pitch = view.pitch + view.dragPitch, r = 10.2;
-    camera.position.set(Math.sin(yaw) * Math.cos(pitch) * r, Math.sin(pitch) * r, Math.cos(yaw) * Math.cos(pitch) * r);
-    camera.lookAt(0, 0, 0);
-  };
-  const v3 = new THREE.Vector3();
-  function project(x, y, z, node, show = true) {
-    v3.set(x, y, z).project(camera);
-    node.style.left = `${(v3.x * 0.5 + 0.5) * canvas.clientWidth}px`;
-    node.style.top = `${(-v3.y * 0.5 + 0.5) * canvas.clientHeight + canvas.offsetTop}px`;
-    node.style.opacity = show ? 1 : 0;
-  }
-  function draw() {
-    place();
-    renderer.render(scene, camera);
-    sheets.forEach((s, k) => project(-W / 2 - 0.25, H / 2 - 0.1, s.g.position.z, labels[k], view.sep > 0.4 || k === 0));
-    project(lapseX, H / 2 + 0.25, sheets[0].g.position.z, lapseLabel);
-    for (const [x, node] of monthLabels) project(x, -H / 2 - 0.15, sheets[0].g.position.z, node);
-  }
-  function resize() {
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setSize(w, h, false); camera.aspect = w / h;
-    camera.fov = w < 640 ? 46 : 32; camera.updateProjectionMatrix(); draw();
-  }
-  new ResizeObserver(resize).observe(canvas);
-
-  const sep = document.getElementById('sepBtn'), stack = document.getElementById('stackBtn');
-  const arrange = (on, animate = true) => {
-    sep.setAttribute('aria-pressed', String(on)); stack.setAttribute('aria-pressed', String(!on));
-    const target = on ? { sep: 1, yaw: -0.62, pitch: 0.3 } : { sep: 0, yaw: -0.05, pitch: 0.02 };
-    if (!animate || reduce || typeof gsap === 'undefined') { Object.assign(view, target); draw(); return; }
-    gsap.to(view, { ...target, duration: 1.1, ease: 'power3.inOut', onUpdate: draw });
-  };
-  sep.addEventListener('click', () => arrange(true));
-  stack.addEventListener('click', () => arrange(false));
-
-  // Drag to turn: damped, clamped, pointer and touch alike (vertical page scroll is left to the page).
-  let down = null;
-  canvas.addEventListener('pointerdown', e => { down = { x: e.clientX, y: e.clientY, d: view.drag, p: view.dragPitch }; canvas.setPointerCapture(e.pointerId); });
-  canvas.addEventListener('pointermove', e => {
-    if (!down) return;
-    view.drag = Math.max(-1.1, Math.min(1.1, down.d + (e.clientX - down.x) / 260));
-    view.dragPitch = Math.max(-0.25, Math.min(0.45, down.p + (e.clientY - down.y) / 400));
-    if (!running) draw();
-  });
-  canvas.addEventListener('pointerup', () => (down = null));
-
-  // Idle drift and the first separation run only while the stage is on screen.
-  let running = false, inView = false, played = false, clock = 0, raf = 0;
-  const loop = ts => {
-    if (!running) return;
-    if (!down) view.yaw += Math.sin(ts / 5200) * 0.0006;
-    draw(); raf = requestAnimationFrame(loop);
-  };
-  const setRunning = on => { if (on === running) return; running = on; if (on) raf = requestAnimationFrame(loop); else cancelAnimationFrame(raf); };
-  new IntersectionObserver(([en]) => {
-    inView = en.isIntersecting;
-    if (inView && !played) { played = true; arrange(true, true); }
-    setRunning(inView && !reduce && !document.hidden);
-  }, { threshold: 0.25 }).observe(canvas);
-  document.addEventListener('visibilitychange', () => setRunning(inView && !reduce && !document.hidden));
-  if (reduce) { Object.assign(view, { sep: 1, yaw: -0.62, pitch: 0.3 }); played = true; }
-  resize();
-}
 </script>
 </body>
 </html>
