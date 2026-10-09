@@ -1,13 +1,13 @@
 {
   "project": "deepswe-tracker",
-  "updated": "2026-10-09T18:10:00+11:00",
+  "updated": "2026-10-09T19:30:00+11:00",
   "verdict": {
     "token": "done",
     "number": "210",
     "unit": "readings of 80 models",
-    "headline": "Live at lprhodes.github.io/deepswe-tracker; every score cites its source. CI commit awaits a token scope.",
+    "headline": "Live at deepswe.dev in the official board's chart forms; every score cites its source.",
     "run_label": "first build",
-    "head_sha": "ca9b65f"
+    "head_sha": "e9b5488"
   },
   "tasks": [
     {
@@ -73,6 +73,30 @@
       "stage": "code written",
       "outcome": "done",
       "note": "lprhodes.github.io/deepswe-tracker"
+    },
+    {
+      "id": "P-4",
+      "title": "Official chart forms, brand lab colours, lab filter",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "table fits at 390\u20131360px"
+    },
+    {
+      "id": "G-3",
+      "title": "Deploy to deepswe.dev on Vercel",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "Namecheap A + CNAME to Vercel"
+    },
+    {
+      "id": "D-3",
+      "title": "Estimate cost from AI Gateway prices when only tokens exist",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "1 reading qualifies (Laguna S 2.1)"
     }
   ],
   "gates": [
@@ -93,11 +117,10 @@
       "kind": "tests"
     },
     {
-      "name": "Chart colours tell apart for colour-blind readers",
+      "name": "Chart colours: brand-led by request, not colour-blind-validated",
       "command": "validate_palette.py --pairs all (light, dark)",
-      "exit_code": 0,
-      "counts": "2/2",
-      "state": "done",
+      "exit_code": 1,
+      "state": "waived",
       "kind": "design"
     },
     {
@@ -128,7 +151,7 @@
       "name": "Every score cites a listed source, and every source is cited",
       "command": "dossier-report audit_page.py index.html",
       "exit_code": 0,
-      "counts": "39/39",
+      "counts": "40/40",
       "state": "done",
       "kind": "tests"
     },
@@ -139,6 +162,22 @@
       "counts": "6/6",
       "state": "done",
       "kind": "tests"
+    },
+    {
+      "name": "Readings table fits without sideways scroll",
+      "command": "Playwright at 1360, 1280, 1024, 900, 768, 390px",
+      "exit_code": 0,
+      "counts": "6/6",
+      "state": "done",
+      "kind": "design"
+    },
+    {
+      "name": "deepswe.dev serves the page over HTTPS",
+      "command": "curl https://deepswe.dev/",
+      "exit_code": 0,
+      "counts": "1/1",
+      "state": "done",
+      "kind": "build"
     }
   ],
   "findings": [
@@ -204,13 +243,19 @@
   ],
   "not_done": [
     {
-      "action": "Cost figures for Anthropic, Google and Meta models",
-      "reason": "Those labs publish none.",
-      "what_would_unblock": "A lab publishing them, or the official board resuming.",
+      "action": "Cost for Anthropic, Google and Meta readings",
+      "reason": "Those labs publish neither cost nor tokens, so there is nothing to price.",
+      "what_would_unblock": "A lab publishing token counts.",
       "size": "unknown"
     }
   ],
   "artifacts": [
+    {
+      "path": "https://deepswe.dev",
+      "kind": "html",
+      "contains": "The live tracker.",
+      "open_first": true
+    },
     {
       "path": "index.html",
       "kind": "html",
