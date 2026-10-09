@@ -108,6 +108,7 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
 .bhead p{margin:var(--space-1) 0 0;color:var(--ink-2);max-width:72ch;text-wrap:pretty}
 .panel{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow-x:auto}
 .panel svg{display:block;width:100%;height:auto;min-width:720px}
+#c-rank svg{min-width:0}
 .legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend svg{color:var(--ink-2)}
@@ -260,16 +261,27 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
 </nav>
 
 <main class="wrap">
+  <section class="block" aria-labelledby="rk-h">
+    <div class="bhead">
+      <div>
+        <span class="field">Fig. 1 · Every model</span>
+        <h2 id="rk-h">Every model, ranked by its best score</h2>
+        <p>One row per model, with its best score at the right. Each dot is one reading: colour is the lab, shape is who measured it, and a line joins one measurer’s effort levels from low to max, as on the official board. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its effort level and source.</p>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="panel" id="c-rank"><!--__RANKED__--></div>
+  </section>
+
   <section class="block" aria-labelledby="sc-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 1 · Readings against cost</span>
+        <span class="field">Fig. 2 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it: colour is the lab, and each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Models whose sources give a score but no cost are listed beside it by best score. Shape and line style say who measured it. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it, for the readings that publish a cost: each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Hover a point for its source; hover a row in the table to pick out its line.</p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
-    <div class="legend" id="legend"></div>
     <div class="panel" id="c-scatter"><!--__SCATTER__--></div>
     <p class="unplotted" id="unplotted"><!--__UNPLOTTED__--></p>
   </section>
@@ -277,7 +289,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="tb-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 2 · Readings</span>
+        <span class="field">Fig. 3 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
         <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices. Select a heading to sort.</p>
       </div>
@@ -289,7 +301,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
   <section class="block" aria-labelledby="sp-h">
     <div class="bhead">
       <div>
-        <span class="field">Fig. 3 · The spread</span>
+        <span class="field">Fig. 4 · The spread</span>
         <h2 id="sp-h">Same model, different measurer</h2>
         <p>The official leaderboard’s bar form, one bar per source under each model: its best official result, its lab’s claim and any independent re-run. Only models measured by at least two sources are shown.</p>
       </div>
@@ -531,7 +543,7 @@ function mount(id, svg, rows) {
   gsap.from(host.querySelectorAll('.eline, .glbl, .span'), { autoAlpha: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
 }
 function highlight(model) {
-  for (const id of ['#c-scatter', '#c-spread']) {
+  for (const id of ['#c-rank', '#c-scatter', '#c-spread']) {
     const svg = $(id).querySelector('svg.viz');
     if (!svg) continue;
     // Dim the rest only when this chart actually holds the model; otherwise leave it alone.
@@ -632,6 +644,12 @@ function showRow() {
 window.addEventListener('hashchange', showRow);
 
 // ---------- render ----------
+// The ranked chart is drawn at the panel's own width below 640px, so a phone gets the stacked layout
+// instead of a sideways scroll; it redraws when the window crosses that width.
+const rankWidth = () => { const w = $('#c-rank').clientWidth; return w && w < 640 ? Math.max(320, Math.round(w)) : 1080; };
+let rankW = null;
+addEventListener('resize', () => { const w = rankWidth(); if (w !== rankW && (w < 1080 || rankW < 1080)) { rankW = w; const rows = selected(); if (rows.length) mount('#c-rank', rankedDots(rows, { id: 'rk', width: w }), rows); } });
+
 let firstRender = true;
 function render() {
   const rows = selected();
@@ -645,14 +663,16 @@ function render() {
   winInput.setAttribute('aria-valuetext', `${winText(state.win)}, ${nModels} models`);
   const span = days == null ? 'at any time' : `${fmtDate(windowStart(ANCHOR, days)).replace(/ \d{4}$/, '')} – ${fmtDate(ANCHOR)}`;
   if (!rows.length) {
-    ['#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
+    ['#c-rank', '#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
     $('#unplotted').textContent = days == null ? '' : `No model in this selection was released ${span}. Slide the release window wider.`;
   } else {
     const M = METRICS[state.metric];
+    mount('#c-rank', rankedDots(rows, { id: 'rk', width: rankWidth() }), rows);
     mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
     $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + unplottedNote(rows, M);
     mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
+  rankW = rankWidth();
   renderTable(rows);
   firstRender = false;
   window.dispatchEvent(new CustomEvent('dsw-filter', { detail: rows }));

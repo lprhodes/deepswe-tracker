@@ -77,8 +77,7 @@ export const STYLE_RULES = `
 .viz .lbl-eff{fill:var(--v-ink2);font-size:9px;letter-spacing:.08em;font-family:"Spline Sans Mono",ui-monospace,monospace;paint-order:stroke;stroke:var(--v-paper);stroke-width:3px;stroke-linejoin:round}
 .viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
-.viz .rail-bg{fill:var(--v-grid);opacity:.45}
-.viz .rail-h{fill:var(--v-ink);font-size:12px;font-weight:650}
+.viz .rowrule{stroke:var(--v-grid);stroke-width:1}
 .viz .glbl text,.viz .glbl .leader{pointer-events:none}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
@@ -135,9 +134,10 @@ function markPath(src, lab, x, y, cls = 'mk') {
   if (src === 's3') return `<rect class="${cls} ${src} ${lab}" x="${x - 4.5}" y="${y - 4.5}" width="9" height="9" pointer-events="none"/>`;
   return `<circle class="${cls} ${src} ${lab}" cx="${x}" cy="${y}" r="5" pointer-events="none"/>`;
 }
-function mark(r, i, x, y) {
+// The hit target is larger than the mark, smaller where marks pack closer than 12px (the ranked lanes).
+function mark(r, i, x, y, hitR = 12) {
   const fx = x.toFixed(1), fy = y.toFixed(1);
-  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="12"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
+  return `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${fx}" data-y="${fy}"><circle class="hit" data-i="${i}" tabindex="0" cx="${fx}" cy="${fy}" r="${hitR}"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></circle>${markPath(CLS[r.source_type], labClass(r.lab), +fx, +fy)}</g>`;
 }
 
 function open(w, h, id, title, desc, embedStyle) {
@@ -233,23 +233,17 @@ export function frontier(rows, field) {
 // runs from the most expensive on the left to the cheapest on the right (log by default, or linear),
 // and each model's effort levels are joined in order from low to max. Lines are drawn first and every
 // point after, so a model measured at one effort level is never hidden under another model's line.
-// A model with no result that publishes this measure is listed beside the plot by its best score, so a
-// model without a published cost still appears. Other unmeasured readings are in the table.
 export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle = false, width = 1080, height = 680, id = 'sc', labelTop = 30, title: titleText } = {}) {
   const M = METRICS[metric];
   const all = rows.map((r, i) => ({ r, i }));
   const pts = all.filter(p => p.r[M.field] > 0);
-  const plotted = new Set(pts.map(p => p.r.model_key));
-  const unlisted = bestOf(all.filter(p => !plotted.has(p.r.model_key))).sort((a, b) => b.r.score_pct - a.r.score_pct);
   const title = titleText || `DeepSWE 1.1 score against ${M.noun}`;
   const desc = `Scatter of ${pts.length} results: pass@1 on the vertical axis, ${M.label.toLowerCase()} on the horizontal from highest at left to lowest at right; each model’s effort levels are joined in order from low to max.` +
-    (unlisted.length ? ` Beside it, ${unlisted.length} models with no published ${M.noun}, listed by best score.` : '');
+    '';
   if (!all.length) return open(width, 120, id, title, 'No results in this selection.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection.</text></svg>`;
   const key = embedStyle ? legend(24, 80, rows, width - 28) : null;
-  const railW = unlisted.length ? 236 : 0;
-  const m = { left: 60, right: 28 + railW, top: key ? key.y + 44 : 48, bottom: 58 };
+  const m = { left: 60, right: 28, top: key ? key.y + 44 : 48, bottom: 58 };
   const right = width - m.right, bottom = height - m.bottom;
-  const railX = right + 30, railR = width - 28;
   const y1 = scoreTop(rows);
   const sy = v => bottom - (v / y1) * (bottom - m.top);
   const plotW = right - m.left, plotH = bottom - m.top;
@@ -329,50 +323,87 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     .filter((p, k) => k < labelTop || frontModels.has(p.r.model_key));
   const items = chosen.map(p => ({ cx: p.cx, cy: p.cy, model: p.r.model_key, cls: labClass(p.r.lab), text: p.r.display_name, sub: (p.r.effort || '').toUpperCase() }));
   svg += placeLabels(items, { left: m.left, right, top: m.top, bottom }, placed.map(p => ({ x: p.cx - 5, y: p.cy - 5, w: 10, h: 10 })));
-  if (unlisted.length) svg += unlistedPanel(unlisted, M, { x: railX, right: railR, top: m.top, bottom });
   return svg + '</svg>';
 }
 
-// The line under the score chart: what the list beside it holds and what only the table holds.
+// The line under the cost chart: how much of the selection it cannot place.
 export function unplottedNote(rows, M) {
   const plotted = new Set(rows.filter(r => r[M.field] > 0).map(r => r.model_key));
-  const listed = new Set(rows.filter(r => !plotted.has(r.model_key)).map(r => r.model_key)).size;
-  const loose = rows.filter(r => !(r[M.field] > 0) && plotted.has(r.model_key)).length;
-  return (listed ? ` ${listed} model${listed === 1 ? ' publishes' : 's publish'} a score but no ${M.noun}; ${listed === 1 ? 'it is' : 'they are'} listed beside the chart.` : '') +
-    (loose ? ` ${loose} more reading${loose === 1 ? '' : 's'} without ${/^[aeiou]/i.test(M.noun) ? 'an' : 'a'} ${M.noun} ${loose === 1 ? 'is' : 'are'} in the table.` : '');
+  const unplaced = new Set(rows.filter(r => !plotted.has(r.model_key)).map(r => r.model_key)).size;
+  return unplaced ? ` ${unplaced} model${unplaced === 1 ? ' publishes' : 's publish'} a score but no ${M.noun}, so ${unplaced === 1 ? 'it is' : 'they are'} only in Fig. 1 and the table.` : '';
 }
 
-// Each model's best result in a set of placed or unplaced results.
+// Each model's best result in a set of placed results.
 function bestOf(set) {
   const b = new Map();
   for (const p of set) { const x = b.get(p.r.model_key); if (!x || p.r.score_pct > x.r.score_pct) b.set(p.r.model_key, p); }
   return [...b.values()];
 }
 
-// The models a chart cannot place, as a short ranked list beside it: mark, name, effort, best score.
-// Rows that do not fit are counted rather than drawn; the table has every reading.
-function unlistedPanel(list, M, box) {
-  const H = 22, cap = Math.floor((box.bottom - box.top - 12) / H);
-  const shown = list.length > cap ? list.slice(0, cap - 1) : list;
-  const scoreX = box.right - 6, nameX = box.x + 14;
-  let out = `<rect class="rail-bg" x="${box.x - 10}" y="${box.top}" width="${box.right - box.x + 10}" height="${box.bottom - box.top}" rx="6" aria-hidden="true"/>` +
-    `<text class="rail-h" x="${box.x - 2}" y="${box.top - 20}">No ${esc(M.short.toLowerCase())} published</text>` +
-    `<text class="tick" x="${scoreX}" y="${box.top - 20}" text-anchor="end">best</text>`;
-  shown.forEach((p, k) => {
-    const y = box.top + 18 + k * H, r = p.r;
-    const room = scoreX - 38 - nameX;
-    let name = r.display_name;
-    if (textW(name, 12) > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
-    const eff = (r.effort || '').toUpperCase();
-    const showEff = eff && textW(name, 12) + textW(eff, 9) + 6 <= room;
-    out += `<g class="grp glbl ${labClass(r.lab)}" data-model="${esc(r.model_key)}"><g class="pt" data-k="${esc(rowKey(r))}">` +
-      `<rect class="hit" data-i="${p.i}" tabindex="0" x="${box.x - 6}" y="${y - 11}" width="${box.right - box.x + 2}" height="${H}"><title>${esc(pointLabel(r))}: ${fmtPct(r.score_pct)}</title></rect>` +
-      markPath(CLS[r.source_type], labClass(r.lab), box.x + 4, y - 4) + '</g>' +
-      `<text class="lbl" x="${nameX}" y="${y}">${esc(name)}${showEff ? `<tspan class="lbl-eff" dx="6">${esc(eff)}</tspan>` : ''}</text>` +
-      `<text class="val" x="${scoreX}" y="${y}" text-anchor="end">${fmtPct(r.score_pct)}</text></g>`;
+// Every model on one score axis, ranked by its best result: the primary view, because a score is the
+// one thing every reading has. A row holds one lane per measurer (official board, lab, independent),
+// and a measurer's effort levels are joined from low to max, as on the official board.
+export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: titleText } = {}) {
+  const title = titleText || 'DeepSWE 1.1 score by model';
+  const byModel = new Map();
+  rows.forEach((r, i) => {
+    if (!byModel.has(r.model_key)) byModel.set(r.model_key, { r, ps: [] });
+    const mo = byModel.get(r.model_key);
+    mo.ps.push({ r, i });
+    if (r.score_pct > mo.r.score_pct) mo.r = r;
   });
-  if (shown.length < list.length) out += `<text class="note" x="${nameX}" y="${box.top + 18 + shown.length * H}">and ${list.length - shown.length} more in the table</text>`;
-  return out;
+  const models = [...byModel.values()].sort((a, b) => b.r.score_pct - a.r.score_pct || a.r.display_name.localeCompare(b.r.display_name));
+  const desc = `${models.length} models ranked by best pass@1. Each dot is a reading, coloured by lab and shaped by who measured it; one measurer's effort levels are joined from low to max.`;
+  if (!models.length) return open(width, 120, id, title, 'No results in this selection.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection.</text></svg>`;
+  const key = embedStyle ? legend(24, 80, rows, width - 28) : null;
+  // On a narrow screen the name and best score sit on a line above the dots, which take the full width.
+  const compact = width < 640, HEAD = compact ? 20 : 0;
+  const m = compact ? { left: 16, right: 16, top: 40, bottom: 34 } : { left: 236, right: 124, top: key ? key.y + 62 : 44, bottom: 40 };
+  const max = barMax(rows), x0 = m.left, x1 = width - m.right;
+  const sx = v => x0 + (v / max) * (x1 - x0);
+  const LANE = 11, PAD = 7;
+  const laneOf = mo => SERIES.filter(sr => mo.ps.some(p => p.r.source_type === sr.key)).map(sr => sr.key);
+  const heights = models.map(mo => HEAD + PAD * 2 + LANE * laneOf(mo).length);
+  const bottom = m.top + heights.reduce((a, b) => a + b, 0);
+  const height = bottom + m.bottom;
+  let svg = open(width, height, id, title, desc, embedStyle);
+  if (embedStyle) svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Ranked by best result. Colour is the lab; shape is who measured it; a line joins one measurer’s effort levels from low to max.</text>` + key.svg;
+  svg += `<text class="y-title" x="${x0}" y="${m.top - 30}">DeepSWE score <tspan class="dir">→ more ${compact ? 'solved' : 'of the 113 tasks solved'}</tspan></text>`;
+  if (!compact) svg += `<text class="tick" x="${width - 24}" y="${m.top - 12}" text-anchor="end">best</text>`;
+  for (let v = 0; v <= max; v += 20) {
+    const x = sx(v).toFixed(1);
+    svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top - 4}" y2="${bottom}"/><text class="tick" x="${x}" y="${m.top - 12}" text-anchor="middle">${v}%</text>`;
+    if (models.length > 12) svg += `<text class="tick" x="${x}" y="${bottom + 16}" text-anchor="middle">${v}%</text>`;
+  }
+  let y = m.top, lines = '', body = '';
+  models.forEach((mo, k) => {
+    const lanes = laneOf(mo), h = heights[k], r = mo.r, model = esc(r.model_key);
+    const edge = compact ? m.left : 24;
+    if (k) body += `<line class="rowrule" x1="${edge}" x2="${width - edge}" y1="${y}" y2="${y}"/>`;
+    const cy = compact ? y + 14 : y + h / 2;
+    let name = r.display_name;
+    const room = compact ? width - m.left - m.right - 110 : m.left - 48;
+    if (textW(name, 12) > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
+    const best = `${fmtPct(r.score_pct)}${r.effort ? `<tspan class="lbl-eff" dx="5">${esc(r.effort.toUpperCase())}</tspan>` : ''}`;
+    body += `<g class="grp glbl ${labClass(r.lab)}" data-model="${model}"><rect class="sw ${labClass(r.lab)}" x="${edge}" y="${(cy - 5).toFixed(1)}" width="10" height="10" rx="2"/>` +
+      `<text class="lbl" x="${edge + 18}" y="${(cy + 4).toFixed(1)}">${esc(name)}</text>` +
+      (compact ? `<text class="val" x="${width - m.right}" y="${(cy + 4).toFixed(1)}" text-anchor="end">${best}</text>` : `<text class="val" x="${x1 + 16}" y="${(cy + 4).toFixed(1)}">${best}</text>`) + '</g>';
+    lanes.forEach((src, l) => {
+      const ly = y + HEAD + PAD + LANE * l + LANE / 2;
+      const ps = mo.ps.filter(p => p.r.source_type === src).map(p => ({ ...p, cx: sx(p.r.score_pct), cy: ly }));
+      const groups = new Map();
+      for (const p of ps) { const g = groupKey(p.r); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(p); }
+      for (const gs of groups.values()) {
+        const byEffort = new Map();
+        for (const p of gs) if (effortRank(p.r.effort) >= 0 && !(byEffort.get(p.r.effort)?.r.score_pct >= p.r.score_pct)) byEffort.set(p.r.effort, p);
+        const lad = [...byEffort.values()].sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
+        if (lad.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[src]} ${labClass(r.lab)}" d="M${lad.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
+      }
+      body += `<g class="grp" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy, 7)).join('') + '</g>';
+    });
+    y += h;
+  });
+  return svg + lines + body + '</svg>';
 }
 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%

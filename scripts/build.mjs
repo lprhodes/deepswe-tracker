@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS, unplottedNote } from '../site/charts.mjs';
+import { effortScatter, rankedDots, spreadBars, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS, unplottedNote } from '../site/charts.mjs';
 import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -104,6 +104,7 @@ const bestRows = rows.filter(r => best.get(r.model_key + '|' + r.source_type) ==
 const PAGE_TOKENS = '.viz{--v-good:var(--good);--v-good-ink:var(--good-ink);--v-paper:var(--sheet);--v-ink:var(--ink);--v-ink2:var(--ink-2);--v-muted:var(--muted);--v-grid:var(--grid);--v-rule:var(--rule);font-family:var(--sans)}';
 const outputs = {
   'data/deepswe-1.1.json': JSON.stringify(dataset, null, 2) + '\n',
+  'charts/ranked.svg': rankedDots(recent, { embedStyle: true, id: 'readme-rk', title: `DeepSWE 1.1 score by model: models released ${span}` }) + '\n',
   'charts/score-vs-cost.svg': effortScatter(recent, { embedStyle: true, id: 'readme-sc', height: 640, title: `DeepSWE 1.1 score against cost per task: models released ${span}` }) + '\n',
   'charts/best-per-model.svg': spreadBars(bestRows, { embedStyle: true, id: 'readme-sp' }) + '\n',
   'SOURCES.md': sourcesMarkdown(sources),
@@ -113,6 +114,7 @@ const outputs = {
     .replace('<!--__TFOOT__-->', () => tfootHtml(max))
     // Every reading is in the table without scripts; older ones are hidden only once scripts run.
     .replace('<!--__ROWS__-->', () => rows.map(r => readingRowHtml(r, srcByUrl.get(r.source_url), max, priceSrc).replace(/^<tr /, inWindow(r, days, anchor) ? '<tr ' : '<tr class="out" ')).join('\n'))
+    .replace('<!--__RANKED__-->', () => rankedDots(recent, { id: 'rk' }))
     .replace('<!--__SCATTER__-->', () => effortScatter(recent, { id: 'sc' }))
     .replace('<!--__UNPLOTTED__-->', () => unplotted)
     .replace('<!--__SPREAD__-->', () => spreadBars(recent, { id: 'sp', onlyMulti: true }))
