@@ -456,14 +456,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
 <script type="application/json" id="report-data">
 {
  "project": "deepswe-tracker",
- "updated": "2026-10-09T19:30:00+11:00",
+ "updated": "2026-10-09T21:10:00+11:00",
  "verdict": {
   "token": "done",
   "number": "210",
   "unit": "readings of 80 models",
-  "headline": "Live at deepswe.dev in the official board's chart forms; every score cites its source.",
-  "run_label": "first build",
-  "head_sha": "e9b5488"
+  "headline": "Score chart reworked for reading: every point visible, one label per model, the frontier keyed.",
+  "run_label": "chart readability pass",
+  "head_sha": "4fc30c5"
  },
  "tasks": [
   {
@@ -553,6 +553,14 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "stage": "code written",
    "outcome": "done",
    "note": "1 reading qualifies (Laguna S 2.1)"
+  },
+  {
+   "id": "P-5",
+   "title": "Make the score chart readable in log and linear",
+   "origin": "carried over",
+   "stage": "code written",
+   "outcome": "done",
+   "note": "points over lines, frontier band, linear axis capped"
   }
  ],
  "gates": [
@@ -580,12 +588,12 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "kind": "design"
   },
   {
-   "name": "Design lint: 0 critical; its 1 major flag misreads a hyperlink",
+   "name": "Design lint: 0 critical; all 41 major flags are source links read as loads",
    "command": "design-lint.py index.html",
-   "exit_code": 1,
+   "exit_code": 0,
    "state": "done",
    "kind": "design",
-   "counts": "1/1"
+   "counts": "41/41"
   },
   {
    "name": "UX lint: no failures",
@@ -596,10 +604,10 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "kind": "design"
   },
   {
-   "name": "Page loads with no errors at three sizes",
-   "command": "Playwright: 1360 light, 1360 dark, 390 mobile",
+   "name": "Score chart renders with no errors, log and linear, light and dark",
+   "command": "Playwright: 1360px, 4 captures + README SVGs",
    "exit_code": 0,
-   "counts": "3/3",
+   "counts": "4/4",
    "state": "done",
    "kind": "tests"
   },
@@ -650,7 +658,7 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
    "score": 20,
    "severity": "low",
    "file_line": "index.html",
-   "claim": "Design lint flags the GitHub link as an external load; it is a hyperlink",
+   "claim": "Design lint flags the 41 source links as external loads; they are hyperlinks",
    "state": "waived"
   }
  ],
@@ -681,8 +689,8 @@ th[aria-sort="ascending"] button.sort, th[aria-sort="descending"] button.sort { 
  ],
  "not_checked": [
   {
-   "axis": "3D overview frame rate",
-   "why_not": "The headless browser reports no frame timing."
+   "axis": "Score chart on a phone",
+   "why_not": "Not captured this round; the chart scales down from 1080px wide."
   },
   {
    "axis": "Screen-reader reading of the page",
