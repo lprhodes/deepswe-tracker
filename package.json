@@ -1,0 +1,11 @@
+{
+  "name": "deepswe-tracker",
+  "private": true,
+  "type": "module",
+  "description": "DeepSWE 1.1 scores from the official Datacurve leaderboard and from lab-reported results, with charts.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check"
+  },
+  "engines": { "node": ">=20" }
+}
