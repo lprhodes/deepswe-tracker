@@ -348,7 +348,7 @@ function bestOf(set) {
 // Every model on one score axis, ranked by its best result: the primary view, because a score is the
 // one thing every reading has. A row holds one lane per measurer (official board, lab, independent),
 // and a measurer's effort levels are joined from low to max, as on the official board.
-export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: titleText } = {}) {
+export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: titleText, max: maxIn } = {}) {
   const title = titleText || 'DeepSWE 1.1 score by model';
   const byModel = new Map();
   rows.forEach((r, i) => {
@@ -364,7 +364,7 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
   // On a narrow screen the name and best score sit on a line above the dots, which take the full width.
   const compact = width < 640, HEAD = compact ? 20 : 0;
   const m = compact ? { left: 16, right: 16, top: 40, bottom: 34 } : { left: 236, right: 124, top: key ? key.y + 62 : 44, bottom: 40 };
-  const max = barMax(rows), x0 = m.left, x1 = width - m.right;
+  const max = maxIn ?? barMax(rows), x0 = m.left, x1 = width - m.right;
   const sx = v => x0 + (v / max) * (x1 - x0);
   // Each lane holds a row of dots and, under them, their effort tags.
   const LANE = 21, PAD = 4;
@@ -425,6 +425,20 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
     y += h;
   });
   return svg + lines + body + '</svg>';
+}
+
+// For print: the ranked chart as several charts of about `size` models each, every one with its own
+// axis, on one shared scale, so the figure can break across pages instead of jumping to a fresh one.
+export function rankedDotsPages(rows, { size = 20, width = 1080 } = {}) {
+  const best = new Map();
+  for (const r of rows) if (!best.has(r.model_key) || r.score_pct > best.get(r.model_key).score_pct) best.set(r.model_key, r);
+  const order = [...best.values()].sort((a, b) => b.score_pct - a.score_pct || a.display_name.localeCompare(b.display_name)).map(r => r.model_key);
+  const max = barMax(rows), out = [];
+  for (let i = 0; i < order.length; i += size) {
+    const keys = new Set(order.slice(i, i + size));
+    out.push(rankedDots(rows.filter(r => keys.has(r.model_key)), { id: `rkp${i}`, width, max }));
+  }
+  return out.join('');
 }
 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%

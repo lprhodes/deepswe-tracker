@@ -210,7 +210,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
   thead th{top:0}
 }
 @media print{
-  nav.controls,#theme,.reset,#metricGroup,#scaleGroup,#tip,#citepop{display:none!important}
+  nav.controls,#theme,.reset,#metricGroup,#scaleGroup,#tip,#citepop,.screen-only{display:none!important}
+  #c-rank svg{break-inside:avoid;margin-bottom:12px}
   thead th{position:static}
   .panel,.tablewrap{box-shadow:none}
   tbody tr{break-inside:avoid}
@@ -288,7 +289,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Every model</span>
         <h2 id="rk-h">Every model, ranked by its best score</h2>
-        <p>One row per model, with its best score at the right. Each dot is one reading, lettered with its effort level, and a line joins one measurer’s effort levels, as on the official board. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its source.</p>
+        <p>One row per model, with its best score at the right. Each dot is one reading, lettered with its effort level, and a line joins one measurer’s effort levels, as on the official board. Nothing here needs a cost, so every model in the selection is on it.<span class="screen-only"> Hover over or tap a dot for its source.</span></p>
       </div>
     </div>
     <div class="legend" id="legend" role="group" aria-label="Key">
@@ -304,7 +305,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 2 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it, for the readings that publish a cost: each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it, for the readings that publish a cost: each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task.<span class="screen-only"> Hover over or tap a point for its source; point at a row in the table to pick out its line.</span></p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
@@ -317,7 +318,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 3 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
-        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices. Select a heading to sort.</p>
+        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices.<span class="screen-only"> Select a heading to sort.</span></p>
       </div>
       <span class="field" id="tableCount"></span>
     </div>
@@ -690,6 +691,12 @@ window.addEventListener('hashchange', showRow);
 const ctrl = $('nav.controls');
 const setCtrlH = () => document.documentElement.style.setProperty('--ctrl-h', getComputedStyle(ctrl).position === 'sticky' ? `${ctrl.offsetHeight}px` : '0px');
 new ResizeObserver(setCtrlH).observe(ctrl); setCtrlH();
+
+// ---------- print ----------
+// The ranked chart prints as page-sized groups of models, each with its own axis, so it can break
+// across pages; the screen layout comes back when printing ends.
+addEventListener('beforeprint', () => { const rows = selected(); if (rows.length) $('#c-rank').innerHTML = rankedDotsPages(rows); });
+addEventListener('afterprint', () => { firstRender = true; render(); });
 
 // ---------- render ----------
 // The ranked chart is drawn at the panel's own width below 640px, so a phone gets the stacked layout

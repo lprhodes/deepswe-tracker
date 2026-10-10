@@ -210,7 +210,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
   thead th{top:0}
 }
 @media print{
-  nav.controls,#theme,.reset,#metricGroup,#scaleGroup,#tip,#citepop{display:none!important}
+  nav.controls,#theme,.reset,#metricGroup,#scaleGroup,#tip,#citepop,.screen-only{display:none!important}
+  #c-rank svg{break-inside:avoid;margin-bottom:12px}
   thead th{position:static}
   .panel,.tablewrap{box-shadow:none}
   tbody tr{break-inside:avoid}
@@ -330,7 +331,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Every model</span>
         <h2 id="rk-h">Every model, ranked by its best score</h2>
-        <p>One row per model, with its best score at the right. Each dot is one reading, lettered with its effort level, and a line joins one measurer’s effort levels, as on the official board. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its source.</p>
+        <p>One row per model, with its best score at the right. Each dot is one reading, lettered with its effort level, and a line joins one measurer’s effort levels, as on the official board. Nothing here needs a cost, so every model in the selection is on it.<span class="screen-only"> Hover over or tap a dot for its source.</span></p>
       </div>
     </div>
     <div class="legend" id="legend" role="group" aria-label="Key">
@@ -346,7 +347,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 2 · Readings against cost</span>
         <h2 id="sc-h">Score against what it costs to get it</h2>
-        <p>Drawn the way the official board draws it, for the readings that publish a cost: each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task. Hover a point for its source; hover a row in the table to pick out its line.</p>
+        <p>Drawn the way the official board draws it, for the readings that publish a cost: each line joins one model’s effort levels from low to max. The models you want are top right: higher up solves more of the 113 tasks, further right costs less per task.<span class="screen-only"> Hover over or tap a point for its source; point at a row in the table to pick out its line.</span></p>
       </div>
       <div class="cgroup"><div class="seg" role="group" aria-label="Horizontal axis" id="metricGroup"></div><div class="seg" role="group" aria-label="Axis scale" id="scaleGroup"></div></div>
     </div>
@@ -359,7 +360,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 3 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
-        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices. Select a heading to sort.</p>
+        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices.<span class="screen-only"> Select a heading to sort.</span></p>
       </div>
       <span class="field" id="tableCount"></span>
     </div>
@@ -1011,7 +1012,7 @@ function bestOf(set) {
 // Every model on one score axis, ranked by its best result: the primary view, because a score is the
 // one thing every reading has. A row holds one lane per measurer (official board, lab, independent),
 // and a measurer's effort levels are joined from low to max, as on the official board.
-function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: titleText } = {}) {
+function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: titleText, max: maxIn } = {}) {
   const title = titleText || 'DeepSWE 1.1 score by model';
   const byModel = new Map();
   rows.forEach((r, i) => {
@@ -1027,7 +1028,7 @@ function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: 
   // On a narrow screen the name and best score sit on a line above the dots, which take the full width.
   const compact = width < 640, HEAD = compact ? 20 : 0;
   const m = compact ? { left: 16, right: 16, top: 40, bottom: 34 } : { left: 236, right: 124, top: key ? key.y + 62 : 44, bottom: 40 };
-  const max = barMax(rows), x0 = m.left, x1 = width - m.right;
+  const max = maxIn ?? barMax(rows), x0 = m.left, x1 = width - m.right;
   const sx = v => x0 + (v / max) * (x1 - x0);
   // Each lane holds a row of dots and, under them, their effort tags.
   const LANE = 21, PAD = 4;
@@ -1088,6 +1089,20 @@ function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', title: 
     y += h;
   });
   return svg + lines + body + '</svg>';
+}
+
+// For print: the ranked chart as several charts of about `size` models each, every one with its own
+// axis, on one shared scale, so the figure can break across pages instead of jumping to a fresh one.
+function rankedDotsPages(rows, { size = 20, width = 1080 } = {}) {
+  const best = new Map();
+  for (const r of rows) if (!best.has(r.model_key) || r.score_pct > best.get(r.model_key).score_pct) best.set(r.model_key, r);
+  const order = [...best.values()].sort((a, b) => b.score_pct - a.score_pct || a.display_name.localeCompare(b.display_name)).map(r => r.model_key);
+  const max = barMax(rows), out = [];
+  for (let i = 0; i < order.length; i += size) {
+    const keys = new Set(order.slice(i, i + size));
+    out.push(rankedDots(rows.filter(r => keys.has(r.model_key)), { id: `rkp${i}`, width, max }));
+  }
+  return out.join('');
 }
 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%
@@ -1492,6 +1507,12 @@ window.addEventListener('hashchange', showRow);
 const ctrl = $('nav.controls');
 const setCtrlH = () => document.documentElement.style.setProperty('--ctrl-h', getComputedStyle(ctrl).position === 'sticky' ? `${ctrl.offsetHeight}px` : '0px');
 new ResizeObserver(setCtrlH).observe(ctrl); setCtrlH();
+
+// ---------- print ----------
+// The ranked chart prints as page-sized groups of models, each with its own axis, so it can break
+// across pages; the screen layout comes back when printing ends.
+addEventListener('beforeprint', () => { const rows = selected(); if (rows.length) $('#c-rank').innerHTML = rankedDotsPages(rows); });
+addEventListener('afterprint', () => { firstRender = true; render(); });
 
 // ---------- render ----------
 // The ranked chart is drawn at the panel's own width below 640px, so a phone gets the stacked layout
