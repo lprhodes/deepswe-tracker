@@ -112,7 +112,7 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:calc(var(--ctrl-h,0px)
 .bhead p{margin:var(--space-1) 0 0;color:var(--ink-2);max-width:72ch;text-wrap:pretty}
 .panel{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow-x:auto}
 .panel svg{display:block;width:100%;height:auto;min-width:720px}
-#c-rank svg{min-width:0}
+#c-rank svg,#c-scatter svg{min-width:0}
 /* The key: one labelled row per encoding (who measured, effort, lab), so shape, letter and colour are never read as one list. */
 .legend{display:grid;gap:var(--space-2);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
 .legend .krow{display:grid;grid-template-columns:7.5rem 1fr;align-items:center;gap:var(--space-3)}
@@ -318,7 +318,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 3 · Readings</span>
         <h2 id="tb-h">Every reading, ranked</h2>
-        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices.<span class="screen-only"> Select a heading to sort.</span></p>
+        <p>The official leaderboard’s form: bars on a 0–80% scale coloured by lab, with the 95% interval as a whisker where the source gives one. The number after each score is its source in the list below; a cost marked est. is estimated from list prices, and a dash means the source did not publish that figure.<span class="screen-only"> Select a heading to sort.</span></p>
       </div>
       <span class="field" id="tableCount"></span>
     </div>
@@ -399,6 +399,8 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => wind
 const ALL_EFF = [...EFFORTS, 'other'];
 const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: new Set(ALL_EFF), offLabs: new Set(), offModels: new Set(), offConfigs: new Set(), win: DEFAULT_WINDOW, metric: 'cost', scale: 'log', sort: { key: 'score_pct', dir: -1 } };
 const ANCHOR = windowAnchor(ROWS, meta.as_of);
+// Counts in the source chips and pickers are readings inside the current release window.
+const inWin = r => inWindow(r, WINDOWS[state.win], ANCHOR);
 const isDefault = () => state.sources.size === 3 && state.mode === 'all' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.win === DEFAULT_WINDOW;
 
 function selected(anyRelease = false) {
@@ -421,7 +423,8 @@ for (const s of SERIES) {
   const b = el('button', { type: 'button', className: 'chip src' });
   b.setAttribute('aria-pressed', 'true');
   b.innerHTML = shapeSvg(s.cls);
-  b.append(s.label, el('span', { className: 'n', textContent: String(ROWS.filter(r => r.source_type === s.key).length) }));
+  const n = el('span', { className: 'n' }); n.dataset.src = s.key;
+  b.append(s.label, n);
   b.addEventListener('click', () => { state.sources.has(s.key) ? state.sources.delete(s.key) : state.sources.add(s.key); b.setAttribute('aria-pressed', String(state.sources.has(s.key))); render(); });
   $('#srcGroup').append(b);
 }
@@ -460,7 +463,7 @@ const segment = (host, options, get, set) => {
 const winInput = $('#win');
 winInput.value = String(state.win);
 const winText = i => WINDOWS[i] == null ? 'at any time' : `in the last ${WINDOWS[i]} days`;
-winInput.addEventListener('input', () => { state.win = +winInput.value; render(); });
+winInput.addEventListener('input', () => { state.win = +winInput.value; windowCounts(); render(); });
 segment($('#metricGroup'), Object.entries(METRICS).map(([k, m]) => [k, m.short]), () => state.metric, v => (state.metric = v));
 segment($('#scaleGroup'), [['log', 'Log'], ['linear', 'Linear']], () => state.scale, v => (state.scale = v));
 
@@ -495,13 +498,20 @@ function buildPicker(body, groups, isOn, toggle, setAll, labelOf, countOf) {
 const byLab = new Map(); for (const m of MODELS) { if (!byLab.has(m.lab)) byLab.set(m.lab, []); byLab.get(m.lab).push(m); }
 const LABS = [...new Set(ROWS.map(r => r.lab))].sort((a, b) => a.localeCompare(b)).map(l => ({ key: l, name: l }));
 const drawLabs = buildPicker($('#labBody'), [['Labs', LABS]], l => !state.offLabs.has(l.key), (l, on) => (on ? state.offLabs.delete(l.key) : state.offLabs.add(l.key)),
-  on => { state.offLabs.clear(); if (!on) LABS.forEach(l => state.offLabs.add(l.key)); }, l => l.name, l => String(ROWS.filter(r => r.lab === l.key).length));
+  on => { state.offLabs.clear(); if (!on) LABS.forEach(l => state.offLabs.add(l.key)); }, l => l.name, l => String(ROWS.filter(r => r.lab === l.key && inWin(r)).length));
 const drawModels = buildPicker($('#modelBody'), [...byLab], m => !state.offModels.has(m.key), (m, on) => (on ? state.offModels.delete(m.key) : state.offModels.add(m.key)),
-  on => { state.offModels.clear(); if (!on) MODELS.forEach(m => state.offModels.add(m.key)); }, m => m.name, m => String(ROWS.filter(r => r.model_key === m.key).length));
+  on => { state.offModels.clear(); if (!on) MODELS.forEach(m => state.offModels.add(m.key)); }, m => m.name, m => String(ROWS.filter(r => r.model_key === m.key && inWin(r)).length));
 const byModelRows = new Map(); for (const r of ROWS) { const n = r.display_name; if (!byModelRows.has(n)) byModelRows.set(n, []); byModelRows.get(n).push(r); }
 const configLabel = r => `${(r.effort || 'unstated').toUpperCase()} · ${SERIES.find(s => s.key === r.source_type).label}${r.harness && r.harness !== 'mini-swe-agent' ? ' · ' + r.harness : ''}`;
 const drawConfigs = buildPicker($('#configBody'), [...byModelRows].sort((a, b) => a[0].localeCompare(b[0])), r => !state.offConfigs.has(r._key), (r, on) => (on ? state.offConfigs.delete(r._key) : state.offConfigs.add(r._key)),
   on => { state.offConfigs.clear(); if (!on) ROWS.forEach(r => state.offConfigs.add(r._key)); }, configLabel, r => fmtPct(r.score_pct));
+// Source chip and picker counts follow the release window; redrawn only when the window changes, so
+// an open picker keeps its focus while its boxes are ticked.
+function windowCounts() {
+  document.querySelectorAll('#srcGroup .n[data-src]').forEach(n => (n.textContent = String(ROWS.filter(r => r.source_type === n.dataset.src && inWin(r)).length)));
+  drawLabs(); drawModels();
+}
+windowCounts();
 document.querySelectorAll('.pop').forEach(p => p.addEventListener('toggle', () => {
   if (!p.open) return;
   document.querySelectorAll('.pop').forEach(o => o !== p && (o.open = false));
@@ -517,6 +527,7 @@ $('#reset').addEventListener('click', () => {
   document.querySelectorAll('#srcGroup .chip, #effortGroup .chip').forEach(b => b.setAttribute('aria-pressed', 'true'));
   document.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.mode === 'all')));
   winInput.value = String(DEFAULT_WINDOW);
+  windowCounts();
   drawLabs(); drawModels(); drawConfigs(); render();
 });
 
@@ -680,7 +691,7 @@ function showRow() {
   const id = location.hash.slice(1);
   if (!id.startsWith('row-') || document.getElementById(id)) return;
   $('#reset').click();
-  state.win = WINDOWS.length - 1; winInput.value = String(state.win);
+  state.win = WINDOWS.length - 1; winInput.value = String(state.win); windowCounts();
   document.querySelector('[data-mode="all"]').click();
   requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'center' }));
 }
@@ -702,8 +713,17 @@ addEventListener('afterprint', () => { firstRender = true; render(); });
 // The ranked chart is drawn at the panel's own width below 640px, so a phone gets the stacked layout
 // instead of a sideways scroll; it redraws when the window crosses that width.
 const rankWidth = () => { const w = $('#c-rank').clientWidth; return w && w < 640 ? Math.max(320, Math.round(w)) : 1080; };
+const scatterSize = () => { const w = $('#c-scatter').clientWidth; return w && w < 640 ? { width: Math.max(320, Math.round(w)), height: Math.round(Math.max(320, w) * 1.1), labelTop: 10 } : {}; };
 let rankW = null;
-addEventListener('resize', () => { const w = rankWidth(); if (w !== rankW && (w < 1080 || rankW < 1080)) { rankW = w; const rows = selected(); if (rows.length) mount('#c-rank', rankedDots(rows, { id: 'rk', width: w }), rows); } });
+addEventListener('resize', () => {
+  const w = rankWidth();
+  if (w === rankW || (w >= 1080 && rankW >= 1080)) return;
+  rankW = w;
+  const rows = selected();
+  if (!rows.length) return;
+  mount('#c-rank', rankedDots(rows, { id: 'rk', width: w }), rows);
+  mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc', ...scatterSize() }), rows);
+});
 
 let firstRender = true;
 function render() {
@@ -725,7 +745,7 @@ function render() {
   } else {
     const M = METRICS[state.metric];
     mount('#c-rank', rankedDots(rows, { id: 'rk', width: rankWidth() }), rows);
-    mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
+    mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc', ...scatterSize() }), rows);
     $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + unplottedNote(rows, M);
   }
   rankW = rankWidth();

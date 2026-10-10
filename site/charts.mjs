@@ -247,7 +247,9 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     '';
   if (!all.length) return open(width, 120, id, title, 'No results in this selection.', embedStyle) + `<text class="sub" x="24" y="64">No results in this selection.</text></svg>`;
   const key = embedStyle ? legend(24, 80, rows, width - 28) : null;
-  const m = { left: 60, right: 28, top: key ? key.y + 44 : 48, bottom: 58 };
+  // On a narrow screen: tighter margins, shorter titles and half the ticks, drawn at the panel's width.
+  const compact = width < 640;
+  const m = compact ? { left: 40, right: 12, top: 50, bottom: 46 } : { left: 60, right: 28, top: key ? key.y + 44 : 48, bottom: 58 };
   const right = width - m.right, bottom = height - m.bottom;
   const y1 = scoreTop(rows);
   const sy = v => bottom - (v / y1) * (bottom - m.top);
@@ -259,13 +261,13 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     const lx0 = Math.log10(vals[0] / 1.35), lx1 = Math.log10(vals.at(-1) * 1.35);
     sx = v => right - (Math.log10(v) - lx0) / (lx1 - lx0) * plotW;
     const all = LOG_TICKS.filter(t => Math.log10(t) >= lx0 && Math.log10(t) <= lx1);
-    ticks = all.filter((_, k) => k % Math.ceil(all.length / 8) === 0);
+    ticks = all.filter((_, k) => k % Math.ceil(all.length / (compact ? 4 : 8)) === 0);
   } else {
     // A long expensive tail would squeeze every other result against zero, so the axis stops at
     // about 1.25x the 90th percentile; results beyond it are pinned to the left edge and counted.
     const p90 = vals[Math.floor(vals.length * 0.9)] ?? vals.at(-1);
     const top = Math.min(vals.at(-1), p90 * 1.25);
-    const step = niceStep(top);
+    const step = niceStep(top, compact ? 4 : 6);
     const max = Math.ceil(top * 1.02 / step) * step;
     if (vals.at(-1) > max) clampAt = max;
     sx = v => right - (Math.min(v, max) / max) * plotW;
@@ -276,8 +278,9 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Lines join each model’s effort levels from low to max, as on the official board. Colour is the lab; shape is who measured it.</text>`;
     svg += key.svg;
   }
-  svg += `<text class="y-title" x="${m.left}" y="${m.top - 20}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
-  const bestText = `Best: higher score, ${M.better} ↗`;
+  svg += compact ? `<text class="y-title" x="${m.left - 30}" y="${m.top - 20}">Score <tspan class="dir">↑</tspan></text>`
+    : `<text class="y-title" x="${m.left}" y="${m.top - 20}">DeepSWE score <tspan class="dir">↑ more of the 113 tasks solved</tspan></text>`;
+  const bestText = compact ? 'Best ↗' : `Best: higher score, ${M.better} ↗`;
   if (vals.length) svg += `<text class="best-lbl" x="${right}" y="${m.top - 20}" text-anchor="end">${esc(bestText)}</text>`;
   if (vals.length && scale !== 'log') {
     // In linear mode the cheapest results sit hard against the right edge, so the top-right corner is
@@ -291,10 +294,10 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
     svg += `<line class="grid" x1="${x}" x2="${x}" y1="${m.top}" y2="${bottom}"/><text class="tick" x="${x}" y="${bottom + 18}" text-anchor="middle">${esc(M.fmt(t))}</text>`;
   }
   svg += `<line class="axis" x1="${m.left}" x2="${right}" y1="${bottom}" y2="${bottom}"/>`;
-  if (vals.length) svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(M.label)}${scale === 'log' ? ' (log scale)' : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
+  if (vals.length) svg += `<text class="axis-title" x="${(m.left + right) / 2}" y="${height - 12}" text-anchor="middle">${esc(compact ? M.short : M.label)}${scale === 'log' ? (compact ? ' (log)' : ' (log scale)') : ''} · <tspan class="dir">${esc(M.better)} →</tspan></text>`;
   else svg += `<text class="note" x="${(m.left + right) / 2}" y="${(m.top + bottom) / 2}" text-anchor="middle">No result in this selection publishes a ${esc(M.noun)}.</text>`;
   const clamped = pts.filter(p => p.r[M.field] > clampAt).length;
-  if (clamped) svg += `<text class="note" x="${m.left + 6}" y="${bottom - 8}">◂ ${clamped} result${clamped === 1 ? '' : 's'} above ${esc(M.fmt(clampAt))}, pinned to this edge</text>`;
+  if (clamped) svg += `<text class="note" x="${m.left + 6}" y="${bottom - 8}">◂ ${clamped} result${clamped === 1 ? '' : 's'} above ${esc(M.fmt(clampAt))}${compact ? '' : ', pinned to this edge'}</text>`;
 
   const placed = pts.map(p => ({ ...p, cx: sx(p.r[M.field]), cy: sy(p.r.score_pct), g: groupKey(p.r) }));
 
@@ -304,7 +307,7 @@ export function effortScatter(rows, { metric = 'cost', scale = 'log', embedStyle
   const frontPts = placed.filter(p => front.includes(p.r)).sort((a, b) => a.cx - b.cx);
   if (frontPts.length > 1) {
     svg += `<path class="front" d="M${frontPts.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}" aria-hidden="true"/>`;
-    const kx = right - textW(bestText, 12) - 24 - textW('Efficient frontier', 12);
+    const kx = right - textW(bestText, 12) - (compact ? 16 : 24) - textW('Efficient frontier', 12);
     svg += `<line class="front" x1="${(kx - 26).toFixed(1)}" x2="${(kx - 8).toFixed(1)}" y1="${m.top - 24}" y2="${m.top - 24}"/>` +
       `<text class="front-lbl" x="${kx.toFixed(1)}" y="${m.top - 20}"><title>No other result here scores higher for less</title>Efficient frontier</text>`;
   }
@@ -491,7 +494,8 @@ const fmtUsdRange = (lo, hi) => (fmtUsd(lo) === fmtUsd(hi) ? `≈${fmtUsd(lo)}` 
 // cited to the price list it came from.
 export function readingRowHtml(r, src, max = 80, priceSrc = null) {
   const s = SERIES.find(x => x.key === r.source_type);
-  const na = t => `<span class="na">${t}</span>`;
+  // One marker for every figure a source did not publish, with words for screen readers.
+  const na = () => '<span class="na" title="Not published by the source"><span aria-hidden="true">—</span><span class="sr">not published</span></span>';
   // Attribute names held in a constant so this template is not itself read as a marker by tools
   // that scan the page source for data-cite.
   const CITE = 'data-cite';
@@ -500,7 +504,7 @@ export function readingRowHtml(r, src, max = 80, priceSrc = null) {
   const ci = r.ci_pct != null ? `<div class="ci" style="left:${w(Math.max(0, r.score_pct - r.ci_pct))};width:${(Math.min(max, r.score_pct + r.ci_pct) - Math.max(0, r.score_pct - r.ci_pct)) / max * 100}%"></div>` : '';
   const est = r.cost_estimate;
   const cost = r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd)
-    : est ? `<span class="estc" title="${esc(est.basis)}">${fmtUsdRange(est.low, est.high)} <span class="esttag">est.</span></span><sup>${marker(priceSrc)}</sup>` : na('not given');
+    : est ? `<span class="estc" title="${esc(est.basis)}">${fmtUsdRange(est.low, est.high)} <span class="esttag">est.</span></span><sup>${marker(priceSrc)}</sup>` : na();
   return `<tr id="${r.row_id}" data-flip-id="${r.row_id}" data-model="${esc(r.model_key)}">` +
     `<td class="c-model"><span class="mcell"><span class="swatch ${labClass(r.lab)}"></span><span class="name">${esc(r.display_name)}</span>${r.effort ? ` <span class="effb">[${esc(r.effort)}]</span>` : ''}` +
       `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="src-inline"> · ${s.mark}</span></span></span></td>` +
@@ -508,7 +512,7 @@ export function readingRowHtml(r, src, max = 80, priceSrc = null) {
     `<td class="c-bar"><div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${labClass(r.lab)}" style="width:${w(r.score_pct)}"></div>${ci}</div></td>` +
     `<td class="n c-score"><span class="sv">${fmtPct(r.score_pct)}${r.ci_pct != null ? `<small> ±${r.ci_pct}</small>` : ''}</span><sup>${marker(src)}</sup></td>` +
     `<td class="n c-cost">${cost}</td>` +
-    `<td class="n c-tok">${r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : r.tokens_per_task != null ? `<span title="total tokens; no input/output split published">${fmtCount(r.tokens_per_task)} total</span>` : na('—')}</td>` +
-    `<td class="n c-steps">${r.steps_per_task != null ? fmtCount(r.steps_per_task) : na('—')}</td>` +
-    `<td class="n c-pub">${r.published ? fmtDay(r.published) : na('not given')}</td></tr>`;
+    `<td class="n c-tok">${r.output_tokens_per_task != null ? fmtCount(r.output_tokens_per_task) : r.tokens_per_task != null ? `<span title="total tokens; no input/output split published">${fmtCount(r.tokens_per_task)} total</span>` : na()}</td>` +
+    `<td class="n c-steps">${r.steps_per_task != null ? fmtCount(r.steps_per_task) : na()}</td>` +
+    `<td class="n c-pub">${r.published ? fmtDay(r.published) : na()}</td></tr>`;
 }
