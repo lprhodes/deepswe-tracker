@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseCsv } from './lib/csv.mjs';
 import { typeModels, typeObservations, SOURCE_TYPES } from './lib/schema.mjs';
-import { effortScatter, rankedDots, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS, unplottedNote } from '../site/charts.mjs';
+import { effortScatter, rankedDots, SERIES, shapeSvg, LAB_COLORS, labClass, readingRowHtml, theadHtml, tfootHtml, barMax, hashId, rowKey, STYLE_RULES, WINDOWS, DEFAULT_WINDOW, windowAnchor, windowStart, inWindow, METRICS, unplottedNote } from '../site/charts.mjs';
 import { buildSources, registryHtml, renderNotes, sourcesMarkdown, citeHtml } from './lib/sources.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -105,6 +105,13 @@ const outputs = {
     .replace('<!--__TFOOT__-->', () => tfootHtml(max))
     // Every reading is in the table without scripts; older ones are hidden only once scripts run.
     .replace('<!--__ROWS__-->', () => rows.map(r => readingRowHtml(r, srcByUrl.get(r.source_url), max, priceSrc).replace(/^<tr /, inWindow(r, days, anchor) ? '<tr ' : '<tr class="out" ')).join('\n'))
+    .replace('<!--__KEY_SRC__-->', () => SERIES.map(sr => `<span>${shapeSvg(sr.cls)}${sr.label}</span>`).join(''))
+    .replace('<!--__KEY_LAB__-->', () => {
+      const present = new Set(recent.map(r => r.lab));
+      const labs = Object.keys(LAB_COLORS).filter(l => present.has(l)).map(l => [l, labClass(l)]);
+      if ([...present].some(l => !LAB_COLORS[l])) labs.push(['Other labs', 'lab-other']);
+      return labs.map(([l, c]) => `<span><span class="sw ${c}"></span>${l}</span>`).join('');
+    })
     .replace('<!--__RANKED__-->', () => rankedDots(recent, { id: 'rk' }))
     .replace('<!--__SCATTER__-->', () => effortScatter(recent, { id: 'sc' }))
     .replace('<!--__UNPLOTTED__-->', () => unplotted)

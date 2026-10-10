@@ -111,12 +111,16 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
 .panel{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow-x:auto}
 .panel svg{display:block;width:100%;height:auto;min-width:720px}
 #c-rank svg{min-width:0}
-.legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
-.legend span{display:inline-flex;align-items:center;gap:6px}
+/* The key: one labelled row per encoding (who measured, effort, lab), so shape, letter and colour are never read as one list. */
+.legend{display:grid;gap:var(--space-2);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
+.legend .krow{display:grid;grid-template-columns:7.5rem 1fr;align-items:center;gap:var(--space-3)}
+.legend .kitems{display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-4)}
+.legend .kitems>span{display:inline-flex;align-items:center;gap:6px}
+.legend .etag{font:600 11px/1 var(--mono);color:var(--ink);min-width:1ch;text-align:center}
+.legend .etag.star{font:400 13px/1 system-ui,sans-serif}
 .legend svg{color:var(--ink-2)}
 .legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);box-shadow:inset 0 0 0 1px var(--edge)}
 [class*="lab-"]{--edge:color-mix(in oklch, var(--c) 55%, var(--ink))}
-.legend .lsep{color:var(--muted);margin-left:var(--space-3)}
 .unplotted{font-size:13px;color:var(--muted);margin:var(--space-2) 0 0}
 .empty{padding:var(--space-7) var(--space-5);text-align:center;color:var(--ink-2)}
 .empty button{margin-top:var(--space-3)}
@@ -196,6 +200,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
 @media (max-width:560px){
   .wrap{padding:0 var(--space-4)}
   .controls{position:static}
+  .legend .krow{grid-template-columns:1fr;gap:var(--space-1)}
   .win input[type=range],.win .stops{inline-size:110px} .win .stops{font-size:8px;padding:0 1px} .win output{min-inline-size:0;white-space:nowrap} .win output .n{display:none}
   thead th{top:0}
 }
@@ -272,10 +277,14 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Every model</span>
         <h2 id="rk-h">Every model, ranked by its best score</h2>
-        <p>One row per model, with its best score at the right. Each dot is one reading: colour is the lab, shape is who measured it, and a line joins one measurer’s effort levels, as on the official board. The letter under a dot is its effort level: L low, M medium, H high, X xhigh, ★ max, O thinking off. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its source.</p>
+        <p>One row per model, with its best score at the right. Each dot is one reading, lettered with its effort level, and a line joins one measurer’s effort levels, as on the official board. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its source.</p>
       </div>
     </div>
-    <div class="legend" id="legend"></div>
+    <div class="legend" id="legend" role="group" aria-label="Key">
+      <div class="krow"><span class="field">Who measured</span><div class="kitems" id="keySrc"><!--__KEY_SRC__--></div></div>
+      <div class="krow"><span class="field">Effort</span><div class="kitems"><span><b class="etag">L</b>low</span><span><b class="etag">M</b>medium</span><span><b class="etag">H</b>high</span><span><b class="etag">X</b>xhigh</span><span><b class="etag star">★</b>max</span><span><b class="etag">O</b>thinking off</span></div></div>
+      <div class="krow"><span class="field">Lab</span><div class="kitems" id="keyLab"><!--__KEY_LAB__--></div></div>
+    </div>
     <div class="panel" id="c-rank"><!--__RANKED__--></div>
   </section>
 
@@ -403,11 +412,9 @@ for (const s of SERIES) {
   b.append(s.label, el('span', { className: 'n', textContent: String(ROWS.filter(r => r.source_type === s.key).length) }));
   b.addEventListener('click', () => { state.sources.has(s.key) ? state.sources.delete(s.key) : state.sources.add(s.key); b.setAttribute('aria-pressed', String(state.sources.has(s.key))); render(); });
   $('#srcGroup').append(b);
-  $('#legend').append(el('span', { innerHTML: shapeSvg(s.cls) }, [s.label]));
 }
-$('#legend').append(el('span', { className: 'lsep', textContent: 'Colour is the lab:' }));
-const labKey = el('span', { className: 'labkey' }); labKey.style.display = 'contents';
-$('#legend').append(labKey);
+$('#keySrc').replaceChildren(...SERIES.map(s => el('span', { innerHTML: shapeSvg(s.cls) }, [s.label])));
+const labKey = $('#keyLab');
 // The colour key lists only the labs in the current selection.
 function renderLabKey(rows) {
   const present = new Set(rows.map(r => r.lab));
