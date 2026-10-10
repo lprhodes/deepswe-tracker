@@ -18,6 +18,8 @@
 .viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
 .viz .rowrule{stroke:var(--v-grid);stroke-width:1}
+.viz .etag{fill:var(--v-muted);font:600 9px/1 "Spline Sans Mono",ui-monospace,monospace;pointer-events:none}
+.viz .etag.star{font:400 11px/1 system-ui,sans-serif}
 .viz .glbl text,.viz .glbl .leader{pointer-events:none}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
@@ -26,7 +28,6 @@
 .viz .dir{fill:var(--v-ink2);font-size:12px;font-weight:600}
 .viz .ref{stroke:var(--v-ink2);stroke-width:1}
 .viz .ref-lbl{fill:var(--v-ink2);font-size:11px}
-.viz .span{stroke:var(--v-rule);stroke-width:2;stroke-linecap:round}
 .viz .eline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;opacity:.55}
 .viz .solo .mk{stroke-width:2.5}
 .viz .solo circle.mk{r:6.5}

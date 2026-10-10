@@ -272,7 +272,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <div>
         <span class="field">Fig. 1 · Every model</span>
         <h2 id="rk-h">Every model, ranked by its best score</h2>
-        <p>One row per model, with its best score at the right. Each dot is one reading: colour is the lab, shape is who measured it, and a line joins one measurer’s effort levels from low to max, as on the official board. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its effort level and source.</p>
+        <p>One row per model, with its best score at the right. Each dot is one reading: colour is the lab, shape is who measured it, and a line joins one measurer’s effort levels, as on the official board. The letter under a dot is its effort level: L low, M medium, H high, X xhigh, ★ max, O thinking off. Nothing here needs a cost, so every model in the selection is on it. Hover a dot for its source.</p>
       </div>
     </div>
     <div class="legend" id="legend"></div>
@@ -302,17 +302,6 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <span class="field" id="tableCount"></span>
     </div>
     <div class="tablewrap"><table id="tbl"><caption class="sr">DeepSWE 1.1 readings for the current filters</caption><thead><!--__THEAD__--></thead><tbody><!--__ROWS__--></tbody><tfoot><!--__TFOOT__--></tfoot></table></div>
-  </section>
-
-  <section class="block" aria-labelledby="sp-h">
-    <div class="bhead">
-      <div>
-        <span class="field">Fig. 4 · The spread</span>
-        <h2 id="sp-h">Same model, different measurer</h2>
-        <p>The official leaderboard’s bar form, one bar per source under each model: its best official result, its lab’s claim and any independent re-run. Only models measured by at least two sources are shown.</p>
-      </div>
-    </div>
-    <div class="panel" id="c-spread"><!--__SPREAD__--></div>
   </section>
 
   <section class="block" aria-labelledby="nt-h">
@@ -568,10 +557,10 @@ function mount(id, svg, rows) {
     if (prev) gsap.from(g, { x: prev[0] - +g.dataset.x, y: prev[1] - +g.dataset.y, duration: 0.55, ease: 'power3.inOut' });
     else gsap.from(g, { autoAlpha: 0, duration: 0.35, delay: 0.15, ease: 'power2.out' });
   });
-  gsap.from(host.querySelectorAll('.eline, .glbl, .span'), { autoAlpha: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
+  gsap.from(host.querySelectorAll('.eline, .glbl, .etag'), { autoAlpha: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
 }
 function highlight(model) {
-  for (const id of ['#c-rank', '#c-scatter', '#c-spread']) {
+  for (const id of ['#c-rank', '#c-scatter']) {
     const svg = $(id).querySelector('svg.viz');
     if (!svg) continue;
     // Dim the rest only when this chart actually holds the model; otherwise leave it alone.
@@ -697,7 +686,7 @@ function render() {
   winInput.setAttribute('aria-valuetext', `${winText(state.win)}, ${nModels} models`);
   const span = days == null ? 'at any time' : `${fmtDate(windowStart(ANCHOR, days)).replace(/ \d{4}$/, '')} – ${fmtDate(ANCHOR)}`;
   if (!rows.length) {
-    ['#c-rank', '#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
+    ['#c-rank', '#c-scatter'].forEach(id => emptyState($(id)));
     // Blame the release window only when it alone emptied the selection.
     const winOnly = days != null && selected(true).length > 0;
     $('#unplotted').textContent = winOnly ? `No model in this selection was released ${span}. Slide the release window wider.` : '';
@@ -706,7 +695,6 @@ function render() {
     mount('#c-rank', rankedDots(rows, { id: 'rk', width: rankWidth() }), rows);
     mount('#c-scatter', effortScatter(rows, { metric: state.metric, scale: state.scale, id: 'sc' }), rows);
     $('#unplotted').textContent = (days == null ? 'Every model, whatever its release date.' : `Models released ${span}.`) + unplottedNote(rows, M);
-    mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
   rankW = rankWidth();
   renderLabKey(rows);

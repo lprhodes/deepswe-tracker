@@ -4,13 +4,12 @@ Every published DeepSWE 1.1 score in one dataset: the official [Datacurve leader
 
 The official board has added no model since **3 September 2026** (GPT-6 Astra). Since then labs have kept publishing DeepSWE 1.1 numbers for GPT-6.1 Sol, Claude Opus 5.5 and Sonnet 5.5, Gemini 4 Argon, Grok 4.7, DeepSeek V4.1 Flash, Mistral Large 4 and others, and Mercor has run its own independent evaluation. This repo puts them side by side without pretending they are the same measurement.
 
-**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). The cost chart and leaderboard use the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be. A release-date slider opens on the models released in the last 60 days, narrows to 30, 14 or 7, and widens to 90 days or any time. The first chart ranks every model by its best score, one dot per reading, so it needs no cost; most Anthropic, Google and Meta claims publish none and appear only there and in the table.
+**Interactive page:** [deepswe.dev](https://deepswe.dev) (also `index.html` in this repo). The cost chart and leaderboard use the official board's chart forms and controls: colour by lab, a line through each model's effort levels, cost running from high to low (log scale by default), a leaderboard of bars with confidence whiskers, all effort levels or the best per model, and filters for lab, model and configuration. The top-right corner of the main chart, high score for low cost, is where a model wants to be. A release-date slider opens on the models released in the last 60 days, narrows to 30, 14 or 7, and widens to 90 days or any time. The first chart ranks every model by its best score, one dot per reading with its effort level lettered underneath, so it needs no cost; most Anthropic, Google and Meta claims publish none and appear only there and in the table.
 
 ![Every model released in the last 60 days, ranked by best score](charts/ranked.svg)
 
 ![Score against cost per task, models released in the last 60 days](charts/score-vs-cost.svg)
 
-![Best score per model by who measured it](charts/best-per-model.svg)
 
 
 ## The data

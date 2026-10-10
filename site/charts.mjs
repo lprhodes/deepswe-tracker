@@ -37,6 +37,8 @@ export const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
 // of its own and falls under "other".
 const LADDER = ['off', ...EFFORTS];
 export const effortRank = e => LADDER.indexOf(e);
+// One-character effort tags for the ranked chart; settings outside the ladder ("thinking", unstated) get none.
+export const EFFORT_TAG = { off: 'O', low: 'L', medium: 'M', high: 'H', xhigh: 'X', max: '★' };
 
 export const METRICS = {
   cost: { field: 'cost_per_task_usd', label: 'Avg cost per task', short: 'Cost', noun: 'cost per task', better: 'cheaper', fmt: v => fmtUsd(v) },
@@ -78,6 +80,8 @@ export const STYLE_RULES = `
 .viz .front{fill:none;stroke:var(--v-ink);stroke-width:11;stroke-linejoin:round;stroke-linecap:round;opacity:.07}
 .viz .front-lbl{fill:var(--v-ink2);font-size:12px}
 .viz .rowrule{stroke:var(--v-grid);stroke-width:1}
+.viz .etag{fill:var(--v-muted);font:600 9px/1 "Spline Sans Mono",ui-monospace,monospace;pointer-events:none}
+.viz .etag.star{font:400 11px/1 system-ui,sans-serif}
 .viz .glbl text,.viz .glbl .leader{pointer-events:none}
 .viz .val{fill:var(--v-ink);font-size:11px;font-weight:650;font-variant-numeric:tabular-nums}
 .viz .note{fill:var(--v-muted);font-size:11px;font-style:italic}
@@ -86,7 +90,6 @@ export const STYLE_RULES = `
 .viz .dir{fill:var(--v-ink2);font-size:12px;font-weight:600}
 .viz .ref{stroke:var(--v-ink2);stroke-width:1}
 .viz .ref-lbl{fill:var(--v-ink2);font-size:11px}
-.viz .span{stroke:var(--v-rule);stroke-width:2;stroke-linecap:round}
 .viz .eline{fill:none;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;opacity:.55}
 .viz .solo .mk{stroke-width:2.5}
 .viz .solo circle.mk{r:6.5}
@@ -363,13 +366,14 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
   const m = compact ? { left: 16, right: 16, top: 40, bottom: 34 } : { left: 236, right: 124, top: key ? key.y + 62 : 44, bottom: 40 };
   const max = barMax(rows), x0 = m.left, x1 = width - m.right;
   const sx = v => x0 + (v / max) * (x1 - x0);
-  const LANE = 11, PAD = 7;
+  // Each lane holds a row of dots and, under them, their effort tags.
+  const LANE = 21, PAD = 4;
   const laneOf = mo => SERIES.filter(sr => mo.ps.some(p => p.r.source_type === sr.key)).map(sr => sr.key);
   const heights = models.map(mo => HEAD + PAD * 2 + LANE * laneOf(mo).length);
   const bottom = m.top + heights.reduce((a, b) => a + b, 0);
   const height = bottom + m.bottom;
   let svg = open(width, height, id, title, desc, embedStyle);
-  if (embedStyle) svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Ranked by best result. Colour is the lab; shape is who measured it; a line joins one measurer’s effort levels from low to max.</text>` + key.svg;
+  if (embedStyle) svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Ranked by best result. Colour is the lab; shape is who measured it; a line joins one measurer’s effort levels. Under each dot: L low, M medium, H high, X xhigh, ★ max.</text>` + key.svg;
   svg += `<text class="y-title" x="${x0}" y="${m.top - 30}">DeepSWE score <tspan class="dir">→ more ${compact ? 'solved' : 'of the 113 tasks solved'}</tspan></text>`;
   if (!compact) svg += `<text class="tick" x="${width - 24}" y="${m.top - 12}" text-anchor="end">best</text>`;
   for (let v = 0; v <= max; v += 20) {
@@ -388,14 +392,14 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
     if (textW(name, 12) > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
     const best = `${fmtPct(r.score_pct)}${r.effort ? `<tspan class="lbl-eff" dx="5">${esc(r.effort.toUpperCase())}</tspan>` : ''}`;
     // The best result's source mark, so a reader can tell a lab's claim from the board or an independent run.
-    const bestW = textW(fmtPct(r.score_pct), 11) + (r.effort ? textW(r.effort, 9) + 5 : 0);
-    const bestMarkX = compact ? width - m.right - bestW - 10 : x1 + 10;
+    const bestW = String(fmtPct(r.score_pct)).length * 7.2 + (r.effort ? r.effort.length * 5.6 + 5 : 0);
+    const bestMarkX = compact ? width - m.right - bestW - 12 : x1 + 10;
     body += `<g class="grp glbl ${labClass(r.lab)}" data-model="${model}"><rect class="sw ${labClass(r.lab)}" x="${edge}" y="${(cy - 5).toFixed(1)}" width="10" height="10" rx="2"/>` +
       `<text class="lbl" x="${edge + 18}" y="${(cy + 4).toFixed(1)}">${esc(name)}</text>` +
       markPath(CLS[r.source_type], labClass(r.lab), +bestMarkX.toFixed(1), +cy.toFixed(1), 'key') +
       (compact ? `<text class="val" x="${width - m.right}" y="${(cy + 4).toFixed(1)}" text-anchor="end">${best}</text>` : `<text class="val" x="${x1 + 20}" y="${(cy + 4).toFixed(1)}">${best}</text>`) + '</g>';
     lanes.forEach((src, l) => {
-      const ly = y + HEAD + PAD + LANE * l + LANE / 2;
+      const ly = y + HEAD + PAD + LANE * l + 7;
       const ps = mo.ps.filter(p => p.r.source_type === src).map(p => ({ ...p, cx: sx(p.r.score_pct), cy: ly }));
       const groups = new Map();
       for (const p of ps) { const g = groupKey(p.r); if (!groups.has(g)) groups.set(g, []); groups.get(g).push(p); }
@@ -405,7 +409,18 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
         const lad = [...byEffort.values()].sort((a, b) => effortRank(a.r.effort) - effortRank(b.r.effort));
         if (lad.length > 1) lines += `<g class="grp" data-model="${model}"><path class="eline ${CLS[src]} ${labClass(r.lab)}" d="M${lad.map(p => `${p.cx.toFixed(1)} ${p.cy.toFixed(1)}`).join('L')}"/></g>`;
       }
-      body += `<g class="grp" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy, 7)).join('') + '</g>';
+      // Effort tags under the dots, left to right: a tag that would overlap the previous one is nudged
+      // right a little, or dropped when it repeats the same letter.
+      let tags = '', lastX = -Infinity, lastT = '';
+      for (const p of [...ps].sort((a, b) => a.cx - b.cx)) {
+        const t = EFFORT_TAG[p.r.effort];
+        if (!t) continue;
+        let x = p.cx;
+        if (x - lastX < 8) { if (t === lastT) continue; x = lastX + 8; }
+        tags += `<text class="etag${t === '★' ? ' star' : ''}" x="${x.toFixed(1)}" y="${(ly + 15).toFixed(1)}" text-anchor="middle">${t}</text>`;
+        lastX = x; lastT = t;
+      }
+      body += `<g class="grp" data-model="${model}">` + ps.map(p => mark(p.r, p.i, p.cx, p.cy, 9)).join('') + tags + '</g>';
     });
     y += h;
   });
@@ -415,59 +430,6 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
 // The bar scale both leaderboard forms share: 0 to 80%, as on the official board, widening to 100%
 // only if a score ever passes 80.
 export const barMax = rows => (rows.some(r => r.score_pct > 80) ? 100 : 80);
-
-// "Same model, different measurer", in the official leaderboard's form: under each model, one bar per
-// source (official board, lab claim, independent run), each with its interval where one was given.
-export function spreadBars(rows, { embedStyle = false, width = 1080, id = 'sp', onlyMulti = false } = {}) {
-  const byModel = new Map();
-  rows.forEach((r, i) => {
-    if (!byModel.has(r.model_key)) byModel.set(r.model_key, { name: r.display_name, key: r.model_key, lab: r.lab, best: {} });
-    const b = byModel.get(r.model_key).best;
-    if (b[r.source_type] == null || rows[b[r.source_type]].score_pct < r.score_pct) b[r.source_type] = i;
-  });
-  let models = [...byModel.values()].map(mo => ({ ...mo, top: Math.max(...Object.values(mo.best).map(i => rows[i].score_pct)) }));
-  if (onlyMulti) models = models.filter(mo => Object.keys(mo.best).length > 1);
-  models.sort((a, b) => b.top - a.top);
-  const title = 'Best DeepSWE 1.1 score per model, by who measured it';
-  const desc = `${models.length} models; for each, a bar for its best official, lab-claimed and independent pass@1 at any effort level.`;
-  if (!models.length) return open(width, 120, id, title, desc, embedStyle) + `<text class="sub" x="24" y="64">No models in this selection.</text></svg>`;
-  const max = barMax(rows);
-  const key = embedStyle ? legend(24, 80, rows, width - 24) : null;
-  const m = { left: 220, srcW: 104, right: 70, top: key ? key.y + 32 : 16, bottom: 36 };
-  const x0 = m.left + m.srcW, x1 = width - m.right;
-  const sx = v => x0 + (v / max) * (x1 - x0);
-  const barH = 9, gap = 6, pad = 10;
-  let y = m.top, body = '';
-  for (const mo of models) {
-    const srcs = SERIES.filter(s => s.key in mo.best);
-    const blockH = pad * 2 + srcs.length * barH + (srcs.length - 1) * gap;
-    body += `<g class="grp" data-model="${esc(mo.key)}"><line class="grid" x1="24" x2="${width - 24}" y1="${y}" y2="${y}"/>`;
-    body += `<rect class="sw ${labClass(mo.lab)}" x="${m.left - 196}" y="${y + blockH / 2 - 5}" width="10" height="10" rx="2"/><text class="lbl" x="${m.left - 180}" y="${y + blockH / 2 + 4}">${esc(mo.name.length > 26 ? mo.name.slice(0, 25) + '…' : mo.name)}</text>`;
-    srcs.forEach((s, k) => {
-      const i = mo.best[s.key], r = rows[i], cy = y + pad + k * (barH + gap) + barH / 2;
-      body += `<g class="pt" data-k="${esc(rowKey(r))}" data-x="${sx(r.score_pct).toFixed(1)}" data-y="${cy.toFixed(1)}">`;
-      body += markPath(s.cls, '', m.left + 6, cy, 'key') + `<text class="tick" x="${m.left + 16}" y="${cy + 4}">${esc(s.label)}</text>`;
-      body += `<rect class="track" x="${x0}" y="${cy - barH / 2}" width="${(x1 - x0).toFixed(1)}" height="${barH}"/>`;
-      body += `<rect class="sw ${labClass(r.lab)}" x="${x0}" y="${cy - barH / 2}" width="${(sx(r.score_pct) - x0).toFixed(1)}" height="${barH}"/>`;
-      if (r.ci_pct != null) {
-        const a = sx(Math.max(0, r.score_pct - r.ci_pct)), b = sx(Math.min(max, r.score_pct + r.ci_pct));
-        body += `<path class="whisk" d="M${a.toFixed(1)} ${cy}H${b.toFixed(1)}M${a.toFixed(1)} ${cy - 5}V${cy + 5}M${b.toFixed(1)} ${cy - 5}V${cy + 5}"/>`;
-      }
-      body += `<text class="val" x="${x1 + 8}" y="${cy + 4}">${fmtPct(r.score_pct)}</text>`;
-      body += `<rect class="hit" data-i="${i}" tabindex="0" x="${x0}" y="${cy - 8}" width="${(x1 - x0).toFixed(1)}" height="16"><title>${esc(pointLabel(r))} · ${esc(s.label)}: ${fmtPct(r.score_pct)}</title></rect></g>`;
-    });
-    body += '</g>';
-    y += blockH;
-  }
-  const height = y + m.bottom;
-  let svg = open(width, height, id, title, desc, embedStyle);
-  if (embedStyle) {
-    svg += `<text class="title" x="24" y="32">${esc(title)}</text><text class="sub" x="24" y="52">Each model’s best result from each source, on the official leaderboard’s 0–${max}% bar scale.</text>`;
-    svg += key.svg;
-  }
-  for (let v = 0; v <= max; v += 20) svg += `<line class="grid" x1="${sx(v).toFixed(1)}" x2="${sx(v).toFixed(1)}" y1="${m.top}" y2="${y}"/><text class="tick" x="${sx(v).toFixed(1)}" y="${y + 18}" text-anchor="middle">${v}%</text>`;
-  return svg + body + '</svg>';
-}
 
 // ---------- readings table, shared by the build (pre-rendered, works without script) and the page ----------
 
