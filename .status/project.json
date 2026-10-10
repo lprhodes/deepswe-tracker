@@ -1,13 +1,13 @@
 {
   "project": "deepswe-tracker",
-  "updated": "2026-10-10T10:30:00+11:00",
+  "updated": "2026-10-10T12:10:00+11:00",
   "verdict": {
     "token": "done",
     "number": "215",
     "unit": "readings of 80 models",
-    "headline": "Fig. 1 now ranks every model by best score with no cost needed; the cost chart is Fig. 2.",
-    "run_label": "ranked chart",
-    "head_sha": "74fd603"
+    "headline": "Design review of 6 sections: faint chart colours, keyboard stops and table header fixed; effort letters added; Fig. 4 removed.",
+    "run_label": "design review",
+    "head_sha": "8495a77"
   },
   "tasks": [
     {
@@ -152,6 +152,21 @@
       "stage": "code written",
       "outcome": "done",
       "note": "ranked dots, effort lanes, phone layout"
+    },
+    {
+      "id": "P-11",
+      "title": "Design review of charts and table, and its fixes",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done",
+      "note": "6 of 6 sections; 10 fixes shipped"
+    },
+    {
+      "id": "P-12",
+      "title": "Effort letters under each dot in Fig. 1",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done"
     }
   ],
   "gates": [
@@ -241,6 +256,22 @@
       "counts": "2/2",
       "state": "done",
       "kind": "build"
+    },
+    {
+      "name": "Chart marks and labels clear contrast in both themes",
+      "command": "Chromium pixel readback of every lab colour and chart text style",
+      "exit_code": 0,
+      "counts": "49/49",
+      "state": "done",
+      "kind": "design"
+    },
+    {
+      "name": "Design review: every section and stage covered",
+      "command": "design-review worklist check",
+      "exit_code": 0,
+      "counts": "48/48",
+      "state": "done",
+      "kind": "design"
     }
   ],
   "findings": [
@@ -343,6 +374,11 @@
       "kind": "html",
       "contains": "The interactive tracker.",
       "open_first": true
+    },
+    {
+      "path": ".design-review/report.md",
+      "kind": "md",
+      "contains": "The design review: findings, fixes and decisions (local, not committed)."
     },
     {
       "path": "SOURCES.md",
