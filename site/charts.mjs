@@ -91,10 +91,12 @@ export const STYLE_RULES = `
 .viz .solo .mk{stroke-width:2.5}
 .viz .solo circle.mk{r:6.5}
 .viz .eline.s2{stroke-dasharray:6 4} .viz .eline.s3{stroke-dasharray:1.5 4}
-.viz .mk{stroke:var(--v-paper);stroke-width:2}
+/* Edge in the mark's own hue pulled toward the ink: keeps the brand fill and clears 3:1 for faint colours in either theme. */
+.viz .mk{stroke:var(--v-edge);stroke-width:1.5}
 .viz .key{fill:var(--v-ink2)}
 ${LAB_CSS}
-.viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c)}
+.viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c);stroke:var(--v-edge);stroke-width:1}
+.viz [class*="lab-"]{--v-edge:color-mix(in oklch, var(--c) 55%, var(--v-ink))}
 .viz .track{fill:var(--v-grid)} .viz .whisk{stroke:var(--v-ink);stroke-width:1.2;fill:none}
 .viz .hit{fill:transparent;cursor:pointer}
 .viz .hit:focus-visible{fill:transparent;stroke:var(--v-ink);stroke-width:2}
@@ -385,9 +387,13 @@ export function rankedDots(rows, { embedStyle = false, width = 1080, id = 'rk', 
     const room = compact ? width - m.left - m.right - 110 : m.left - 48;
     if (textW(name, 12) > room) name = name.slice(0, Math.max(4, Math.floor(room / (12 * 0.55)) - 1)) + '…';
     const best = `${fmtPct(r.score_pct)}${r.effort ? `<tspan class="lbl-eff" dx="5">${esc(r.effort.toUpperCase())}</tspan>` : ''}`;
+    // The best result's source mark, so a reader can tell a lab's claim from the board or an independent run.
+    const bestW = textW(fmtPct(r.score_pct), 11) + (r.effort ? textW(r.effort, 9) + 5 : 0);
+    const bestMarkX = compact ? width - m.right - bestW - 10 : x1 + 10;
     body += `<g class="grp glbl ${labClass(r.lab)}" data-model="${model}"><rect class="sw ${labClass(r.lab)}" x="${edge}" y="${(cy - 5).toFixed(1)}" width="10" height="10" rx="2"/>` +
       `<text class="lbl" x="${edge + 18}" y="${(cy + 4).toFixed(1)}">${esc(name)}</text>` +
-      (compact ? `<text class="val" x="${width - m.right}" y="${(cy + 4).toFixed(1)}" text-anchor="end">${best}</text>` : `<text class="val" x="${x1 + 16}" y="${(cy + 4).toFixed(1)}">${best}</text>`) + '</g>';
+      markPath(CLS[r.source_type], labClass(r.lab), +bestMarkX.toFixed(1), +cy.toFixed(1), 'key') +
+      (compact ? `<text class="val" x="${width - m.right}" y="${(cy + 4).toFixed(1)}" text-anchor="end">${best}</text>` : `<text class="val" x="${x1 + 20}" y="${(cy + 4).toFixed(1)}">${best}</text>`) + '</g>';
     lanes.forEach((src, l) => {
       const ly = y + HEAD + PAD + LANE * l + LANE / 2;
       const ps = mo.ps.filter(p => p.r.source_type === src).map(p => ({ ...p, cx: sx(p.r.score_pct), cy: ly }));
@@ -520,8 +526,8 @@ export function readingRowHtml(r, src, max = 80, priceSrc = null) {
   const cost = r.cost_per_task_usd != null ? fmtUsd(r.cost_per_task_usd)
     : est ? `<span class="estc" title="${esc(est.basis)}">${fmtUsdRange(est.low, est.high)} <span class="esttag">est.</span></span><sup>${marker(priceSrc)}</sup>` : na('not given');
   return `<tr id="${r.row_id}" data-flip-id="${r.row_id}" data-model="${esc(r.model_key)}">` +
-    `<td class="c-model"><span class="swatch ${labClass(r.lab)}"></span><span class="name">${esc(r.display_name)}</span>${r.effort ? ` <span class="effb">[${esc(r.effort)}]</span>` : ''}` +
-      `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="src-inline"> · ${s.mark}</span></span></td>` +
+    `<td class="c-model"><span class="mcell"><span class="swatch ${labClass(r.lab)}"></span><span class="name">${esc(r.display_name)}</span>${r.effort ? ` <span class="effb">[${esc(r.effort)}]</span>` : ''}` +
+      `<span class="id">${esc(r.lab)}${r.harness ? `<span class="hsep"> · <span class="h">${esc(r.harness)}</span></span>` : ''}<span class="src-inline"> · ${s.mark}</span></span></span></td>` +
     `<td class="c-src"><span class="hall ${s.cls}">${shapeSvg(s.cls)}${s.mark}</span><span class="via">${esc(src ? src.publisher : r.source_name)}</span></td>` +
     `<td class="c-bar"><div class="bar" role="img" aria-label="${fmtPct(r.score_pct)}${r.ci_pct != null ? ` plus or minus ${r.ci_pct}` : ''}"><div class="track"></div><div class="fill ${labClass(r.lab)}" style="width:${w(r.score_pct)}"></div>${ci}</div></td>` +
     `<td class="n c-score"><span class="sv">${fmtPct(r.score_pct)}${r.ci_pct != null ? `<small> ±${r.ci_pct}</small>` : ''}</span><sup>${marker(src)}</sup></td>` +

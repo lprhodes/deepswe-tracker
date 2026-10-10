@@ -89,7 +89,7 @@ a:hover{text-decoration-thickness:2px}
 .pop-body .acts{display:flex;gap:var(--space-2);margin:var(--space-2) 0}
 .pop-body .acts button{font:500 12px/1 var(--sans);border:1px solid var(--rule);background:none;color:var(--ink-2);padding:6px 8px;cursor:pointer;border-radius:2px}
 .pop-body .acts button:hover{background:var(--ground-2);color:var(--ink)}
-.pop-body h4{margin:var(--space-3) 0 var(--space-1)}
+.pop-body .grp-h{margin:var(--space-3) 0 var(--space-1)}
 .pop-body label{display:flex;align-items:center;gap:var(--space-2);min-height:32px;padding:4px 2px;font-size:13.5px;cursor:pointer}
 .pop-body label small{color:var(--muted);font-family:var(--mono);font-size:11px;margin-left:auto}
 .pop-body input[type=checkbox]{accent-color:var(--ink);inline-size:18px;block-size:18px;margin:0}
@@ -97,6 +97,8 @@ a:hover{text-decoration-thickness:2px}
 .reset[hidden]{display:none}
 .win{display:inline-flex;align-items:center;gap:var(--space-2);border:1px solid var(--rule);background:var(--sheet);border-radius:2px;padding:0 10px;min-height:32px;font:500 13px/1 var(--sans);color:var(--ink-2)}
 .win input[type=range]{inline-size:132px;margin:0;accent-color:var(--ink);cursor:pointer}
+.win .track{display:inline-flex;flex-direction:column;gap:1px;padding-top:4px}
+.win .stops{display:flex;justify-content:space-between;inline-size:132px;padding:0 3px;font:500 9px/1 var(--mono);color:var(--muted);letter-spacing:.02em}
 .win output{color:var(--ink);font-variant-numeric:tabular-nums;min-inline-size:15ch}
 .win output .n{color:var(--muted)}
 .js tr.out{display:none}
@@ -112,17 +114,19 @@ section.block{margin:0 0 var(--space-8);scroll-margin-top:140px}
 .legend{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin:var(--space-3) 0;font-size:13px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend svg{color:var(--ink-2)}
-.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c)}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);box-shadow:inset 0 0 0 1px var(--edge)}
+[class*="lab-"]{--edge:color-mix(in oklch, var(--c) 55%, var(--ink))}
 .legend .lsep{color:var(--muted);margin-left:var(--space-3)}
 .unplotted{font-size:13px;color:var(--muted);margin:var(--space-2) 0 0}
 .empty{padding:var(--space-7) var(--space-5);text-align:center;color:var(--ink-2)}
 .empty button{margin-top:var(--space-3)}
 
 /* readings table */
-.tablewrap{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow-x:auto}
+/* clip rather than auto: the table fits at every width, and a scroll container would stop the header sticking */
+.tablewrap{background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow-1);overflow:clip}
 table{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:auto}
-thead th{background:var(--sheet);text-align:left;padding:10px;border-bottom:1px solid var(--ink);font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
-thead th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+thead th{position:sticky;top:var(--ctrl-h,0px);z-index:5;background:var(--sheet);text-align:left;padding:10px;box-shadow:inset 0 -1px 0 var(--ink);font:500 11px/1.2 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+thead th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center;padding:5px 0;margin:-5px 0}
 thead th button:hover{color:var(--ink)}
 thead th button:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 thead th[aria-sort="ascending"] button::after{content:"↑"} thead th[aria-sort="descending"] button::after{content:"↓"}
@@ -131,8 +135,9 @@ tbody tr:hover{background:var(--ground)}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 td .name{font-weight:620}
 td .effb{font:400 12px/1 var(--mono);color:var(--muted)}
-td .swatch{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:8px;vertical-align:-1px}
-td .id{display:block;font:400 11px/1.35 var(--mono);color:var(--muted);margin-left:18px}
+td .mcell{display:block;position:relative;padding-left:18px}
+td .swatch{position:absolute;left:0;top:.32em;width:10px;height:10px;border-radius:2px;background:var(--c);box-shadow:inset 0 0 0 1px var(--edge)}
+td .id{display:block;font:400 11px/1.35 var(--mono);color:var(--muted)}
 td .id .h{white-space:nowrap}
 .src-inline{display:none}
 .hall{display:inline-flex;align-items:center;gap:6px;font:600 10px/1 var(--mono);letter-spacing:.1em;color:var(--ink);border:1px solid var(--ink-2);padding:3px 5px;border-radius:1px;white-space:nowrap}
@@ -141,7 +146,7 @@ td .via{display:block;margin-top:4px;font-size:12px;max-width:16ch;white-space:n
 td.c-bar,th.c-bar{width:30%;min-width:96px}
 .bar{position:relative;width:100%;height:14px}
 .bar .track{position:absolute;inset:3px 0;background:var(--grid)}
-.bar .fill{position:absolute;left:0;top:3px;bottom:3px;background:var(--c)}
+.bar .fill{position:absolute;left:0;top:3px;bottom:3px;background:var(--c);box-shadow:inset 0 0 0 1px var(--edge)}
 .bar .ci{position:absolute;top:0;bottom:0;border-left:1.2px solid var(--ink);border-right:1.2px solid var(--ink)}
 .bar .ci::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1.2px solid var(--ink)}
 .axis-row td{border-bottom:0;padding-top:4px;padding-bottom:12px}
@@ -177,7 +182,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
   tbody td,thead th{padding:8px 4px}
   .tablewrap{border-left:0;border-right:0}
   td .name{font-size:13px}
-  td .effb{display:block;margin-left:18px}
+  td .effb{display:block}
   td .id{font-size:10.5px}
   td.c-bar,th.c-bar{min-width:40px;width:20%}
   .ticks span:not(:first-child):not(:last-child){display:none}
@@ -191,7 +196,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:var(--space-4);flex-
 @media (max-width:560px){
   .wrap{padding:0 var(--space-4)}
   .controls{position:static}
-  .win input[type=range]{inline-size:104px} .win output{min-inline-size:0;white-space:nowrap} .win output .n{display:none}
+  .win input[type=range],.win .stops{inline-size:110px} .win .stops{font-size:8px;padding:0 1px} .win output{min-inline-size:0;white-space:nowrap} .win output .n{display:none}
+  thead th{top:0}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 /* citations: marker, preview, registry */
@@ -254,7 +260,7 @@ tbody tr:target td{background:color-mix(in oklch, var(--link) 10%, transparent)}
       <details class="pop" id="labPop"><summary>Labs <span class="n" id="labCount"></span></summary><div class="pop-body" id="labBody"></div></details>
       <details class="pop" id="modelPop"><summary>Models <span class="n" id="modelCount"></span></summary><div class="pop-body" id="modelBody"></div></details>
       <details class="pop" id="configPop"><summary>Configs <span class="n" id="configCount"></span></summary><div class="pop-body" id="configBody"></div></details>
-      <div class="win"><label for="win">Released</label><input type="range" id="win" min="0" max="5" step="1" list="winStops"><datalist id="winStops"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option><option value="5"></option></datalist><output for="win" id="winOut" aria-live="polite"></output></div>
+      <div class="win"><label for="win">Released</label><span class="track"><input type="range" id="win" min="0" max="5" step="1" list="winStops"><span class="stops" aria-hidden="true"><span>7d</span><span>14d</span><span>30d</span><span>60d</span><span>90d</span><span>All</span></span></span><datalist id="winStops"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option><option value="5"></option></datalist><output for="win" id="winOut" aria-live="polite"></output></div>
       <button type="button" class="reset" id="reset" hidden>Reset filters</button>
     </div>
   </div>
@@ -385,9 +391,9 @@ const state = { sources: new Set(SERIES.map(s => s.key)), mode: 'all', efforts: 
 const ANCHOR = windowAnchor(ROWS, meta.as_of);
 const isDefault = () => state.sources.size === 3 && state.mode === 'all' && state.efforts.size === ALL_EFF.length && !state.offLabs.size && !state.offModels.size && !state.offConfigs.size && state.win === DEFAULT_WINDOW;
 
-function selected() {
+function selected(anyRelease = false) {
   let rows = ROWS.filter(r => state.sources.has(r.source_type) && state.efforts.has(r._eff) && !state.offLabs.has(r.lab) && !state.offModels.has(r.model_key) && !state.offConfigs.has(r._key)
-    && inWindow(r, WINDOWS[state.win], ANCHOR));
+    && (anyRelease || inWindow(r, WINDOWS[state.win], ANCHOR)));
   if (state.mode === 'best') {
     const best = new Map();
     for (const r of rows) {
@@ -411,9 +417,15 @@ for (const s of SERIES) {
   $('#legend').append(el('span', { innerHTML: shapeSvg(s.cls) }, [s.label]));
 }
 $('#legend').append(el('span', { className: 'lsep', textContent: 'Colour is the lab:' }));
-for (const [lab, cls] of [...Object.keys(LAB_COLORS).map(l => [l, labClass(l)]), ['Other labs', 'lab-other']]) {
-  const sw = el('span', { className: `sw ${cls}` });
-  $('#legend').append(el('span', {}, [sw, lab]));
+const labKey = el('span', { className: 'labkey' }); labKey.style.display = 'contents';
+$('#legend').append(labKey);
+// The colour key lists only the labs in the current selection.
+function renderLabKey(rows) {
+  const present = new Set(rows.map(r => r.lab));
+  const named = Object.keys(LAB_COLORS).filter(l => present.has(l));
+  const other = [...present].some(l => !LAB_COLORS[l]);
+  labKey.replaceChildren(...[...named.map(l => [l, labClass(l)]), ...(other ? [['Other labs', 'lab-other']] : [])]
+    .map(([lab, cls]) => el('span', {}, [el('span', { className: `sw ${cls}` }), lab])));
 }
 for (const e of ALL_EFF) {
   const b = el('button', { type: 'button', className: 'chip', textContent: e === 'other' ? 'other' : e });
@@ -459,7 +471,7 @@ function buildPicker(body, groups, isOn, toggle, setAll, labelOf, countOf) {
     for (const [title, items] of groups) {
       const shown = items.filter(it => !q || labelOf(it).toLowerCase().includes(q) || title.toLowerCase().includes(q));
       if (!shown.length) continue;
-      list.append(el('h4', { className: 'field', textContent: title }));
+      list.append(el('div', { className: 'field grp-h', textContent: title }));
       for (const it of shown) {
         const cb = el('input', { type: 'checkbox', checked: isOn(it) });
         cb.addEventListener('change', () => { toggle(it, cb.checked); render(); });
@@ -526,6 +538,8 @@ function mount(id, svg, rows) {
   host.dataset.state = 'ideal';
   const before = new Map([...host.querySelectorAll('.pt')].map(g => [g.dataset.k, [+g.dataset.x, +g.dataset.y]]));
   host.innerHTML = svg; // built by charts.mjs, which escapes every data-derived string
+  const hits = [...host.querySelectorAll('.hit')];
+  hits.forEach((h, k) => h.setAttribute('tabindex', k ? '-1' : '0'));
   host.querySelectorAll('.hit').forEach(h => {
     const r = rows[+h.dataset.i];
     h.querySelector('title')?.remove();
@@ -533,6 +547,20 @@ function mount(id, svg, rows) {
     h.addEventListener('pointermove', show); h.addEventListener('focus', show);
     h.addEventListener('pointerleave', () => { hideTip(); highlight(null); }); h.addEventListener('blur', () => { hideTip(); highlight(null); });
   });
+  if (!host.dataset.keys) {
+    // One tab stop per chart: arrow keys walk its points, Home and End jump to the ends.
+    host.dataset.keys = '1';
+    host.addEventListener('keydown', e => {
+      const list = [...host.querySelectorAll('.hit')], k = list.indexOf(document.activeElement);
+      if (k < 0) return;
+      const next = { ArrowRight: k + 1, ArrowDown: k + 1, ArrowLeft: k - 1, ArrowUp: k - 1, Home: 0, End: list.length - 1 }[e.key];
+      if (next == null) return;
+      e.preventDefault();
+      const t = list[Math.max(0, Math.min(list.length - 1, next))];
+      list.forEach(h => h.setAttribute('tabindex', h === t ? '0' : '-1'));
+      t.focus();
+    });
+  }
   if (!motionOK() || !before.size || firstRender) return;
   // Marks travel from their previous reading to the new one; arrivals grow in, lines fade up.
   host.querySelectorAll('.pt').forEach(g => {
@@ -643,6 +671,12 @@ function showRow() {
 }
 window.addEventListener('hashchange', showRow);
 
+// ---------- sticky table header ----------
+// The header sticks under the controls bar, whose height changes as it wraps.
+const ctrl = $('nav.controls');
+const setCtrlH = () => document.documentElement.style.setProperty('--ctrl-h', getComputedStyle(ctrl).position === 'sticky' ? `${ctrl.offsetHeight}px` : '0px');
+new ResizeObserver(setCtrlH).observe(ctrl); setCtrlH();
+
 // ---------- render ----------
 // The ranked chart is drawn at the panel's own width below 640px, so a phone gets the stacked layout
 // instead of a sideways scroll; it redraws when the window crosses that width.
@@ -664,7 +698,9 @@ function render() {
   const span = days == null ? 'at any time' : `${fmtDate(windowStart(ANCHOR, days)).replace(/ \d{4}$/, '')} – ${fmtDate(ANCHOR)}`;
   if (!rows.length) {
     ['#c-rank', '#c-scatter', '#c-spread'].forEach(id => emptyState($(id)));
-    $('#unplotted').textContent = days == null ? '' : `No model in this selection was released ${span}. Slide the release window wider.`;
+    // Blame the release window only when it alone emptied the selection.
+    const winOnly = days != null && selected(true).length > 0;
+    $('#unplotted').textContent = winOnly ? `No model in this selection was released ${span}. Slide the release window wider.` : '';
   } else {
     const M = METRICS[state.metric];
     mount('#c-rank', rankedDots(rows, { id: 'rk', width: rankWidth() }), rows);
@@ -673,6 +709,7 @@ function render() {
     mount('#c-spread', spreadBars(rows, { id: 'sp', onlyMulti: true }), rows);
   }
   rankW = rankWidth();
+  renderLabKey(rows);
   renderTable(rows);
   firstRender = false;
   window.dispatchEvent(new CustomEvent('dsw-filter', { detail: rows }));

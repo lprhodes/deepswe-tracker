@@ -31,10 +31,12 @@
 .viz .solo .mk{stroke-width:2.5}
 .viz .solo circle.mk{r:6.5}
 .viz .eline.s2{stroke-dasharray:6 4} .viz .eline.s3{stroke-dasharray:1.5 4}
-.viz .mk{stroke:var(--v-paper);stroke-width:2}
+/* Edge in the mark's own hue pulled toward the ink: keeps the brand fill and clears 3:1 for faint colours in either theme. */
+.viz .mk{stroke:var(--v-edge);stroke-width:1.5}
 .viz .key{fill:var(--v-ink2)}
 .lab-openai{--c:oklch(0.58 0.13 155)}.lab-anthropic{--c:oklch(0.62 0.15 50)}.lab-google{--c:oklch(0.58 0.17 255)}.lab-z-ai{--c:oklch(0.62 0.12 195)}.lab-deepseek{--c:oklch(0.55 0.18 295)}.lab-meta{--c:oklch(0.61 0.2 255)}.lab-alibaba{--c:oklch(0.6 0.15 220)}.lab-xai{--c:oklch(0.56 0.08 265)}.lab-moonshot-ai{--c:oklch(0.6 0.18 20)}.lab-mistral{--c:oklch(0.66 0.21 38)}.lab-xiaomi{--c:oklch(0.69 0.2 47)}.lab-nvidia{--c:oklch(0.72 0.19 130)}.lab-fireworks-ai{--c:oklch(0.5 0.27 285)}.lab-minimax{--c:oklch(0.6 0.2 5)}.lab-tencent{--c:oklch(0.5 0.2 262)}.lab-other{--c:oklch(0.64 0.01 160)}
-.viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c)}
+.viz .eline{stroke:var(--c)} .viz .mk{fill:var(--c)} .viz .sw{fill:var(--c);stroke:var(--v-edge);stroke-width:1}
+.viz [class*="lab-"]{--v-edge:color-mix(in oklch, var(--c) 55%, var(--v-ink))}
 .viz .track{fill:var(--v-grid)} .viz .whisk{stroke:var(--v-ink);stroke-width:1.2;fill:none}
 .viz .hit{fill:transparent;cursor:pointer}
 .viz .hit:focus-visible{fill:transparent;stroke:var(--v-ink);stroke-width:2}
