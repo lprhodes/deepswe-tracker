@@ -1,13 +1,13 @@
 {
   "project": "deepswe-tracker",
-  "updated": "2026-10-10T16:05:00+11:00",
+  "updated": "2026-10-10T16:50:00+11:00",
   "verdict": {
     "token": "done",
     "number": "215",
     "unit": "readings of 80 models",
-    "headline": "Last two review items done: Fig. 1 breaks across printed pages, and hints name tap as well as hover.",
-    "run_label": "review follow-ups",
-    "head_sha": "186e74d"
+    "headline": "All design-review items closed: one missing-value marker, window-aware counts, and a phone layout for the cost chart.",
+    "run_label": "last review items",
+    "head_sha": "8964629"
   },
   "tasks": [
     {
@@ -190,6 +190,13 @@
       "origin": "carried over",
       "stage": "code written",
       "outcome": "done"
+    },
+    {
+      "id": "P-16",
+      "title": "Missing-value marker, window counts, phone cost chart",
+      "origin": "carried over",
+      "stage": "code written",
+      "outcome": "done"
     }
   ],
   "gates": [
@@ -354,10 +361,6 @@
     }
   ],
   "not_checked": [
-    {
-      "axis": "Cost chart on a phone",
-      "why_not": "It still scrolls sideways below 720px; only the ranked chart has a phone layout."
-    },
     {
       "axis": "Screen-reader reading of the page",
       "why_not": "Needs a device and a person."
